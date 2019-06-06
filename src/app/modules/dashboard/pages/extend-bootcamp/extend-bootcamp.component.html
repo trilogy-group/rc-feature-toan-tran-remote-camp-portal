@@ -1,0 +1,170 @@
+<section class="container">
+  <div class="content">
+    <div class="header">
+      <div class="user col">
+        Milos ( Miskone ) Sretin
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="introduction">
+        <h1>Request Bootcamp Service Extension</h1>
+
+        <p>If current Bootcamp support doesn't fit your requirements, please fill in bellow form and request extension.</p>
+
+        <div class="alert">
+          <div class="badge">
+            <mat-icon>info</mat-icon>
+          </div>
+          <div class="data">
+            <h1>Attention</h1>
+
+            <p>
+              Currently available Bootcamps are for
+            </p>
+
+            <ul>
+              <li><strong>SEM</strong></li>
+              <li><strong>Java</strong> ( CA, SA, SE )</li>
+              <li><strong>C#</strong> ( CA, SA, SE )</li>
+              <li><strong>C++</strong> ( SA, SE )</li>
+              <li><strong>Javascript</strong> ( SA, SE )</li>
+              <li><strong>Front End Software Engineers</strong> ( QA. Integration Testing )</li>
+              <li><strong>QA. Manual Testing</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="center">
+        <div class="left">
+          <h1>Request Form</h1>
+
+          <form>
+            <div class="row" style="margin-bottom: 20px">
+              <div class="col">
+                <h1>General Information</h1>
+
+                <mat-form-field class="full-width">
+                  <input matInput placeholder="Direct Manager's Email address" />
+                </mat-form-field>
+
+                <h1>Extension Request</h1>
+
+                <mat-form-field class="full-width">
+                  <input matInput placeholder="Name of the pipeline or the technology requesting for" />
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                  <mat-select placeholder="Crossover Team room name" [(value)]="otherTeamRoom">
+                    <mat-option value="1">Eng.Feature</mat-option>
+                    <mat-option value="2">Eng.Faster</mat-option>
+                    <mat-option value="3">Eng.Easier</mat-option>
+                    <mat-option value="4">Eng.Design</mat-option>
+                    <mat-option value="5">Eng.Maintenance</mat-option>
+                    <mat-option value="6">Eng.Testing</mat-option>
+                    <mat-option value="7">Eng.SaaSOps</mat-option>
+                    <mat-option value="0">Other</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" *ngIf="otherTeamRoom == 0">
+                  <input matInput placeholder="Please enter Team room name" />
+                </mat-form-field>
+
+                <button mat-raised-button style="margin-bottom: 10px">Upload Playbook & Documents of team room</button>
+                <button mat-raised-button style="margin-bottom: 10px">Upload Backlog Details</button>
+
+                <mat-form-field class="full-width">
+                  <input matInput placeholder="Metric unit of team" />
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                  <input matInput placeholder="T4W productivity of Top performers" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <button type="button" mat-raised-button style="background: #22AAE3; color: #fff">SEND FEEDBACK</button>
+          </form>
+        </div>
+
+        <div class="right">
+          <h1>Available Bootcamp SEMs</h1>
+
+          <p>
+            Please, feel free to contact Bootcamp SEMs for any questions that you
+            have related to Bootcamp and IC transferring.
+          </p>
+
+          <div class="managers">
+            <div class="manager">
+              <div class="avatar"></div>
+              <div class="manager-content">
+                <div class="title">Mohammad Shah</div>
+                <div class="contact">
+                  <div>mohammad.shah@aurea.com</div>
+                  <div>mdshahbrains</div>
+                </div>
+              </div>
+              <div class="actions">
+                <button mat-icon-button>
+                  <mat-icon>chat</mat-icon>
+                </button>
+
+                <button mat-icon-button>
+                  <mat-icon>mail</mat-icon>
+                </button>
+
+                <button mat-icon-button>
+                  S
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="help">
+    <h1>Tips & Quick Help</h1>
+
+    <p>
+      IC Transfer Request and Boot Camp
+      Registration page helps you create new
+      transfer request to Boot Camp for your IC.
+    </p>
+
+    <p>
+      Please, make sure you read all instructions
+      before submitting transfer request and
+      feel free to contact available Boot Camp
+      Software Engineering Manager for any
+      questions you have.
+    </p>
+
+    <p>IMPORTANT</p>
+
+    <p>
+      Bootcamp form needs to be filled before
+      Wednesday EOD to book the slot
+      available for next batch.
+    </p>
+
+    <p>
+      Current / existing manager needs to
+      communicate clearly to IC the reason for
+      their movement to Bootcamp and
+      graduation from Bootcamp is mandatory
+      to be eligible for any job offer in EWS.
+    </p>
+
+    <p>
+      IC needs to be moved to Eng Bootcamp
+      team only on Monday morning under any
+      of the below reporting SEM name and
+      also for any queries.
+    </p>
+  </div>
+</section>

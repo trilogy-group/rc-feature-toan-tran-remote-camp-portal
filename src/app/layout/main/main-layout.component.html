@@ -1,0 +1,117 @@
+<section class="page">
+  <header class="header">
+    <div class="left">
+      <button mat-icon-button class="drawer-toggle">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div class="logo">
+        CROSS|OVER BOOTCAMP
+      </div>
+    </div>
+
+    <div class="center"></div>
+
+    <div class="right">
+      <button mat-icon-button matTooltip="Latest News & Updates">
+        <mat-icon>feedback</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Help & Support">
+        <mat-icon>help</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Notifications">
+        <mat-icon>notifications</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Settings">
+        <mat-icon>settings</mat-icon>
+      </button>
+
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="User Profile">
+        <mat-icon class="avatar">
+          <img src="https://www.infrascan.net/demo/assets/img/avatar5.png" />
+        </mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item [routerLink]="['/dashboard', 'users', 'profile']">User Profile</button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item>Preferences</button>
+        <button mat-menu-item>Feedback</button>
+        <button mat-menu-item>Privacy Policy</button>
+        <mat-divider></mat-divider>
+        <a mat-menu-item href="http://jenkins.aureacentral.com/" target="_blank">
+          Crossover Application
+          <mat-icon class="mat-right-icon">open_in_new</mat-icon>
+        </a>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">Log Out</button>
+      </mat-menu>
+    </div>
+  </header>
+
+  <section class="center">
+    <aside class="left-sidebar">
+      <a class="dashboard"[routerLink]="['/dashboard']">
+        <mat-icon>home</mat-icon>
+        Dashboard
+      </a>
+
+      <a [routerLink]="['/dashboard', 'transfer-request']">
+        <mat-icon>transform</mat-icon>
+        IC Transaction Request
+      </a>
+      <a [routerLink]="['/dashboard', 'sem-dashboard']">
+        <mat-icon>settings_input_svideo</mat-icon>
+        SEM Dashboard
+      </a>
+      <a [routerLink]="['/dashboard', 'vp-dashboard']">
+        <mat-icon>dashboard</mat-icon>
+        VP Dashboard
+      </a>
+      <a [routerLink]="['/dashboard', 'automate-to-eliminate']">
+        <mat-icon>leak_remove</mat-icon>
+        Innovations & Automations
+      </a>
+      <a [routerLink]="['/dashboard', 'team-configurations']">
+        <mat-icon>group</mat-icon>
+        Team Configurations
+      </a>
+      <a [routerLink]="['/dashboard', 'request-extension']">
+        <mat-icon>extension</mat-icon>
+        Extend Bootcamp Service
+      </a>
+      <a [routerLink]="['/dashboard', 'track-ic']">
+        <mat-icon>track_changes</mat-icon>
+        Track ICs progress
+      </a>
+      <a [routerLink]="['/dashboard', 'assignments-and-points']">
+        <mat-icon>group_work</mat-icon>
+        Assignments & Points
+      </a>
+      <a [routerLink]="['/dashboard', 'analysis']">
+        <mat-icon>multiline_chart</mat-icon>
+        Analysis
+      </a>
+      <a [routerLink]="['/dashboard', 'history']">
+        <mat-icon>history</mat-icon>
+        History
+      </a>
+      <a [routerLink]="['/dashboard', 'documents-and-playbooks']">
+        <mat-icon>attach_file</mat-icon>
+        Documents & Playbooks
+      </a>
+      <a [routerLink]="['/dashboard', 'feedback']">
+        <mat-icon>feedback</mat-icon>
+        Feedback
+      </a>
+    </aside>
+
+    <div class="main">
+      <router-outlet></router-outlet>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Hide Sidebar
+  </footer>
+</section>

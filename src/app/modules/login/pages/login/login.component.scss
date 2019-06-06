@@ -1,0 +1,240 @@
+section.page {
+
+  .wrapper {
+    display: flex;
+    width: 1200px;
+    margin: auto;
+  }
+
+  header.header {
+    position: relative;
+    background: #F5F5F5;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 5px rgba(#000, .5);
+    z-index: 100;
+
+    .left {
+      a.logo {
+        display: flex;
+        align-items: center;
+        width: 180px;
+        height: 50px;
+        background: url("/assets/images/crossover-logo.png") center left no-repeat;
+        text-decoration: none;
+        color: #242424;
+        padding-left: 190px;
+        font-size: 22px;
+        line-height: 13px;
+      }
+    }
+  }
+
+  div.content {
+    display: flex;
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+
+      .image {
+        background: url("/assets/images/team.png") center center no-repeat;
+        background-size: cover;
+        flex-grow: 1;
+      }
+
+      .info {
+        display: flex;
+        color: #fff;
+
+        h1 {
+          font-size: 16px;
+          margin: 0 0 20px;
+        }
+
+        &-left {
+          flex-grow: 1;
+          padding: 20px;
+          background: #22AAE3;
+        }
+
+        &-right {
+          padding: 20px;
+          background: #2295C6;
+        }
+      }
+    }
+
+    .right {
+      width: 400px;
+      min-width: 400px;
+      max-width: 400px;
+      background: #F5F5F5;
+      padding: 80px 40px;
+      box-sizing: border-box;
+
+      h1, h2 {
+        font-size: 16px;
+        margin: 0 0 20px;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 14px;
+        color: #5A5A5A;
+      }
+
+      .tab-content {
+        box-sizing: border-box;
+        padding: 20px 0;
+
+        p {
+          text-align: center;
+        }
+
+        mat-form-field {
+          width: 100%;
+        }
+      }
+
+      ::ng-deep {
+        mat-checkbox {
+          display: inline-block;
+          margin: 0 0 40px;
+        }
+      }
+
+      button.login {
+        background: #22AAE3;
+        width: 100%;
+        color: #fff;
+      }
+
+      div.actions {
+        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        a {
+          color: #242424;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .video {
+    background: #22AAE3;
+    box-sizing: border-box;
+    padding: 40px;
+    color: #fff;
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    p {
+      display: block;
+      margin: 0 auto;
+      width: 600px;
+      text-align: center;
+    }
+
+    .wrapper {
+      flex-direction: column;
+
+      video {
+        width: 800px;
+        margin: 20px auto;
+      }
+    }
+  }
+
+  .success {
+    padding: 40px;
+    justify-content: center;
+    flex-direction: column;
+
+    h1 {
+      text-align: center;
+    }
+
+    .wrapper-inner {
+      display: flex;
+      width: 900px;
+      align-self: center;
+      align-items: center;
+
+      .comment {
+        flex-grow: 1;
+
+        p.signature {
+          font-style: italic;
+          color: #5A5A5A;
+          font-weight: 700;
+
+          span {
+            font-weight: 300;
+          }
+        }
+      }
+
+      .avatar {
+        width: 160px;
+        min-width: 160px;
+        height: 160px;
+        background: url("/assets/images/avatar.jpg") center center;
+        background-size: cover;
+        border-radius: 50%;
+        margin-left: 20px;
+      }
+
+      mat-icon {
+        display: block;
+        font-size: 52px;
+        margin: 0 20px;
+        width: 100px;
+        height: 52px;
+      }
+    }
+  }
+
+  .partners {
+    flex-direction: column;
+    padding: 40px;
+    justify-content: center;
+
+    h1 {
+      font-size: 16px;
+      text-align: center;
+    }
+  }
+
+  .copyright {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 0 40px;
+
+    p {
+      text-align: center;
+      margin: 0;
+      padding: 0;
+
+      &:last-child {
+        padding-bottom: 20px;
+      }
+    }
+
+    img {
+      margin-top: 20px;
+      display: block;
+    }
+  }
+}
