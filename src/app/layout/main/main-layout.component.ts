@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { DfSidebar } from '@devfactory/ngx-df/sidebar';
 
 @Component({
   selector: 'app-main-layout',
@@ -8,6 +9,8 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
   styleUrls: ['./main-layout.component.scss']
 })
 export class MainLayoutComponent {
+  @ViewChild('sideBar')
+  private sideBar: DfSidebar;
 
   public constructor(
     private _authenticationService: AuthenticationService
@@ -15,5 +18,9 @@ export class MainLayoutComponent {
 
   public logout(): void {
     this._authenticationService.logout();
+  }
+
+  public toggleSideBar(): void {
+    this.sideBar.toogleOpen();
   }
 }

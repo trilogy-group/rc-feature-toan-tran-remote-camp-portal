@@ -1,4 +1,4 @@
-section.page {
+div.page {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -23,7 +23,7 @@ section.page {
 
     .left {
       display: flex;
-      width: 320px;
+      width: 212px;
       background: #2295C6;
       padding: 0 20px;
       box-sizing: border-box;
@@ -103,5 +103,13 @@ section.page {
 ::ng-deep {
   mat-icon.mat-right-icon {
     margin: 0 0 0 20px !important;
+  }
+
+  .df-sidebar__item-container > a {
+    padding: 11px 10px 11px 10px !important;
+  }
+
+  .df-sidebar {
+    margin-top: 1rem !important;
   }
 }

@@ -8,6 +8,7 @@ import { MainLayoutComponent } from 'src/app/layout/main/main-layout.component';
 import { AuthenticationGuard } from 'src/app/shared/guards/authentication.guard';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 
+import { DfSidebarModule } from '@devfactory/ngx-df';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -24,7 +25,7 @@ import { AppComponent } from './app.component';
     MatMenuModule,
     MatTooltipModule,
     MatListModule,
-
+    DfSidebarModule,
     AppRoutingModule
   ],
   providers: [

@@ -1,12 +1,15 @@
-<section class="page">
+<div class="page">
   <header class="header">
     <div class="left">
-      <button mat-icon-button class="drawer-toggle">
+      <button 
+        mat-icon-button
+        (click)="toggleSideBar()"
+        class="drawer-toggle">
         <mat-icon>menu</mat-icon>
       </button>
 
       <div class="logo">
-        CROSS|OVER RemoteU
+        RemoteU
       </div>
     </div>
 
@@ -49,66 +52,159 @@
     </div>
   </header>
 
-  <section class="center">
-    <aside class="left-sidebar">
-      <a class="dashboard"[routerLink]="['/dashboard']">
-        <mat-icon>home</mat-icon>
-        Dashboard
-      </a>
+  <div class="center">
+    <df-sidebar
+      #sideBar
+      [open]="true"
+      [disableButton]="true">
+      <df-sidebar-item [hasIcon]="false"
+                       [hasNestedMenu]="false"
+                       link="/dashboard">
+        <a
+          class="h5 d-flex align-items-center"
+          routerLink="/dashboard">
+          <mat-icon class="ml-1">home</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Dashboard</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'transfer-request']">
+          <mat-icon class="ml-1">transform</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">IC Transaction Request</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'sem-dashboard']">
+          <mat-icon class="ml-1">settings_input_svideo</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">SEM Dashboard</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'vp-dashboard']">
+          <mat-icon class="ml-1">dashboard</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">VP Dashboard</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          routerLink="['/dashboard', 'automate-to-eliminate']">
+          <mat-icon class="ml-1">leak_remove</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Innovations & Automations</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'team-configurations']">
+          <mat-icon class="ml-1">group</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Team Configurations</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'request-extension']">
+          <mat-icon class="ml-1">extension</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Extend RemoteU Service</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'track-ic']">
+          <mat-icon class="ml-1">track_changes</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Track ICs progress</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'assignments-and-points']">
+          <mat-icon class="ml-1">group_work</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Assignments & Points</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'analysis']">
+          <mat-icon class="ml-1">multiline_chart</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Analysis</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'history']">
+          <mat-icon class="ml-1">history</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">History</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'documents-and-playbooks']">
+          <mat-icon class="ml-1">attach_file</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Documents & Playbooks</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item 
+        [hasIcon]="false"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/dashboard', 'feedback']">
+          <mat-icon class="ml-1">feedback</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Feedback</span>
+        </a>
+      </df-sidebar-item>
+    </df-sidebar>
 
-      <a [routerLink]="['/dashboard', 'transfer-request']">
-        <mat-icon>transform</mat-icon>
-        IC Transaction Request
-      </a>
-      <a [routerLink]="['/dashboard', 'sem-dashboard']">
-        <mat-icon>settings_input_svideo</mat-icon>
-        SEM Dashboard
-      </a>
-      <a [routerLink]="['/dashboard', 'vp-dashboard']">
-        <mat-icon>dashboard</mat-icon>
-        VP Dashboard
-      </a>
-      <a [routerLink]="['/dashboard', 'automate-to-eliminate']">
-        <mat-icon>leak_remove</mat-icon>
-        Innovations & Automations
-      </a>
-      <a [routerLink]="['/dashboard', 'team-configurations']">
-        <mat-icon>group</mat-icon>
-        Team Configurations
-      </a>
-      <a [routerLink]="['/dashboard', 'request-extension']">
-        <mat-icon>extension</mat-icon>
-        Extend RemoteU Service
-      </a>
-      <a [routerLink]="['/dashboard', 'track-ic']">
-        <mat-icon>track_changes</mat-icon>
-        Track ICs progress
-      </a>
-      <a [routerLink]="['/dashboard', 'assignments-and-points']">
-        <mat-icon>group_work</mat-icon>
-        Assignments & Points
-      </a>
-      <a [routerLink]="['/dashboard', 'analysis']">
-        <mat-icon>multiline_chart</mat-icon>
-        Analysis
-      </a>
-      <a [routerLink]="['/dashboard', 'history']">
-        <mat-icon>history</mat-icon>
-        History
-      </a>
-      <a [routerLink]="['/dashboard', 'documents-and-playbooks']">
-        <mat-icon>attach_file</mat-icon>
-        Documents & Playbooks
-      </a>
-      <a [routerLink]="['/dashboard', 'feedback']">
-        <mat-icon>feedback</mat-icon>
-        Feedback
-      </a>
-    </aside>
-
-    <div class="main">
+    <main class="col p-0">
       <router-outlet></router-outlet>
-    </div>
-  </section>
+    </main>
+  </div>
 
-</section>
+</div>
