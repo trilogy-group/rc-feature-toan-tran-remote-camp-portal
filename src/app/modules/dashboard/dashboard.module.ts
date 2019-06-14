@@ -20,6 +20,8 @@ import { ExtendBootcampComponent } from 'src/app/modules/dashboard/pages/extend-
 import { InnovationsComponent } from 'src/app/modules/dashboard/pages/innovations/innovations.component';
 import { TrackIcComponent } from 'src/app/modules/dashboard/pages/track-ic/track-ic.component';
 import { TransferRequestComponent } from 'src/app/modules/dashboard/pages/transfer-request/transfer-request.component';
+import { AccomplishmentsComponent } from './pages/accomplishments/accomplishments.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -29,12 +31,13 @@ import { TransferRequestComponent } from 'src/app/modules/dashboard/pages/transf
     InnovationsComponent,
     VpDashboardComponent,
     ExtendBootcampComponent,
-    TrackIcComponent
+    TrackIcComponent,
+    AccomplishmentsComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
-
+    SharedModule,
     MatButtonModule,
     MatIconModule,
     MatInputModule,
@@ -49,7 +52,6 @@ import { TransferRequestComponent } from 'src/app/modules/dashboard/pages/transf
     MatRadioModule,
     MatButtonToggleModule,
     MatSelectModule,
-
     DashboardRoutingModule
   ],
   exports: []

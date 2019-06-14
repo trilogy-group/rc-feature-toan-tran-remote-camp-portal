@@ -1,0 +1,69 @@
+:host ::ng-deep {
+  .accomplishments-summary {
+    .df-grid__table {
+      width: unset;
+      th {
+        width: 100px !important;
+      }
+    }
+
+    .df-grid__tablewrapper {
+      justify-content: center !important;
+      display: flex !important;
+    }
+  }
+
+  .df-pie__slice__label--inner {
+    font-size: 15px !important;
+  }
+
+  .df-tooltip__content {
+    width: 300px;
+    font-size: 11px !important;
+  }
+
+  .line-chart {
+    height: 310px !important;
+  }
+}
+
+.overflow-visible {
+  overflow: visible;
+}
+
+.bottom-charts {
+  min-height: 435px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin: -20px -20px 20px;
+  background: #fff;
+  padding: 20px;
+  border-bottom: 1px solid #D1D1D1;
+
+  .col {
+    display: flex;
+    align-items: center;
+    min-width: 460px;
+    max-width: 460px;
+
+    mat-icon {
+      margin-left: 10px;
+    }
+
+    &:first-child {
+      min-width: 320px;
+      max-width: 320px;
+    }
+  }
+}
+
+.chart-container {
+  width: 100%;
+  height: 280px;
+  display: inline-block;
+  position: relative;
+}

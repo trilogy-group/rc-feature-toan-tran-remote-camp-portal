@@ -1,0 +1,198 @@
+<div class="d-flex flex-column">
+  <div class="header ml-5 mt-2">
+    <div class="col-3">
+      <b>Name:</b>&nbsp;{{ icName }}
+    </div>
+
+    <div class="col-3">
+      <b>Pipeline:</b>&nbsp;{{ pipeline }}
+    </div>
+
+    <div class="col-2">
+      <b>Date Started:</b>&nbsp;{{ dateStarted }}
+    </div>
+
+    <div class="col-2">
+      <b>Days Completed:</b>&nbsp;{{ daysCompleted }}
+    </div>
+
+    <div class="col-2 ">
+      <div class="d-flex flex-column justify-content-between">
+        <a [href]="tmsUrl"
+          target="_blank">TMS</a>
+        <a [href]="deckUrl"
+          target="_blank">Deck</a>
+      </div>
+    </div>
+  </div>
+  <div class="row ml-5 mb-5 mt-3 mr-3">
+    <div class="col-6">
+      <div class="d-flex flex-column">
+        <div class="my-0">
+          <h2 class="ml-3">Weekly Summary</h2>
+        </div>
+        <div class="accomplishments-summary">
+          <df-grid [value]="accomplishmentsSummary">
+            <df-grid-column header="">
+              <ng-template let-item="rowData"
+                dfGridTemplate="body">
+                {{ item.stat }}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="This Week">
+              <ng-template let-item="rowData"
+                dfGridTemplate="body">
+                {{ item.values[0] != null ? (item.values[0] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[0] != null ? '%' : ''}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="1 Week Ago">
+              <ng-template let-item="rowData"
+                dfGridTemplate="body">
+                {{ item.values[1] != null ? (item.values[1] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[1] != null ? '%' : ''}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="2 Weeks Ago">
+              <ng-template let-item="rowData"
+                dfGridTemplate="body">
+                {{ item.values[2] != null ? (item.values[2] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[2] != null ? '%' : ''}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="3 Weeks Ago">
+              <ng-template let-item="rowData"
+                dfGridTemplate="body">
+                {{ item.values[3] != null ? (item.values[3] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[3] != null ? '%' : ''}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="4 Weeks Ago">
+              <ng-template let-item="rowData"
+                dfGridTemplate="body">
+                {{ item.values[4] != null ? (item.values[4] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[4] != null ? '%' : ''}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Average">
+              <ng-template let-item="rowData"
+                dfGridTemplate="body">
+                {{ item.average ? (item.average | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.average != null ? '%' : ''}}
+              </ng-template>
+            </df-grid-column>
+          </df-grid>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="d-flex flex-column">
+        <div class="my-0">
+          <h2>Hardest Problems</h2>
+        </div>
+        <div class="row">
+          <df-card *ngFor="let hardestProblem of hardestProblems"
+            class="col-5 mx-2 my-1 overflow-visible">
+            <df-card-content class="d-flex flex-column"
+              dfToolTipColor="dark"
+              container="df-card"
+              dfToolTip="empty"
+              [dftoolTipTemplate]="hardestProblemTooltip"
+              [dftoolTipData]="{failedIn: hardestProblem.failedIn}"
+              dfToolTipPlacement="left">
+              <div class="w-100 d-flex justify-content-between">
+                <span><h4><a href="#">{{ hardestProblem.name }}</a></h4></span>
+                <span dfToolTipColor="dark"
+                  container="body"
+                  dfToolTip="See failed tickets in Jira"
+                  dfToolTipPlacement="left">
+                  <h4>
+                    <a [href]="hardestProblem.failedInJiraLink"
+                      target="_blank">
+                      <mat-icon>open_in_new</mat-icon>
+                    </a>
+                  </h4>
+                </span>
+              </div>
+              <span class="text-muted">{{ hardestProblem.summary}} </span>
+            </df-card-content>
+          </df-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row ml-5 mt-4 bottom-charts">
+    <div class="col-4">
+      <div class="d-flex row">
+        <h3 class="ml-3">Daily Progress</h3>
+        <df-group-toggle [items]="productivityDisplayTypes"
+          class="ml-2"
+          (change)="onDailyProgressDisplayChange($event.text)">
+        </df-group-toggle>
+      </div>
+      <df-grid *ngIf="currentProductivityDisplay == productivityDisplayTypes[0].text"
+        [value]="dailyProgress"
+        tableStyleClass="df-grid--striped">
+        <df-grid-column header="Day">
+          <ng-template let-item="rowData"
+            dfGridTemplate="body">
+            {{ item.day }}
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column header="Productivity">
+          <ng-template let-item="rowData"
+            dfGridTemplate="body">
+            {{ item.productivity != null ? (item.productivity | number:'1.2') : '-' }}
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column header="Quality">
+          <ng-template let-item="rowData"
+            dfGridTemplate="body">
+            {{ item.quality != null ? ((item.quality | number:'1.2') + '%') : '-' }}
+          </ng-template>
+        </df-grid-column>
+      </df-grid>
+      <df-line-chart *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].text"
+        class="line-chart"
+        [data]="dailyProgressChart"
+        [showDots]="true"
+        [showValues]="true"
+        [smoothLine]="false"
+        [options]="dailyProgressChartOptions">
+        
+      </df-line-chart>
+    </div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-6">
+          <div class="d-flex flex-column">
+            <h3>Productivity Target: {{ productivityTarget }} Units</h3>
+            <div class="chart-container">
+              <df-bar [data]="productivityChart"
+                [padding]="0.2"
+                [colors]="productivityColors"
+                [valueTicksCount]="10">
+              </df-bar>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="d-flex flex-column">
+            <h3>Quality Target: {{ qualityTarget }}%</h3>
+            <div class="chart-container">
+              <df-pie [data]="qualityChart"
+                [colors]="qualityColors"
+                labelType="inner"
+                [selectable]="false">
+              </df-pie>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #hardestProblemTooltip
+             let-data="data">
+  <div class="d-flex flex-column">
+    Failed In:
+    <span *ngFor="let failed of data.failedIn">
+      <b>{{ failed.name }}</b>:&nbsp;{{ failed.summary }}
+    </span>
+  </div>
+</ng-template>
