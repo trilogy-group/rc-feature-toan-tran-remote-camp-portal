@@ -124,20 +124,21 @@ pipeline {
 
     stage ("7) Deploy with Ansible") {
       steps {
-        echo "Running the 'ansible-playbook' command in a Docker container that provides a recent 'ansible-playbook' binary..."
-        sh """#!/bin/bash
-          set -e
-          docker run -i --rm --entrypoint ansible-playbook \
-                     -v ${WORKSPACE}/ansible:/ansible \
-                     -w /ansible \
-                     ansible/ansible-runner:latest -i '${DOCKER_HOST_IP},' \
-                                                   --extra-vars "image_name=${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH} \
-                                                                 container_name=${ARTIFACT_ID}-${BRANCH_NAME} \
-                                                                 host_port=${HOST_PORT} \
-                                                                 ansible_password=${DOCKER_HOST_PASSWORD}" \
-                                                   deploy-image.yaml
-        """
-        echo "VMware-hosted app available at http://${DOCKER_HOST_IP}:${HOST_PORT}"
+        echo "Skip this and deploy on DL6 instead."
+        // echo "Running the 'ansible-playbook' command in a Docker container that provides a recent 'ansible-playbook' binary..."
+        // sh """#!/bin/bash
+        //   set -e
+        //   docker run -i --rm --entrypoint ansible-playbook \
+        //              -v ${WORKSPACE}/ansible:/ansible \
+        //              -w /ansible \
+        //              ansible/ansible-runner:latest -i '${DOCKER_HOST_IP},' \
+        //                                            --extra-vars "image_name=${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH} \
+        //                                                          container_name=${ARTIFACT_ID}-${BRANCH_NAME} \
+        //                                                          host_port=${HOST_PORT} \
+        //                                                          ansible_password=${DOCKER_HOST_PASSWORD}" \
+        //                                            deploy-image.yaml
+        // """
+        // echo "VMware-hosted app available at http://${DOCKER_HOST_IP}:${HOST_PORT}"
       }
     }
 
