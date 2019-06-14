@@ -32,7 +32,31 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "prod": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -64,8 +88,8 @@
             "browserTarget": "crossover-bootcamp:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "crossover-bootcamp:build:production"
+            "prod": {
+              "browserTarget": "crossover-bootcamp:build:prod"
             }
           }
         },
@@ -118,8 +142,8 @@
             "devServerTarget": "crossover-bootcamp:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "crossover-bootcamp:serve:production"
+            "prod": {
+              "devServerTarget": "crossover-bootcamp:serve:prod"
             }
           }
         },

@@ -1,0 +1,29 @@
+---
+# This playbook runs a Docker container on a remote host
+
+- name: Run a Docker container on a remote Docker Host VM in vSphere
+  hosts: all
+  remote_user: root
+
+  vars:
+    image_name:
+    container_name:
+    host_port:
+
+  tasks:
+
+    - name: Run a Docker container
+      docker_container:
+        image: "{{ image_name }}"
+        name: "{{ container_name }}"
+        published_ports: "{{ host_port }}:80"
+        cpu_shares: 100
+        memory: 1GB
+        memory_reservation: 1GB
+        memory_swap: 2GB
+        restart_policy: on-failure
+        restart_retries: 5
+        state: started
+
+    - name: Check if Docker container is running
+      shell: '[ "$(docker ps | grep "{{ container_name }}")" ]'
