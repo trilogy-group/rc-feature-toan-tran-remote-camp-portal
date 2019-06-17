@@ -1,9 +1,5 @@
-#############
-### build ###
-#############
-
 # Base image
-FROM node:12.4.0 as build
+FROM node:12.4.0
 
 # Expect build arguments
 ARG ENVIRONMENT
@@ -35,23 +31,5 @@ RUN sed -i "s/GIT_HASH_PLACEHOLDER/${GIT_HASH}/g" /app/src/environments/environm
 # RUN ng test --watch=false
 # RUN ng e2e --port 4200
 
-# Generate build
-RUN ng build --configuration=${ENVIRONMENT} --output-path=dist
-
-
-
-###############
-### package ###
-###############
-
-# Base image
-FROM nginx:1.16.0-alpine
-
-# Copy artifact build from the 'build environment'
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
-
-# Run nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start app
+CMD ng serve --host 0.0.0.0 --port 4200
