@@ -37,7 +37,7 @@ pipeline {
 
   stages {
 
-    stage ("Setup - check if 'master' or 'develop'") {
+    stage ("Setup - check which branch") {
       stages {
 
         stage("Set 'master' branch parameters") {
