@@ -5,9 +5,9 @@
 # Base image
 FROM node:12.4.0 as build
 
-# Expect build arguments
-ARG ENVIRONMENT
+# Expected build arguments
 ARG GIT_HASH
+ARG NG_BUILD_CONFIG
 
 # Install chrome for protractor tests
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -28,15 +28,15 @@ RUN npm install
 # Add app code
 COPY . /app
 
-RUN sed -i "s/GIT_HASH_PLACEHOLDER/${GIT_HASH}/g" /app/src/environments/environment.ts
-RUN sed -i "s/GIT_HASH_PLACEHOLDER/${GIT_HASH}/g" /app/src/environments/environment.${ENVIRONMENT}.ts
+# Insert Git Hash value
+RUN sed -i "s/GIT_HASH_PLACEHOLDER/${GIT_HASH}/g" /app/src/environments/*
 
 # Run tests
 # RUN ng test --watch=false
 # RUN ng e2e --port 4200
 
 # Generate build
-RUN ng build --configuration=${ENVIRONMENT} --output-path=dist
+RUN ng build --output-path=dist ${NG_BUILD_CONFIG}
 
 
 

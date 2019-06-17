@@ -1,8 +1,7 @@
 # Base image
 FROM node:12.4.0
 
-# Expect build arguments
-ARG ENVIRONMENT
+# Expected build arguments
 ARG GIT_HASH
 
 # Install chrome for protractor tests
@@ -24,8 +23,8 @@ RUN npm install
 # Add app code
 COPY . /app
 
-RUN sed -i "s/GIT_HASH_PLACEHOLDER/${GIT_HASH}/g" /app/src/environments/environment.ts
-RUN sed -i "s/GIT_HASH_PLACEHOLDER/${GIT_HASH}/g" /app/src/environments/environment.${ENVIRONMENT}.ts
+# Insert Git Hash value
+RUN sed -i "s/GIT_HASH_PLACEHOLDER/${GIT_HASH}/g" /app/src/environments/*
 
 # Run tests
 # RUN ng test --watch=false

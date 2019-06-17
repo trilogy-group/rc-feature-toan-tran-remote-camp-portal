@@ -46,9 +46,9 @@ pipeline {
           }
           steps {
             script {
-              ENVIRONMENT = 'prod'
-              STAGE = 'staging'
-              echo "ENVIRONMENT: ${ENVIRONMENT}"
+              NG_BUILD_CONFIG="--configuration=prod"
+              STAGE = "staging"
+              echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
             }
           }
@@ -60,9 +60,9 @@ pipeline {
           }
           steps {
             script {
-              ENVIRONMENT = 'dev'
-              STAGE = 'dev'
-              echo "ENVIRONMENT: ${ENVIRONMENT}"
+              NG_BUILD_CONFIG="--configuration=dev"
+              STAGE = "dev"
+              echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
             }
           }
@@ -79,9 +79,9 @@ pipeline {
           }
           steps {
             script {
-              ENVIRONMENT = 'other'
-              STAGE = 'regression'
-              echo "ENVIRONMENT: ${ENVIRONMENT}"
+              NG_BUILD_CONFIG=""
+              STAGE = "regression"
+              echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
             }
           }
@@ -105,7 +105,7 @@ pipeline {
     stage ("2) Build Docker image") {
       steps {
         echo "Building the Docker image..."
-        sh "docker build -f Dockerfile --build-arg ENVIRONMENT=${ENVIRONMENT} --build-arg GIT_HASH=${GIT_HASH} -t ${ARTIFACT_ID}:latest ."
+        sh "docker build -f Dockerfile --build-arg GIT_HASH=${GIT_HASH} --build-arg NG_BUILD_CONFIG=${NG_BUILD_CONFIG} -t ${ARTIFACT_ID}:latest ."
       }
     }
 
@@ -248,6 +248,20 @@ pipeline {
                 """
               }
             }
+          }
+        }
+
+        stage('8) Deploy to prod?') {
+          when {
+            beforeInput true
+            branch 'master'
+          }
+          input {
+            message "Deploy to prod?"
+            id "deploy-to-prod"
+          }
+          steps {
+            echo "Deploying to 'prod'..."
           }
         }
       }
