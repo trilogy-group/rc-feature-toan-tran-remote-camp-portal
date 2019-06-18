@@ -293,7 +293,7 @@ pipeline {
                       docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                       --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                       -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
-                      -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.https,trilogy.redirecthttp,trilogy.internal,trilogy.endpoint=${PROD_ENDPOINT}" \
+                      -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.https,trilogy.redirecthttp,trilogy.endpoint=${PROD_ENDPOINT}" \
                       -l "com.trilogy.company=${COMPANY}" \
                       -l "com.trilogy.team=${TEAM}" \
                       -l "com.trilogy.maintainer.email=${EMAIL}" \
