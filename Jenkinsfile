@@ -261,69 +261,71 @@ pipeline {
             message "Deploy to prod?"
             ok "Just do it"
           }
-          stage ("8) Deploy to DL6 - Prod") {
-            stages {
-              stage ("8.1) Find old 'prod' deployments on DL6") {
-                steps {
-                  echo "Finding old 'prod' deployments on DL6..."
-                  script {
-                    OLD_DEPLOYMENTS = sh (script: """#!/bin/bash
+          stages {
+            stage ("8) Deploy to DL6 - Prod") {
+              stages {
+                stage ("8.1) Find old 'prod' deployments on DL6") {
+                  steps {
+                    echo "Finding old 'prod' deployments on DL6..."
+                    script {
+                      OLD_DEPLOYMENTS = sh (script: """#!/bin/bash
+                        set -e
+                        docker -H ${DOCKER_LINUX_HOST} ps -q -f "label=SERVICE_NAME=prod_${PRODUCT}_${SERVICE}"
+                      """, returnStdout: true).trim()
+                    }
+                    sh """#!/bin/bash
                       set -e
-                      docker -H ${DOCKER_LINUX_HOST} ps -q -f "label=SERVICE_NAME=prod_${PRODUCT}_${SERVICE}"
-                    """, returnStdout: true).trim()
+                      echo "Found the following old 'prod' deployment(s):"
+                      for hash in ${OLD_DEPLOYMENTS}
+                      do
+                        CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                        echo \\'\${CONTAINER_NAME:1}\\'
+                      done
+                    """
                   }
-                  sh """#!/bin/bash
-                    set -e
-                    echo "Found the following old 'prod' deployment(s):"
-                    for hash in ${OLD_DEPLOYMENTS}
-                    do
-                      CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
-                      echo \\'\${CONTAINER_NAME:1}\\'
-                    done
-                  """
                 }
-              }
 
-              stage ("8.2) Deploy new 'prod' container to DL6") {
-                steps {
-                  echo "Deploying new 'prod' container to DL6..."
-                  sh """#!/bin/bash
-                    set -e
-                    docker -H ${DOCKER_LINUX_HOST} run -d --rm \
-                    --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH} \
-                    -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
-                    -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.http,trilogy.internal,trilogy.endpoint=${PROD_ENDPOINT}" \
-                    -l "com.trilogy.company=${COMPANY}" \
-                    -l "com.trilogy.team=${TEAM}" \
-                    -l "com.trilogy.maintainer.email=${EMAIL}" \
-                    -l "com.trilogy.maintainer.skype=${SKYPE}" \
-                    -l "com.trilogy.stage=prod" \
-                    -l "com.trilogy.product=${PRODUCT}" \
-                    -l "com.trilogy.service=${SERVICE}" \
-                    -m "2048m" \
-                    --cpu-quota 100000 \
-                    -p 80 \
-                    ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}
-                  """
-                  echo "DL6-hosted app available at http://${PROD_ENDPOINT}"
+                stage ("8.2) Deploy new 'prod' container to DL6") {
+                  steps {
+                    echo "Deploying new 'prod' container to DL6..."
+                    sh """#!/bin/bash
+                      set -e
+                      docker -H ${DOCKER_LINUX_HOST} run -d --rm \
+                      --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH} \
+                      -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
+                      -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.http,trilogy.internal,trilogy.endpoint=${PROD_ENDPOINT}" \
+                      -l "com.trilogy.company=${COMPANY}" \
+                      -l "com.trilogy.team=${TEAM}" \
+                      -l "com.trilogy.maintainer.email=${EMAIL}" \
+                      -l "com.trilogy.maintainer.skype=${SKYPE}" \
+                      -l "com.trilogy.stage=prod" \
+                      -l "com.trilogy.product=${PRODUCT}" \
+                      -l "com.trilogy.service=${SERVICE}" \
+                      -m "2048m" \
+                      --cpu-quota 100000 \
+                      -p 80 \
+                      ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}
+                    """
+                    echo "DL6-hosted app available at http://${PROD_ENDPOINT}"
+                  }
                 }
-              }
 
-              stage ("8.3) Clean up old 'prod' deployments on DL6") {
-                steps {
-                  echo "Cleaning up old 'prod' deployments on DL6..."
-                  sh """#!/bin/bash
-                    set -e
-                    for hash in ${OLD_DEPLOYMENTS}
-                    do
-                      CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
-                      echo Killing container \\'\${CONTAINER_NAME:1}\\'
-                      docker -H ${DOCKER_LINUX_HOST} kill \$hash 2> /dev/null || true
-                      echo Removing container \\'\${CONTAINER_NAME:1}\\'
-                      docker -H ${DOCKER_LINUX_HOST} rm \$hash 2> /dev/null || true
-                      echo
-                    done
-                  """
+                stage ("8.3) Clean up old 'prod' deployments on DL6") {
+                  steps {
+                    echo "Cleaning up old 'prod' deployments on DL6..."
+                    sh """#!/bin/bash
+                      set -e
+                      for hash in ${OLD_DEPLOYMENTS}
+                      do
+                        CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                        echo Killing container \\'\${CONTAINER_NAME:1}\\'
+                        docker -H ${DOCKER_LINUX_HOST} kill \$hash 2> /dev/null || true
+                        echo Removing container \\'\${CONTAINER_NAME:1}\\'
+                        docker -H ${DOCKER_LINUX_HOST} rm \$hash 2> /dev/null || true
+                        echo
+                      done
+                    """
+                  }
                 }
               }
             }
