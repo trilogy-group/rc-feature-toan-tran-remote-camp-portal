@@ -21,7 +21,7 @@ pipeline {
     PRODUCT = "remotecamp"
     SERVICE = "remoteu-portal"
     ENDPOINT = "remoteu-portal.internal-webproxy.aureacentral.com"
-    PROD_ENDPOINT = "prod-remoteu-portal.internal-webproxy.aureacentral.com"
+    PROD_ENDPOINT = "prod-remoteu-portal.webproxy.aureacentral.com"
   }
 
   agent {
@@ -38,10 +38,10 @@ pipeline {
 
   stages {
 
-    stage ("Setup - check which branch") {
+    stage ("1) Setup - check which branch") {
       stages {
 
-        stage("Set 'master' branch parameters") {
+        stage("1.1) Set 'master' branch parameters") {
           when {
             branch 'master'
           }
@@ -55,7 +55,7 @@ pipeline {
           }
         }
 
-        stage("Set 'develop' branch parameters") {
+        stage("1.1) Set 'develop' branch parameters") {
           when {
             branch 'develop'
           }
@@ -69,7 +69,7 @@ pipeline {
           }
         }
 
-        stage("Set 'other' branch parameters") {
+        stage("1.1) Set 'other' branch parameters") {
           when {
             not {
               anyOf {
@@ -90,7 +90,7 @@ pipeline {
       }
     }
 
-    stage ("1) Generate 'GIT_HASH' value from the SCM checkout") {
+    stage ("2) Generate 'GIT_HASH' value from the SCM checkout") {
       steps {
         echo "Generating the 'GIT_HASH' value from the SCM checkout"
         script {
@@ -103,14 +103,14 @@ pipeline {
       }
     }
 
-    stage ("2) Build Docker image") {
+    stage ("3) Build Docker image") {
       steps {
         echo "Building the Docker image..."
         sh "docker build -f Dockerfile --build-arg GIT_HASH=${GIT_HASH} --build-arg NG_BUILD_CONFIG=${NG_BUILD_CONFIG} -t ${ARTIFACT_ID}:latest ."
       }
     }
 
-    stage ("3) Run app container") {
+    stage ("4) Run app container") {
       steps {
         echo "Killing any existing Docker image..."
         sh """#!/bin/bash
@@ -132,7 +132,7 @@ pipeline {
       }
     }
 
-    stage ("4) Health-check the app container") {
+    stage ("5) Health-check the app container") {
       steps {
         echo "Running a health-check of the app container..."
         sh """#!/bin/bash
@@ -157,7 +157,7 @@ pipeline {
 
       stages {
 
-        stage ("5) Tag Docker image") {
+        stage ("6) Tag Docker image") {
           steps {
             echo "Applying 'GIT_HASH', and 'latest' tags to the Docker image..."
             sh "docker tag ${ARTIFACT_ID}:latest ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}"
@@ -165,16 +165,16 @@ pipeline {
           }
         }
 
-        stage ("6) Push Docker image to DTR") {
+        stage ("7) Push Docker image to DTR") {
           stages {
-            stage ("6.1) Login to the remote registry") {
+            stage ("7.1) Login to the remote registry") {
               steps {
                 echo "Logging in to the remote registry..."
                 sh "docker login https://${DTR_URL} -u${DTR_USERNAME} -p${DTR_PASSWORD}"
               }
             }
 
-            stage ("6.2) Push tagged Docker images to DTR") {
+            stage ("7.2) Push tagged Docker images to DTR") {
               steps {
                 echo "Pushing the Docker image to the remote registry..."
                 sh "docker push ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}"
@@ -184,9 +184,9 @@ pipeline {
           }
         }
 
-        stage ("7) Deploy to DL6 - Non-Prod") {
+        stage ("8) Deploy to DL6 - Non-Prod") {
           stages {
-            stage ("7.1) Find old deployments on DL6") {
+            stage ("8.1) Find old deployments on DL6") {
               steps {
                 echo "Finding old deployments on DL6..."
                 script {
@@ -207,7 +207,7 @@ pipeline {
               }
             }
 
-            stage ("7.2) Deploy new container to DL6") {
+            stage ("8.2) Deploy new container to DL6") {
               steps {
                 echo "Deploying new container to DL6..."
                 sh """#!/bin/bash
@@ -232,7 +232,7 @@ pipeline {
               }
             }
 
-            stage ("7.3) Clean up old deployments on DL6") {
+            stage ("8.3) Clean up old deployments on DL6") {
               steps {
                 echo "Cleaning up old deployments on DL6..."
                 sh """#!/bin/bash
@@ -262,9 +262,9 @@ pipeline {
             ok "Just do it"
           }
           stages {
-            stage ("8) Deploy to DL6 - Prod") {
+            stage ("9) Deploy to DL6 - Prod") {
               stages {
-                stage ("8.1) Find old 'prod' deployments on DL6") {
+                stage ("9.1) Find old 'prod' deployments on DL6") {
                   steps {
                     echo "Finding old 'prod' deployments on DL6..."
                     script {
@@ -285,7 +285,7 @@ pipeline {
                   }
                 }
 
-                stage ("8.2) Deploy new 'prod' container to DL6") {
+                stage ("9.2) Deploy new 'prod' container to DL6") {
                   steps {
                     echo "Deploying new 'prod' container to DL6..."
                     sh """#!/bin/bash
@@ -310,7 +310,7 @@ pipeline {
                   }
                 }
 
-                stage ("8.3) Clean up old 'prod' deployments on DL6") {
+                stage ("9.3) Clean up old 'prod' deployments on DL6") {
                   steps {
                     echo "Cleaning up old 'prod' deployments on DL6..."
                     sh """#!/bin/bash
