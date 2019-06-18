@@ -33,7 +33,7 @@ pipeline {
   options {
     disableConcurrentBuilds()
     timestamps()
-    timeout(time: 15, unit: "MINUTES")
+    timeout(time: 30, unit: "MINUTES")
   }
 
   stages {
@@ -215,7 +215,7 @@ pipeline {
                   docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
-                  -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.http,trilogy.internal,trilogy.endpoint=${STAGE}-${ENDPOINT}" \
+                  -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.https,trilogy.redirecthttp,trilogy.internal,trilogy.endpoint=${STAGE}-${ENDPOINT}" \
                   -l "com.trilogy.company=${COMPANY}" \
                   -l "com.trilogy.team=${TEAM}" \
                   -l "com.trilogy.maintainer.email=${EMAIL}" \
@@ -293,7 +293,7 @@ pipeline {
                       docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                       --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                       -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
-                      -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.http,trilogy.internal,trilogy.endpoint=${PROD_ENDPOINT}" \
+                      -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.https,trilogy.redirecthttp,trilogy.internal,trilogy.endpoint=${PROD_ENDPOINT}" \
                       -l "com.trilogy.company=${COMPANY}" \
                       -l "com.trilogy.team=${TEAM}" \
                       -l "com.trilogy.maintainer.email=${EMAIL}" \
