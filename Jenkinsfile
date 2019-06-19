@@ -6,8 +6,8 @@ String OLD_DEPLOYMENTS
 pipeline {
 
   environment {
-    PROJECT_ID = "remote-camp-portal"
-    ARTIFACT_ID = "rc-portal-app"
+    PROJECT_ID = "remoteu-portal"
+    ARTIFACT_ID = "remoteu-portal-web"
     HOST_PORT = 80
     CONTAINER_PORT = 80
     DTR_URL = "registry2.swarm.devfactory.com"
@@ -21,6 +21,7 @@ pipeline {
     PRODUCT = "remotecamp"
     SERVICE = "remoteu-portal"
     ENDPOINT = "remoteu-portal.internal-webproxy.aureacentral.com"
+    PROD_ENDPOINT = "remoteu.trilogy.com"
   }
 
   agent {
@@ -32,15 +33,15 @@ pipeline {
   options {
     disableConcurrentBuilds()
     timestamps()
-    timeout(time: 15, unit: "MINUTES")
+    timeout(time: 120, unit: "MINUTES")
   }
 
   stages {
 
-    stage ("Setup - check which branch") {
+    stage ("1) Setup - check which branch") {
       stages {
 
-        stage("Set 'master' branch parameters") {
+        stage("1.1) Set 'master' branch parameters") {
           when {
             branch 'master'
           }
@@ -54,7 +55,7 @@ pipeline {
           }
         }
 
-        stage("Set 'develop' branch parameters") {
+        stage("1.1) Set 'develop' branch parameters") {
           when {
             branch 'develop'
           }
@@ -68,7 +69,7 @@ pipeline {
           }
         }
 
-        stage("Set 'other' branch parameters") {
+        stage("1.1) Set 'other' branch parameters") {
           when {
             not {
               anyOf {
@@ -89,7 +90,7 @@ pipeline {
       }
     }
 
-    stage ("1) Generate 'GIT_HASH' value from the SCM checkout") {
+    stage ("2) Generate 'GIT_HASH' value from the SCM checkout") {
       steps {
         echo "Generating the 'GIT_HASH' value from the SCM checkout"
         script {
@@ -102,14 +103,14 @@ pipeline {
       }
     }
 
-    stage ("2) Build Docker image") {
+    stage ("3) Build Docker image") {
       steps {
         echo "Building the Docker image..."
-        sh "docker build -f Dockerfile --build-arg GIT_HASH=${GIT_HASH} --build-arg NG_BUILD_CONFIG=${NG_BUILD_CONFIG} -t ${ARTIFACT_ID}:latest ."
+        sh "docker build -f Dockerfile --build-arg GIT_HASH=${GIT_HASH} --build-arg NG_BUILD_CONFIG=${NG_BUILD_CONFIG} -t ${ARTIFACT_ID}-${BRANCH_NAME}:latest ."
       }
     }
 
-    stage ("3) Run app container") {
+    stage ("4) Run app container") {
       steps {
         echo "Killing any existing Docker image..."
         sh """#!/bin/bash
@@ -126,12 +127,12 @@ pipeline {
           docker run -d --rm \
                      --name ${ARTIFACT_ID}-${BRANCH_NAME} \
                      -p ${HOST_PORT}:${CONTAINER_PORT} \
-                     ${ARTIFACT_ID}:latest
+                     ${ARTIFACT_ID}-${BRANCH_NAME}:latest
         """
       }
     }
 
-    stage ("4) Health-check the app container") {
+    stage ("5) Health-check the app container") {
       steps {
         echo "Running a health-check of the app container..."
         sh """#!/bin/bash
@@ -156,36 +157,36 @@ pipeline {
 
       stages {
 
-        stage ("5) Tag Docker image") {
+        stage ("6) Tag Docker image") {
           steps {
             echo "Applying 'GIT_HASH', and 'latest' tags to the Docker image..."
-            sh "docker tag ${ARTIFACT_ID}:latest ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}"
-            sh "docker tag ${ARTIFACT_ID}:latest ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:latest"
+            sh "docker tag ${ARTIFACT_ID}-${BRANCH_NAME}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}"
+            sh "docker tag ${ARTIFACT_ID}-${BRANCH_NAME}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:latest"
           }
         }
 
-        stage ("6) Push Docker image to DTR") {
+        stage ("7) Push Docker image to DTR") {
           stages {
-            stage ("6.1) Login to the remote registry") {
+            stage ("7.1) Login to the remote registry") {
               steps {
                 echo "Logging in to the remote registry..."
                 sh "docker login https://${DTR_URL} -u${DTR_USERNAME} -p${DTR_PASSWORD}"
               }
             }
 
-            stage ("6.2) Push tagged Docker images to DTR") {
+            stage ("7.2) Push tagged Docker images to DTR") {
               steps {
                 echo "Pushing the Docker image to the remote registry..."
-                sh "docker push ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}"
-                sh "docker push ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:latest"
+                sh "docker push ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}"
+                sh "docker push ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:latest"
               }
             }
           }
         }
 
-        stage ("7) Deploy to DL6") {
+        stage ("8) Deploy to DL6 - Non-Prod") {
           stages {
-            stage ("7.1) Find old deployments on DL6") {
+            stage ("8.1) Find old deployments on DL6") {
               steps {
                 echo "Finding old deployments on DL6..."
                 script {
@@ -206,7 +207,7 @@ pipeline {
               }
             }
 
-            stage ("7.2) Deploy new container to DL6") {
+            stage ("8.2) Deploy new container to DL6") {
               steps {
                 echo "Deploying new container to DL6..."
                 sh """#!/bin/bash
@@ -214,7 +215,7 @@ pipeline {
                   docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
-                  -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.http,trilogy.internal,trilogy.endpoint=${STAGE}-${ENDPOINT}" \
+                  -l "SERVICE_TAGS=githash=${GIT_HASH},trilogy.expose-v2,trilogy.internal,trilogy.https,trilogy.cert=internal_default,trilogy.redirecthttp,trilogy.endpoint=${STAGE}-${ENDPOINT}" \
                   -l "com.trilogy.company=${COMPANY}" \
                   -l "com.trilogy.team=${TEAM}" \
                   -l "com.trilogy.maintainer.email=${EMAIL}" \
@@ -225,13 +226,14 @@ pipeline {
                   -m "2048m" \
                   --cpu-quota 100000 \
                   -p 80 \
-                  ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}
+                  ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                 """
-                echo "DL6-hosted app available at http://${STAGE}-${ENDPOINT}"
+                echo "Deployed container '${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
+                echo "DL6-hosted '${STAGE}' app available at http://${STAGE}-${ENDPOINT}"
               }
             }
 
-            stage ("7.3) Clean up old deployments on DL6") {
+            stage ("8.3) Clean up old deployments on DL6") {
               steps {
                 echo "Cleaning up old deployments on DL6..."
                 sh """#!/bin/bash
@@ -251,17 +253,84 @@ pipeline {
           }
         }
 
-        stage('8) Deploy to prod?') {
+        stage('Deploy to prod?') {
           when {
             beforeInput true
             branch 'master'
           }
           input {
             message "Deploy to prod?"
-            id "deploy-to-prod"
+            ok "Just do it"
           }
-          steps {
-            echo "Deploying to 'prod'..."
+          stages {
+            stage ("9) Deploy to DL6 - Prod") {
+              stages {
+                stage ("9.1) Find old 'prod' deployments on DL6") {
+                  steps {
+                    echo "Finding old 'prod' deployments on DL6..."
+                    script {
+                      OLD_DEPLOYMENTS = sh (script: """#!/bin/bash
+                        set -e
+                        docker -H ${DOCKER_LINUX_HOST} ps -q -f "label=SERVICE_NAME=prod_${PRODUCT}_${SERVICE}"
+                      """, returnStdout: true).trim()
+                    }
+                    sh """#!/bin/bash
+                      set -e
+                      echo "Found the following old 'prod' deployment(s):"
+                      for hash in ${OLD_DEPLOYMENTS}
+                      do
+                        CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                        echo \\'\${CONTAINER_NAME:1}\\'
+                      done
+                    """
+                  }
+                }
+
+                stage ("9.2) Deploy new 'prod' container to DL6") {
+                  steps {
+                    echo "Deploying new 'prod' container to DL6..."
+                    sh """#!/bin/bash
+                      set -e
+                      docker -H ${DOCKER_LINUX_HOST} run -d --rm \
+                      --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH} \
+                      -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
+                      -l "SERVICE_TAGS=githash=${GIT_HASH},trilogy.expose-v2,trilogy.https,trilogy.cert=default,trilogy.redirecthttp,trilogy.endpoint=${PROD_ENDPOINT}" \
+                      -l "com.trilogy.company=${COMPANY}" \
+                      -l "com.trilogy.team=${TEAM}" \
+                      -l "com.trilogy.maintainer.email=${EMAIL}" \
+                      -l "com.trilogy.maintainer.skype=${SKYPE}" \
+                      -l "com.trilogy.stage=prod" \
+                      -l "com.trilogy.product=${PRODUCT}" \
+                      -l "com.trilogy.service=${SERVICE}" \
+                      -m "2048m" \
+                      --cpu-quota 100000 \
+                      -p 80 \
+                      ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
+                    """
+                    echo "Deployed container 'prod_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
+                    echo "DL6-hosted 'prod' app available at http://${PROD_ENDPOINT}"
+                  }
+                }
+
+                stage ("9.3) Clean up old 'prod' deployments on DL6") {
+                  steps {
+                    echo "Cleaning up old 'prod' deployments on DL6..."
+                    sh """#!/bin/bash
+                      set -e
+                      for hash in ${OLD_DEPLOYMENTS}
+                      do
+                        CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                        echo Killing container \\'\${CONTAINER_NAME:1}\\'
+                        docker -H ${DOCKER_LINUX_HOST} kill \$hash 2> /dev/null || true
+                        echo Removing container \\'\${CONTAINER_NAME:1}\\'
+                        docker -H ${DOCKER_LINUX_HOST} rm \$hash 2> /dev/null || true
+                        echo
+                      done
+                    """
+                  }
+                }
+              }
+            }
           }
         }
       }
