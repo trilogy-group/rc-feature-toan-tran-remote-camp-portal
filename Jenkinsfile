@@ -215,7 +215,7 @@ pipeline {
                   docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
-                  -l "SERVICE_TAGS=githash=${GIT_HASH},trilogy.expose-v2,trilogy.internal,trilogy.https,trilogy.cert=internal_default,trilogy.redirecthttp,trilogy.endpoint=${STAGE}.${ENDPOINT}" \
+                  -l "SERVICE_TAGS=githash=${GIT_HASH},trilogy.expose-v2,trilogy.internal,trilogy.https,trilogy.cert=internal_default,trilogy.redirecthttp,trilogy.endpoint=${STAGE}-${ENDPOINT}" \
                   -l "com.trilogy.company=${COMPANY}" \
                   -l "com.trilogy.team=${TEAM}" \
                   -l "com.trilogy.maintainer.email=${EMAIL}" \
@@ -229,7 +229,7 @@ pipeline {
                   ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                 """
                 echo "Deployed container '${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
-                echo "DL6-hosted '${STAGE}' app available at http://${STAGE}.${ENDPOINT}"
+                echo "DL6-hosted '${STAGE}' app available at http://${STAGE}-${ENDPOINT}"
               }
             }
 
