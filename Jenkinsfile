@@ -6,8 +6,8 @@ String OLD_DEPLOYMENTS
 pipeline {
 
   environment {
-    PROJECT_ID = "remote-camp-portal"
-    ARTIFACT_ID = "rc-portal-app"
+    PROJECT_ID = "remoteu-portal"
+    ARTIFACT_ID = "remoteu-portal-web"
     HOST_PORT = 80
     CONTAINER_PORT = 80
     DTR_URL = "registry2.swarm.devfactory.com"
@@ -33,7 +33,7 @@ pipeline {
   options {
     disableConcurrentBuilds()
     timestamps()
-    timeout(time: 30, unit: "MINUTES")
+    timeout(time: 120, unit: "MINUTES")
   }
 
   stages {
@@ -106,7 +106,7 @@ pipeline {
     stage ("3) Build Docker image") {
       steps {
         echo "Building the Docker image..."
-        sh "docker build -f Dockerfile --build-arg GIT_HASH=${GIT_HASH} --build-arg NG_BUILD_CONFIG=${NG_BUILD_CONFIG} -t ${ARTIFACT_ID}:latest ."
+        sh "docker build -f Dockerfile --build-arg GIT_HASH=${GIT_HASH} --build-arg NG_BUILD_CONFIG=${NG_BUILD_CONFIG} -t ${ARTIFACT_ID}-${BRANCH_NAME}:latest ."
       }
     }
 
@@ -127,7 +127,7 @@ pipeline {
           docker run -d --rm \
                      --name ${ARTIFACT_ID}-${BRANCH_NAME} \
                      -p ${HOST_PORT}:${CONTAINER_PORT} \
-                     ${ARTIFACT_ID}:latest
+                     ${ARTIFACT_ID}-${BRANCH_NAME}:latest
         """
       }
     }
@@ -160,8 +160,8 @@ pipeline {
         stage ("6) Tag Docker image") {
           steps {
             echo "Applying 'GIT_HASH', and 'latest' tags to the Docker image..."
-            sh "docker tag ${ARTIFACT_ID}:latest ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}"
-            sh "docker tag ${ARTIFACT_ID}:latest ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:latest"
+            sh "docker tag ${ARTIFACT_ID}-${BRANCH_NAME}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}"
+            sh "docker tag ${ARTIFACT_ID}-${BRANCH_NAME}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:latest"
           }
         }
 
@@ -177,8 +177,8 @@ pipeline {
             stage ("7.2) Push tagged Docker images to DTR") {
               steps {
                 echo "Pushing the Docker image to the remote registry..."
-                sh "docker push ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}"
-                sh "docker push ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:latest"
+                sh "docker push ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}"
+                sh "docker push ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:latest"
               }
             }
           }
@@ -215,7 +215,7 @@ pipeline {
                   docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
-                  -l "SERVICE_TAGS=githash=${GIT_HASH},trilogy.expose-v2,trilogy.internal,trilogy.https,trilogy.cert=internal_default,trilogy.redirecthttp,trilogy.endpoint=${STAGE}-${ENDPOINT}" \
+                  -l "SERVICE_TAGS=githash=${GIT_HASH},trilogy.expose-v2,trilogy.internal,trilogy.https,trilogy.cert=internal_default,trilogy.redirecthttp,trilogy.endpoint=${STAGE}.${ENDPOINT}" \
                   -l "com.trilogy.company=${COMPANY}" \
                   -l "com.trilogy.team=${TEAM}" \
                   -l "com.trilogy.maintainer.email=${EMAIL}" \
@@ -226,9 +226,9 @@ pipeline {
                   -m "2048m" \
                   --cpu-quota 100000 \
                   -p 80 \
-                  ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}
+                  ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                 """
-                echo "DL6-hosted app available at http://${STAGE}-${ENDPOINT}"
+                echo "DL6-hosted app available at http://${STAGE}.${ENDPOINT}"
               }
             }
 
@@ -304,9 +304,9 @@ pipeline {
                       -m "2048m" \
                       --cpu-quota 100000 \
                       -p 80 \
-                      ${DTR_URL}/${PROJECT_ID}-${BRANCH_NAME}/${ARTIFACT_ID}:${GIT_HASH}
+                      ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                     """
-                    echo "DL6-hosted app available at http://${PROD_ENDPOINT}"
+                    echo "DL6-hosted 'prod' app available at http://${PROD_ENDPOINT}"
                   }
                 }
 
