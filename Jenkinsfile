@@ -228,7 +228,7 @@ pipeline {
                   docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
-                  -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.redirecthttp,trilogy.cert=internal_default,trilogy.https,trilogy.internal,trilogy.endpoint=${STAGE}-${ENDPOINT}" \
+                  -l "SERVICE_TAGS=trilogy.expose-v2,trilogy.redirecthttp,trilogy.cert=internal_default,trilogy.https,trilogy.internal,trilogy.endpoint=${STAGE}-${ENDPOINT},deploy.date=${DEPLOY_DATE},git.hash=${GIT_HASH}" \
                   -l "com.trilogy.company=${COMPANY}" \
                   -l "com.trilogy.team=${TEAM}" \
                   -l "com.trilogy.maintainer.email=${EMAIL}" \
