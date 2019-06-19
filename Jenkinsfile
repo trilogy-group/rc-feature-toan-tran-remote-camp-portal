@@ -228,7 +228,8 @@ pipeline {
                   -p 80 \
                   ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                 """
-                echo "DL6-hosted app available at http://${STAGE}.${ENDPOINT}"
+                echo "Deployed container '${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
+                echo "DL6-hosted '${STAGE}' app available at http://${STAGE}.${ENDPOINT}"
               }
             }
 
@@ -306,6 +307,7 @@ pipeline {
                       -p 80 \
                       ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                     """
+                    echo "Deployed container 'prod_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
                     echo "DL6-hosted 'prod' app available at http://${PROD_ENDPOINT}"
                   }
                 }
