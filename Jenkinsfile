@@ -1,6 +1,6 @@
-String ENVIRONMENT
 String STAGE
 String GIT_HASH
+String DEPLOY_DATE
 String OLD_DEPLOYMENTS
 
 pipeline {
@@ -207,7 +207,20 @@ pipeline {
               }
             }
 
-            stage ("8.2) Deploy new container to DL6") {
+            stage ("8.2) Generate 'DEPLOY_DATE' value from the current date/time") {
+              steps {
+                echo "Generating the 'DEPLOY_DATE' value from the current date/time"
+                script {
+                  DEPLOY_DATE = sh (script: """#!/bin/bash
+                    set -e
+                    date +'%Y-%m-%d_%H-%M-%S'
+                  """, returnStdout: true).trim()
+                }
+                echo "DEPLOY_DATE: ${DEPLOY_DATE}"
+              }
+            }
+
+            stage ("8.3) Deploy new container to DL6") {
               steps {
                 echo "Deploying new container to DL6..."
                 sh """#!/bin/bash
@@ -215,7 +228,16 @@ pipeline {
                   docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
-                  -l "SERVICE_TAGS=githash=${GIT_HASH},trilogy.expose-v2,trilogy.internal,trilogy.https,trilogy.cert=internal_default,trilogy.redirecthttp,trilogy.endpoint=${STAGE}-${ENDPOINT}" \
+                  -l "SERVICE_TAGS=trilogy.expose-v2,\
+                                   trilogy.redirecthttp,\
+                                   trilogy.cert=internal_default,\
+                                   trilogy.https,\
+                                   trilogy.internal,\
+                                   trilogy.endpoint=${STAGE}-${ENDPOINT},\
+                                   deploy.date=${DEPLOY_DATE},\
+                                   git.hash=${GIT_HASH},\
+                                   jenkins.build=${BUILD_NUMBER},\
+                                   jenkins.job=${JOB_NAME}" \
                   -l "com.trilogy.company=${COMPANY}" \
                   -l "com.trilogy.team=${TEAM}" \
                   -l "com.trilogy.maintainer.email=${EMAIL}" \
@@ -233,7 +255,7 @@ pipeline {
               }
             }
 
-            stage ("8.3) Clean up old deployments on DL6") {
+            stage ("8.4) Clean up old deployments on DL6") {
               steps {
                 echo "Cleaning up old deployments on DL6..."
                 sh """#!/bin/bash
@@ -286,7 +308,20 @@ pipeline {
                   }
                 }
 
-                stage ("9.2) Deploy new 'prod' container to DL6") {
+                stage ("9.2) Generate 'DEPLOY_DATE' value from the current date/time") {
+                  steps {
+                    echo "Generating the 'DEPLOY_DATE' value from the current date/time"
+                    script {
+                      DEPLOY_DATE = sh (script: """#!/bin/bash
+                        set -e
+                        date +'%Y-%m-%d_%H-%M-%S'
+                      """, returnStdout: true).trim()
+                    }
+                    echo "DEPLOY_DATE: ${DEPLOY_DATE}"
+                  }
+                }
+
+                stage ("9.3) Deploy new 'prod' container to DL6") {
                   steps {
                     echo "Deploying new 'prod' container to DL6..."
                     sh """#!/bin/bash
@@ -294,7 +329,15 @@ pipeline {
                       docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                       --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                       -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
-                      -l "SERVICE_TAGS=githash=${GIT_HASH},trilogy.expose-v2,trilogy.https,trilogy.cert=default,trilogy.redirecthttp,trilogy.endpoint=${PROD_ENDPOINT}" \
+                      -l "SERVICE_TAGS=trilogy.expose-v2,\
+                                       trilogy.redirecthttp,\
+                                       trilogy.cert=default,\
+                                       trilogy.https,\
+                                       trilogy.endpoint=${PROD_ENDPOINT},\
+                                       deploy.date=${DEPLOY_DATE},\
+                                       git.hash=${GIT_HASH},\
+                                       jenkins.build=${BUILD_NUMBER},\
+                                       jenkins.job=${JOB_NAME}" \
                       -l "com.trilogy.company=${COMPANY}" \
                       -l "com.trilogy.team=${TEAM}" \
                       -l "com.trilogy.maintainer.email=${EMAIL}" \
@@ -312,7 +355,7 @@ pipeline {
                   }
                 }
 
-                stage ("9.3) Clean up old 'prod' deployments on DL6") {
+                stage ("9.4) Clean up old 'prod' deployments on DL6") {
                   steps {
                     echo "Cleaning up old 'prod' deployments on DL6..."
                     sh """#!/bin/bash
