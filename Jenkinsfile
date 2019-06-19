@@ -236,7 +236,9 @@ trilogy.https,\
 trilogy.internal,\
 trilogy.endpoint=${STAGE}-${ENDPOINT},\
 deploy.date=${DEPLOY_DATE},\
-git.hash=${GIT_HASH}" \
+git.hash=${GIT_HASH},\
+jenkins.build=${BUILD_NUMBER},\
+jenkins.job=${JOB_NAME}" \
                   -l "com.trilogy.company=${COMPANY}" \
                   -l "com.trilogy.team=${TEAM}" \
                   -l "com.trilogy.maintainer.email=${EMAIL}" \
@@ -328,15 +330,16 @@ git.hash=${GIT_HASH}" \
                       docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                       --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH} \
                       -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
-                      -l "SERVICE_TAGS=trilogy.expose-v2,\
-                                       trilogy.redirecthttp,\
-                                       trilogy.cert=default,\
-                                       trilogy.https,\
-                                       trilogy.endpoint=${PROD_ENDPOINT},\
-                                       deploy.date=${DEPLOY_DATE},\
-                                       git.hash=${GIT_HASH},\
-                                       jenkins.build=${BUILD_NUMBER},\
-                                       jenkins.job=${JOB_NAME}" \
+                      -l "SERVICE_TAGS=\
+trilogy.expose-v2,\
+trilogy.redirecthttp,\
+trilogy.cert=default,\
+trilogy.https,\
+trilogy.endpoint=${PROD_ENDPOINT},\
+deploy.date=${DEPLOY_DATE},\
+git.hash=${GIT_HASH},\
+jenkins.build=${BUILD_NUMBER},\
+jenkins.job=${JOB_NAME}" \
                       -l "com.trilogy.company=${COMPANY}" \
                       -l "com.trilogy.team=${TEAM}" \
                       -l "com.trilogy.maintainer.email=${EMAIL}" \
