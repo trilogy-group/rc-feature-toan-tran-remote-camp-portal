@@ -333,7 +333,7 @@ jenkins.job=${JOB_NAME}" \
                       -l "SERVICE_TAGS=\
 trilogy.expose-v2,\
 trilogy.redirecthttp,\
-trilogy.cert=default,\
+trilogy.cert=trilogy-wildcard,\
 trilogy.https,\
 trilogy.endpoint=${PROD_ENDPOINT},\
 deploy.date=${DEPLOY_DATE},\
