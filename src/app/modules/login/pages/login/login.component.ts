@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { Router } from '@angular/router';
 
 declare var gapi: any;
 
@@ -13,15 +14,10 @@ export class LoginComponent implements OnInit {
   public form: FormGroup;
 
   public constructor(
-    private _authenticationService: AuthenticationService,
-    private _formBuilder: FormBuilder
-  ) {
-
-    this.form = _formBuilder.group({
-      username: _formBuilder.control('', [Validators.required]),
-      password: _formBuilder.control('', [Validators.required])
-    });
-  }
+    private ngZone: NgZone,
+    private router: Router,
+    private authenticationService: AuthenticationService,
+  ) { }
 
   public ngOnInit(): void {
     gapi.signin2.render('my-signin2', {
@@ -30,20 +26,25 @@ export class LoginComponent implements OnInit {
       'height': 40,
       'longtitle': true,
       'theme': 'dark',
-      'onsuccess': this.onSuccess,
-      'onfailure': this.onFailure
+      'onsuccess': this.onSuccess.bind(this),
+      'onfailure': this.onFailure.bind(this)
     });
   }
 
   public onSuccess(googleUser: any): void {
-    console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+    setTimeout(() => this.login(googleUser.getAuthResponse().id_token));
   }
 
   public onFailure(error: any): void {
     console.log(error);
   }
 
-  public login(): void {
-    this._authenticationService.login(this.form.value);
+  public login(googleToken: string): void {
+    this.authenticationService.login(googleToken).subscribe(
+      sessionToken => {
+        localStorage.setItem('sessionToken', sessionToken);
+        this.ngZone.run(() => this.router.navigate(['/'])).then();
+      }, () => { }
+    );
   }
 }

@@ -47,7 +47,14 @@
           <mat-icon class="mat-right-icon">open_in_new</mat-icon>
         </a>
         <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout()">Log Out</button>
+        <!-- <button mat-menu-item (click)="logout()">Log Out</button> -->
+        <a href="/login" 
+          onclick="signOut();"
+          class="d-flex"
+          style="padding: 0 16px; height: 48px;"><div class="d-flex align-items-center">
+            Sign out
+          </div>
+        </a>
       </mat-menu>
     </div>
   </header>

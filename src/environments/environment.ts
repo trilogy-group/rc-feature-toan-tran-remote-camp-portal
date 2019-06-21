@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   envName: 'undefined',
-  gitHash: 'GIT_HASH_PLACEHOLDER'
+  gitHash: 'GIT_HASH_PLACEHOLDER',
+  apiUrl: '/api'
 };
 
 /*

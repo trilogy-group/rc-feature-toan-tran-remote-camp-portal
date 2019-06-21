@@ -13,13 +13,13 @@
 </head>
 <body>
     <script>
-      function onSuccess(googleUser) {
-        console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-      }
-      function onFailure(error) {
-        console.log(error);
-      }      
-    </script>
+        function signOut() {
+          var auth2 = gapi.auth2.getAuthInstance();
+          auth2.signOut().then(function () {
+            localStorage.removeItem('sessionToken');
+          });
+        }
+      </script>
   <app-root></app-root>
 </body>
 </html>
