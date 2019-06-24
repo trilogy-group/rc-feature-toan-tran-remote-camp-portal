@@ -1,4 +1,9 @@
 :host ::ng-deep {
+  .quality-pie {
+    svg {
+      overflow: visible;
+    }
+  }
   .accomplishments-summary {
     .df-grid__table {
       width: unset;
@@ -24,6 +29,13 @@
 
   .line-chart {
     height: 310px !important;
+  }
+
+  .daily-progress-grid {
+    .df-grid {
+      height: 334px;
+      overflow: auto;
+    }
   }
 }
 

@@ -16,19 +16,6 @@
     <div class="center"></div>
 
     <div class="right">
-      <button mat-icon-button matTooltip="Latest News & Updates">
-        <mat-icon>feedback</mat-icon>
-      </button>
-      <button mat-icon-button matTooltip="Help & Support">
-        <mat-icon>help</mat-icon>
-      </button>
-      <button mat-icon-button matTooltip="Notifications">
-        <mat-icon>notifications</mat-icon>
-      </button>
-      <button mat-icon-button matTooltip="Settings">
-        <mat-icon>settings</mat-icon>
-      </button>
-
       <button mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="User Profile">
         <mat-icon class="avatar">
           <img src="https://www.infrascan.net/demo/assets/img/avatar5.png" />
@@ -36,13 +23,8 @@
       </button>
 
       <mat-menu #userMenu="matMenu">
-        <button mat-menu-item [routerLink]="['/dashboard', 'users', 'profile']">User Profile</button>
         <mat-divider></mat-divider>
-        <button mat-menu-item>Preferences</button>
-        <button mat-menu-item>Feedback</button>
-        <button mat-menu-item>Privacy Policy</button>
-        <mat-divider></mat-divider>
-        <a mat-menu-item href="http://jenkins.aureacentral.com/" target="_blank">
+        <a mat-menu-item href="https://app.crossover.com/x/login" target="_blank">
           Crossover Application
           <mat-icon class="mat-right-icon">open_in_new</mat-icon>
         </a>

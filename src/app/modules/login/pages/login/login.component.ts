@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { Router } from '@angular/router';
+import { flatMap } from 'rxjs/operators';
 
 declare var gapi: any;
 
@@ -32,7 +33,7 @@ export class LoginComponent implements OnInit {
   }
 
   public onSuccess(googleUser: any): void {
-    setTimeout(() => this.login(googleUser.getAuthResponse().id_token));
+    this.login(googleUser.getAuthResponse().id_token);
   }
 
   public onFailure(error: any): void {
@@ -40,11 +41,17 @@ export class LoginComponent implements OnInit {
   }
 
   public login(googleToken: string): void {
-    this.authenticationService.login(googleToken).subscribe(
+    const email = 'poojan.trivedi@aurea.com';
+    this.authenticationService.login(googleToken)
+    .pipe(flatMap((sessionToken: string) => {
+      localStorage.setItem('sessionToken', sessionToken);
+      return this.authenticationService.impersonate(email);
+    }))
+    .subscribe(
       sessionToken => {
         localStorage.setItem('sessionToken', sessionToken);
         this.ngZone.run(() => this.router.navigate(['/'])).then();
-      }, () => { }
+      }, error => console.log()
     );
   }
 }
