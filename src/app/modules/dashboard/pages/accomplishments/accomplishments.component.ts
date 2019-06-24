@@ -51,6 +51,7 @@ export class AccomplishmentsComponent implements OnInit {
   public pipeline: string;
   public deckUrl: string;
   public tmsUrl: string;
+  public profile: any = { };
 
   constructor(private readonly accomplishmentsService: AccomplishmentsService) {}
 
@@ -58,16 +59,11 @@ export class AccomplishmentsComponent implements OnInit {
     this.dailyProgressChartOptions.xAxisScale = DfLineChartScaleType.Linear;
     this.dailyProgressChartOptions.showDots = true;
 
-    this.icName = localStorage.getItem('icName');
-    this.dateStarted = localStorage.getItem('dateStarted');
-    this.daysCompleted = localStorage.getItem('daysCompleted');
-    this.pipeline = localStorage.getItem('pipeline');
-    this.deckUrl = localStorage.getItem('deckUrl');
-    this.tmsUrl = localStorage.getItem('tmsUrl');
     forkJoin(
       this.accomplishmentsService.getScoreSummary(''),
-      this.accomplishmentsService.getFtarSummary('')
-    ).subscribe(([score, ftar]) => {
+      this.accomplishmentsService.getFtarSummary(''),
+      this.accomplishmentsService.getProfile()
+    ).subscribe(([score, ftar, profile]) => {
       this.accomplishmentsSummary.push({
         stat: this.FTAR,
         values: ftar.weekly.map(qualityScore => qualityScore * 100),
@@ -78,6 +74,7 @@ export class AccomplishmentsComponent implements OnInit {
         values: score.weekly,
         average: score.average
       });
+      this.profile = profile;
     });
 
     this.accomplishmentsService.getAcomplishmentsDailyProgress('')

@@ -1,8 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AccomplishmentsService {
+  private userProfile = {
+    icName: 'John Smith',
+    dateStarted: '2019/06/22',
+    daysCompleted: '4',
+    pipeline: 'QA Manual Tester',
+    deckUrl: '',
+    tmsUrl: '',
+  };
+
   private readonly scoreMock = {
     total: 2.4,
     pending: 1.2,
@@ -78,19 +90,54 @@ export class AccomplishmentsService {
     }]
   }];
 
+  private GET_FTAR_SUMMARY = `${environment.apiUrl}/`;
+  private GET_SCORE_SUMMARY = `${environment.apiUrl}/`;
+  private GET_PROFILE = `${environment.apiUrl}/profile`;
+  private GET_HARDEST_PROBLEMS = `${environment.apiUrl}/`;
+  private GET_DAILY_PROGRESS = `${environment.apiUrl}/`;
+
+  public constructor(
+    private http: HttpClient
+  ) {}
+
   public getScoreSummary(icName: string): Observable<any> {
+    // const headers = this.createAuthorizationHeader();
+    // return this.http.get(this.GET_SCORE_SUMMARY, { headers })
+    //   .pipe(map(() => this.scoreMock));
     return of(this.scoreMock);
   }
 
   public getFtarSummary(icName: string): Observable<any> {
+    // const headers = this.createAuthorizationHeader();
+    // return this.http.get(this.GET_FTAR_SUMMARY, { headers })
+    //   .pipe(map(() => this.ftarMock));
     return of(this.ftarMock);
   }
 
   public getAcomplishmentsDailyProgress(icName: string): Observable<any> {
+    // const headers = this.createAuthorizationHeader();
+    // return this.http.get(this.GET_DAILY_PROGRESS, { headers })
+    //   .pipe(map(() => this.dailyProgressMock));
     return of(this.dailyProgressMock);
   }
 
   public getHardestProblems(icName: string): Observable<any> {
+    // const headers = this.createAuthorizationHeader();
+    // return this.http.get(this.GET_HARDEST_PROBLEMS, { headers })
+    //   .pipe(map(() => this.hardestProblems));
     return of(this.hardestProblems);
+  }
+
+  public getProfile(): Observable<any> {
+    // const headers = this.createAuthorizationHeader();
+    // return this.http.get(this.GET_PROFILE, { headers })
+    //   .pipe(map(() => this.userProfile));
+    return of(this.userProfile);
+  }
+
+  private createAuthorizationHeader(): HttpHeaders {
+    const headers = new HttpHeaders();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('sessionToken')}`);
+    return headers;
   }
 }
