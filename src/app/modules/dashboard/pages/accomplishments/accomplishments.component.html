@@ -1,15 +1,15 @@
 <div class="d-flex flex-column">
   <div class="header ml-5 mt-2">
     <div class="col-3">
-      <b>Name:</b>&nbsp;{{ icName }}
+      <b>Name:</b>&nbsp;{{ profile?.name }}
     </div>
 
     <div class="col-3">
-      <b>Pipeline:</b>&nbsp;{{ pipeline }}
+      <b>Pipeline:</b>&nbsp;{{ profile?.pipeline }}
     </div>
 
     <div class="col-2">
-      <b>Date Started:</b>&nbsp;{{ dateStarted }}
+      <b>Date Started:</b>&nbsp;{{ profile?.startDate | date: 'yyyy/MM/dd' }}
     </div>
 
     <div class="col-2">
@@ -32,7 +32,8 @@
           <h2 class="ml-3">Weekly Summary</h2>
         </div>
         <div class="accomplishments-summary">
-          <df-grid [value]="accomplishmentsSummary">
+          <df-grid *ngIf="loaded"
+            [value]="accomplishmentsSummary">
             <df-grid-column header="">
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
@@ -95,7 +96,7 @@
               [dftoolTipData]="{failedIn: hardestProblem.failedIn}"
               dfToolTipPlacement="left">
               <div class="w-100 d-flex justify-content-between">
-                <span><h4><a href="#">{{ hardestProblem.name }}</a></h4></span>
+                <span><h4><a href="#">{{ hardestProblem.jiraKey }}</a></h4></span>
                 <span dfToolTipColor="dark"
                   container="body"
                   dfToolTip="See failed tickets in Jira"
@@ -125,6 +126,7 @@
         </df-group-toggle>
       </div>
       <df-grid *ngIf="currentProductivityDisplay == productivityDisplayTypes[0].text"
+        class="daily-progress-grid"
         [value]="dailyProgress"
         tableStyleClass="df-grid--striped">
         <df-grid-column header="Day">
@@ -162,7 +164,8 @@
           <div class="d-flex flex-column">
             <h3>Productivity Target: {{ productivityTarget }} Units</h3>
             <div class="chart-container">
-              <df-bar [data]="productivityChart"
+              <df-bar *ngIf="loaded"
+                [data]="productivityChart"
                 [padding]="0.2"
                 [colors]="productivityColors"
                 [valueTicksCount]="10">
@@ -173,8 +176,9 @@
         <div class="col-6">
           <div class="d-flex flex-column">
             <h3>Quality Target: {{ qualityTarget }}%</h3>
-            <div class="chart-container">
-              <df-pie [data]="qualityChart"
+            <div class="chart-container quality-pie">
+              <df-pie *ngIf="loaded"
+                [data]="qualityChart"
                 [colors]="qualityColors"
                 labelType="inner"
                 [selectable]="false">
@@ -192,7 +196,7 @@
   <div class="d-flex flex-column">
     Failed In:
     <span *ngFor="let failed of data.failedIn">
-      <b>{{ failed.name }}</b>:&nbsp;{{ failed.summary }}
+      <b>{{ failed.jiraKey }}</b>:&nbsp;{{ failed.summary }}
     </span>
   </div>
 </ng-template>

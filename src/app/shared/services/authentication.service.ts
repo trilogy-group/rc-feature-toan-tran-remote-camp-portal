@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
+declare var signOut: any;
 
 @Injectable()
 export class AuthenticationService {
@@ -12,12 +17,16 @@ export class AuthenticationService {
     tmsUrl: ''
   };
 
+  private LOGIN = `${environment.apiUrl}/AuthenticationGoogleToken`;
+  private IMPERSONATE = `${environment.apiUrl}/Impersonation`;
+
   public constructor(
-    private _router: Router
+    private _router: Router,
+    private http: HttpClient
   ) {}
 
   public static getToken(): string {
-    return localStorage.getItem('crossoverBootcampUserToken');
+    return localStorage.getItem('sesssionToken');
   }
 
   public setToken(token: string, userData: any): void {
@@ -32,26 +41,38 @@ export class AuthenticationService {
   }
 
   public isLoggedIn(): boolean {
-    return AuthenticationService.getToken() !== null;
+    return !!localStorage.getItem('sessionToken');
   }
 
   public logout(): void {
-    localStorage.removeItem('crossoverBootcampUserToken');
-    localStorage.removeItem('crossoverBootcampUserData');
-    this._router.navigate(['/login']);
+    localStorage.removeItem('sessionToken');
+    signOut();
   }
 
-  public login(credentials: {username: string, password: string}) {
-    const user: {username: string, password: string} = {
-      username: credentials.username,
-      password: credentials.password
-    };
+  public login(token: string): Observable<any> {
+    const headers = this.getCommonHeaders();
+    return this.http.post(this.LOGIN, JSON.stringify(token), { headers });
+  }
 
-    this.setToken(
-      btoa(`${credentials.username}:${credentials.password}`),
-      user
-    );
+  public impersonate(email: string): Observable<any> {
+    const headers = this.getCommonHeadersWithAuthorization();
+    return this.http.post(this.IMPERSONATE, JSON.stringify(email), { headers });
+  }
 
-    this._router.navigate(['/']);
+  private getCommonHeaders(): HttpHeaders {
+    const headers = new HttpHeaders({
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    });
+    return headers;
+  }
+
+  private getCommonHeadersWithAuthorization(): HttpHeaders {
+    const headers = new HttpHeaders({
+      'content-type': 'application/json',
+      'accept': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('sessionToken')}`,
+    });
+    return headers;
   }
 }

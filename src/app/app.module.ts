@@ -12,6 +12,7 @@ import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.
 import { DfSidebarModule } from '@devfactory/ngx-df';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,9 @@ import { SharedModule } from './shared/shared.module';
     MatListModule,
     DfSidebarModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule,
+    HttpClientModule
   ],
   providers: [
     AuthenticationGuard,

@@ -2,6 +2,7 @@ import { OnInit, Component } from '@angular/core';
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
 import { forkJoin } from 'rxjs';
 import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType } from '@devfactory/ngx-df';
+import { differenceInDays, parse } from 'date-fns';
 
 @Component({
   selector: 'app-accomplishments',
@@ -32,6 +33,7 @@ export class AccomplishmentsComponent implements OnInit {
     DF_COLORS.BLUE,
     DF_COLORS.LIGHT_GREY,
   ];
+  public loaded = false;
 
   dailyProgressChartOptions = new DfLineChartConfiguration();
 
@@ -45,12 +47,8 @@ export class AccomplishmentsComponent implements OnInit {
   public productivityTarget: number;
   public hardestProblems = [];
 
-  public icName: string;
-  public dateStarted: string;
-  public daysCompleted: string;
-  public pipeline: string;
-  public deckUrl: string;
-  public tmsUrl: string;
+  public daysCompleted: number;
+  public profile: any = { };
 
   constructor(private readonly accomplishmentsService: AccomplishmentsService) {}
 
@@ -58,30 +56,29 @@ export class AccomplishmentsComponent implements OnInit {
     this.dailyProgressChartOptions.xAxisScale = DfLineChartScaleType.Linear;
     this.dailyProgressChartOptions.showDots = true;
 
-    this.icName = localStorage.getItem('icName');
-    this.dateStarted = localStorage.getItem('dateStarted');
-    this.daysCompleted = localStorage.getItem('daysCompleted');
-    this.pipeline = localStorage.getItem('pipeline');
-    this.deckUrl = localStorage.getItem('deckUrl');
-    this.tmsUrl = localStorage.getItem('tmsUrl');
     forkJoin(
-      this.accomplishmentsService.getScoreSummary(''),
-      this.accomplishmentsService.getFtarSummary('')
-    ).subscribe(([score, ftar]) => {
-      this.accomplishmentsSummary.push({
-        stat: this.FTAR,
-        values: ftar.weekly.map(qualityScore => qualityScore * 100),
-        average: ftar.average * 100
-      });
-      this.accomplishmentsSummary.push({
-        stat: this.score,
-        values: score.weekly,
-        average: score.average
-      });
+      this.accomplishmentsService.getProfile()
+    ).subscribe(([profile]) => {
+      this.profile = profile;
+      this.calculateDaysCompleted();
     });
 
-    this.accomplishmentsService.getAcomplishmentsDailyProgress('')
+    this.accomplishmentsService.getAcomplishmentsDailyProgress()
       .subscribe(dailyProgressResponse => {
+        const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality ? week.quality * 100 : 100);
+        this.accomplishmentsSummary.push({
+          stat: this.FTAR,
+          values: weeklyQuality,
+          average: weeklyQuality.reduce((a, b) => (a + b)) / (weeklyQuality.length || 1)
+        });
+
+        const weeklyProductivity = dailyProgressResponse.weekly.map(week => week.productivity ? week.productivity : 0);
+        this.accomplishmentsSummary.push({
+          stat: this.score,
+          values: weeklyProductivity,
+          average: weeklyProductivity.reduce((a, b) => (a + b)) / (weeklyProductivity.length || 1)
+        });
+
         this.productivityTarget = dailyProgressResponse.scoreSummary.targetForToday;
         this.qualityTarget = dailyProgressResponse.qualitySummary.targetForToday * 100;
         let day = 1;
@@ -92,20 +89,23 @@ export class AccomplishmentsComponent implements OnInit {
             }
             return { day: day++, ...dailyObject };
           }
-        ).reverse();
+        );
 
-        this.dailyProgressChart = this.dailyProgress.reverse().map(dailyObject => {
+        this.dailyProgressChart = this.dailyProgress.map(dailyObject => {
           return {
             xKey: `Day ${dailyObject.day.toString()}`,
             productivity: dailyObject.productivity,
             quality: dailyObject.quality ?  dailyObject.quality / 100 : 1
           };
         });
-        const productivityApproved = dailyProgressResponse.scoreSummary.approved;
-        const productivityInReview = dailyProgressResponse.scoreSummary.inReview;
-        const productivityInProgress = dailyProgressResponse.scoreSummary.inProgress;
-        const productivityToDo = dailyProgressResponse.scoreSummary.toDo;
-        const ftarYes = dailyProgressResponse.qualitySummary.approved;
+
+        this.dailyProgress = this.dailyProgress.reverse();
+
+        const productivityApproved = dailyProgressResponse.scoreSummary.approved || 0;
+        const productivityInReview = dailyProgressResponse.scoreSummary.inReview || 0;
+        const productivityInProgress = dailyProgressResponse.scoreSummary.inProgress || 0;
+        const productivityToDo = dailyProgressResponse.scoreSummary.toDo || 0;
+        const ftarYes = dailyProgressResponse.qualitySummary.approved || 0;
 
         this.productivityChart.push({ xKey: this.approved, yKey: productivityApproved });
         this.productivityChart.push({ xKey: this.inReview, yKey: productivityInReview });
@@ -114,12 +114,17 @@ export class AccomplishmentsComponent implements OnInit {
 
         this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: ftarYes });
         this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: 1 - ftarYes });
+        this.loaded = true;
       });
 
-    this.accomplishmentsService.getHardestProblems(this.icName).subscribe(hardestProblems => this.hardestProblems = hardestProblems);
+    this.accomplishmentsService.getHardestProblems().subscribe(hardestProblems => this.hardestProblems = hardestProblems);
   }
 
   public onDailyProgressDisplayChange(text: string): void {
     this.currentProductivityDisplay = text;
+  }
+
+  private calculateDaysCompleted(): void {
+    this.daysCompleted = Math.floor(differenceInDays(new Date(), parse(this.profile.startDate)) / 7) * 5;
   }
 }

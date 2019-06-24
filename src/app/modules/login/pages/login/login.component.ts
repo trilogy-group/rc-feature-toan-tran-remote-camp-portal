@@ -1,28 +1,57 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { Router } from '@angular/router';
+import { flatMap } from 'rxjs/operators';
+
+declare var gapi: any;
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-
+export class LoginComponent implements OnInit {
   public form: FormGroup;
 
   public constructor(
-    private _authenticationService: AuthenticationService,
-    private _formBuilder: FormBuilder
-  ) {
+    private ngZone: NgZone,
+    private router: Router,
+    private authenticationService: AuthenticationService,
+  ) { }
 
-    this.form = _formBuilder.group({
-      username: _formBuilder.control('', [Validators.required]),
-      password: _formBuilder.control('', [Validators.required])
+  public ngOnInit(): void {
+    gapi.signin2.render('my-signin2', {
+      'scope': 'profile email',
+      'width': 240,
+      'height': 40,
+      'longtitle': true,
+      'theme': 'dark',
+      'onsuccess': this.onSuccess.bind(this),
+      'onfailure': this.onFailure.bind(this)
     });
   }
 
-  public login(): void {
-    this._authenticationService.login(this.form.value);
+  public onSuccess(googleUser: any): void {
+    this.login(googleUser.getAuthResponse().id_token);
+  }
+
+  public onFailure(error: any): void {
+    console.log(error);
+  }
+
+  public login(googleToken: string): void {
+    const email = 'poojan.trivedi@aurea.com';
+    this.authenticationService.login(googleToken)
+    .pipe(flatMap((sessionToken: string) => {
+      localStorage.setItem('sessionToken', sessionToken);
+      return this.authenticationService.impersonate(email);
+    }))
+    .subscribe(
+      sessionToken => {
+        localStorage.setItem('sessionToken', sessionToken);
+        this.ngZone.run(() => this.router.navigate(['/'])).then();
+      }, error => console.log()
+    );
   }
 }
