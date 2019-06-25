@@ -14,10 +14,9 @@
 <body>
     <script>
         function signOut() {
+          localStorage.removeItem('sessionToken');
           var auth2 = gapi.auth2.getAuthInstance();
-          auth2.signOut().then(function () {
-            localStorage.removeItem('sessionToken');
-          });
+          auth2.signOut().then();
         }
       </script>
   <app-root></app-root>

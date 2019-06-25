@@ -23,15 +23,17 @@ export class LoginComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    gapi.signin2.render('my-signin2', {
-      'scope': 'profile email',
-      'width': 240,
-      'height': 40,
-      'longtitle': true,
-      'theme': 'dark',
-      'onsuccess': this.onSuccess.bind(this),
-      'onfailure': this.onFailure.bind(this)
-    });
+    setTimeout(() => {
+      gapi.signin2.render('my-signin2', {
+        'scope': 'profile email',
+        'width': 240,
+        'height': 40,
+        'longtitle': true,
+        'theme': 'dark',
+        'onsuccess': this.onSuccess.bind(this),
+        'onfailure': this.onFailure.bind(this)
+      });
+    }, 500);
   }
 
   public onSuccess(googleUser: any): void {

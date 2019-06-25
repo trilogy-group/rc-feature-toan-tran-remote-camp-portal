@@ -9,7 +9,7 @@ import { AuthenticationGuard } from 'src/app/shared/guards/authentication.guard'
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
 
-import { DfSidebarModule } from '@devfactory/ngx-df';
+import { DfSidebarModule, DfHttpLoaderInterceptorModule } from '@devfactory/ngx-df';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -31,7 +31,8 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     SharedModule,
     HttpClientModule,
-    HttpClientModule
+    HttpClientModule,
+    DfHttpLoaderInterceptorModule.forRoot()
   ],
   providers: [
     AuthenticationGuard,
