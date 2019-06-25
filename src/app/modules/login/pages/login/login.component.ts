@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { Router } from '@angular/router';
 import { flatMap } from 'rxjs/operators';
+import { DfToasterService } from '@devfactory/ngx-df';
 
 declare var gapi: any;
 
@@ -15,9 +16,10 @@ export class LoginComponent implements OnInit {
   public form: FormGroup;
 
   public constructor(
-    private ngZone: NgZone,
-    private router: Router,
-    private authenticationService: AuthenticationService,
+    private readonly ngZone: NgZone,
+    private readonly router: Router,
+    private readonly authenticationService: AuthenticationService,
+    private readonly toasterService: DfToasterService
   ) { }
 
   public ngOnInit(): void {
@@ -51,7 +53,7 @@ export class LoginComponent implements OnInit {
       sessionToken => {
         localStorage.setItem('sessionToken', sessionToken);
         this.ngZone.run(() => this.router.navigate(['/'])).then();
-      }, error => console.log()
+      }, () => this.toasterService.popError('Something went wrong')
     );
   }
 }
