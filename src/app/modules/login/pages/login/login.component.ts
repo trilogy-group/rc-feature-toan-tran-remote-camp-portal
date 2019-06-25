@@ -43,10 +43,10 @@ export class LoginComponent implements OnInit {
   public login(googleToken: string): void {
     const email = 'poojan.trivedi@aurea.com';
     this.authenticationService.login(googleToken)
-    .pipe(flatMap((sessionToken: string) => {
-      localStorage.setItem('sessionToken', sessionToken);
-      return this.authenticationService.impersonate(email);
-    }))
+    // .pipe(flatMap((sessionToken: string) => {
+    //   localStorage.setItem('sessionToken', sessionToken);
+    //   return this.authenticationService.impersonate(email);
+    // }))
     .subscribe(
       sessionToken => {
         localStorage.setItem('sessionToken', sessionToken);
