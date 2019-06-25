@@ -1,7 +1,7 @@
 import { OnInit, Component } from '@angular/core';
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
 import { forkJoin } from 'rxjs';
-import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType } from '@devfactory/ngx-df';
+import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfToasterService } from '@devfactory/ngx-df';
 import { differenceInDays, parse } from 'date-fns';
 
 @Component({
@@ -50,22 +50,25 @@ export class AccomplishmentsComponent implements OnInit {
   public daysCompleted: number;
   public profile: any = { };
 
-  constructor(private readonly accomplishmentsService: AccomplishmentsService) {}
+  constructor(
+    private readonly accomplishmentsService: AccomplishmentsService,
+    private readonly toasterService: DfToasterService
+  ) {}
 
   public ngOnInit(): void {
     this.dailyProgressChartOptions.xAxisScale = DfLineChartScaleType.Linear;
     this.dailyProgressChartOptions.showDots = true;
 
     forkJoin(
-      this.accomplishmentsService.getProfile()
-    ).subscribe(([profile]) => {
+      this.accomplishmentsService.getHardestProblems(),
+      this.accomplishmentsService.getProfile(),
+      this.accomplishmentsService.getAcomplishmentsDailyProgress()
+    ).subscribe(([hardestProblems, profile, dailyProgressResponse]) => {
+      this.hardestProblems = hardestProblems;
       this.profile = profile;
       this.calculateDaysCompleted();
-    });
 
-    this.accomplishmentsService.getAcomplishmentsDailyProgress()
-      .subscribe(dailyProgressResponse => {
-        const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality ? week.quality * 100 : 100);
+      const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality ? week.quality * 100 : 100);
         this.accomplishmentsSummary.push({
           stat: this.FTAR,
           values: weeklyQuality,
@@ -115,9 +118,9 @@ export class AccomplishmentsComponent implements OnInit {
         this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: ftarYes });
         this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: 1 - ftarYes });
         this.loaded = true;
-      });
 
-    this.accomplishmentsService.getHardestProblems().subscribe(hardestProblems => this.hardestProblems = hardestProblems);
+        this.toasterService.popSuccess(`Welcome Back ${this.profile.name}!`);
+    }, () => this.toasterService.popError('Something went wrong'));
   }
 
   public onDailyProgressDisplayChange(text: string): void {
@@ -125,6 +128,7 @@ export class AccomplishmentsComponent implements OnInit {
   }
 
   private calculateDaysCompleted(): void {
-    this.daysCompleted = Math.floor(differenceInDays(new Date(), parse(this.profile.startDate)) / 7) * 5;
+    const daysBetween = differenceInDays(new Date(), parse(this.profile.startDate));
+    this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7);
   }
 }

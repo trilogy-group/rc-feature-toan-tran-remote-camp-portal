@@ -40,31 +40,31 @@
                 {{ item.stat }}
               </ng-template>
             </df-grid-column>
-            <df-grid-column header="This Week">
+            <df-grid-column header="Week 1">
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
                 {{ item.values[0] != null ? (item.values[0] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[0] != null ? '%' : ''}}
               </ng-template>
             </df-grid-column>
-            <df-grid-column header="1 Week Ago">
+            <df-grid-column header="Week 2">
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
                 {{ item.values[1] != null ? (item.values[1] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[1] != null ? '%' : ''}}
               </ng-template>
             </df-grid-column>
-            <df-grid-column header="2 Weeks Ago">
+            <df-grid-column header="Week 3">
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
                 {{ item.values[2] != null ? (item.values[2] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[2] != null ? '%' : ''}}
               </ng-template>
             </df-grid-column>
-            <df-grid-column header="3 Weeks Ago">
+            <df-grid-column header="Week 4">
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
                 {{ item.values[3] != null ? (item.values[3] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[3] != null ? '%' : ''}}
               </ng-template>
             </df-grid-column>
-            <df-grid-column header="4 Weeks Ago">
+            <df-grid-column header="Week 5">
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
                 {{ item.values[4] != null ? (item.values[4] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[4] != null ? '%' : ''}}
@@ -85,12 +85,12 @@
         <div class="my-0">
           <h2>Hardest Problems</h2>
         </div>
-        <div class="row">
+        <div class="row hardest-problems">
           <df-card *ngFor="let hardestProblem of hardestProblems"
             class="col-5 mx-2 my-1 overflow-visible">
             <df-card-content class="d-flex flex-column"
               dfToolTipColor="dark"
-              container="df-card"
+              container=".hardest-problems"
               dfToolTip="empty"
               [dftoolTipTemplate]="hardestProblemTooltip"
               [dftoolTipData]="{failedIn: hardestProblem.failedIn}"
