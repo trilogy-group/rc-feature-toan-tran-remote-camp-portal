@@ -13,7 +13,7 @@ ARG NG_BUILD_CONFIG
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 RUN apt-get update \
-    && apt-get install -yq google-chrome-stable
+    && apt-get install -yq --no-install-recommends google-chrome-stable curl vim
 
 # Set working directory
 WORKDIR /app
@@ -47,9 +47,6 @@ RUN ng build --output-path=dist ${NG_BUILD_CONFIG}
 
 # Base image
 FROM nginx:1.16.0-alpine
-
-RUN yum update \
-    && yum install -yq --no-install-recommends curl vim
 
 # Copy artifact build from the 'build environment'
 COPY --from=build /app/dist /usr/share/nginx/html
