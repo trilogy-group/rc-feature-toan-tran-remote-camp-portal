@@ -1,0 +1,57 @@
+<framework>
+	<property name="threads" value="1"/>
+	<data-sources>
+		<data-source type="org.apache.commons.dbcp.BasicDataSource" key="LINKSDS">
+			<property property="driverClassName" value="com.mysql.jdbc.Driver"/>
+			<property property="url" value="jdbc:mysql://{PROP_LINKSDB_HOSTNAME_MYSQL}:{PROP_LINKSDB_PORTNO_MYSQL}/{PROP_LINKSDB_NAME_MYSQL}?SelectMethod=direct&amp;allowMultiQueries=true"/>
+			<property property="username" value="{PROP_LINKSDB_USERNAME}"/>
+			<property property="password" value="{PROP_LINKSDB_PASSWORD}"/>
+			<property property="maxActive" value="-1"/>
+			<property property="maxWait" value="30000"/>
+			<property property="defaultAutoCommit" value="false"/>
+			<property property="defaultReadOnly" value="false"/>
+			<property property="validationQuery" value="select 1"/>
+			<property property="poolPreparedStatement" value="true"/>
+		</data-source>
+	</data-sources>
+	<pipeline id="Crawler Pipeline" disabled="false" startInactive="false">
+			<property name="concurrency" value="1"/>
+			<property name="misfireThreshold" value="4"/>
+			<trigger className="org.quartz.CronTrigger" cronExpression="00 0/10 * * * ?" startTime="2009-09-09 09:09:09"/>
+			<producer className="com.firstrain.nutch.expirychecker.CrawlEntryProducer">
+				<property name="linkDataSource" value="LINKSDS"/>
+				<property name="batchSize" value="50"/>
+				<property name="thisPipelineId" value="Crawler Pipeline"/>
+				<property name="dependentPipelineId" value="Source Domain Documents Analyzer Pipeline"/>
+				<property name="pipelineProgressDataSource" value="LINKSDS"/>
+			</producer>
+			<processors>
+				<processor className="com.firstrain.nutch.expirychecker.ContentCheckProcessor">
+					<property name="linkDataSource" value="LINKSDS"/>
+					<property name="expireThreshold" value="25"/>
+					<property name="crawlerConfigLocation" value="D:\mi4\sourcing\NutchCrawler\conf\nutch-conf"/>
+					<property name="crawlerConfigFiles" value="crawler-default.xml;crawler-site.xml"/>
+				</processor>
+			</processors>
+	</pipeline>
+	<!-- N-Fire producer based crawler pipeline for simple crawl data expiration analysis. -->
+	<pipeline id="Crawler Pipeline For Simple Analysis" disabled="false" startInactive="true">
+		<property name="concurrency" value="1"/>
+		<property name="interval" value="10000000"/>
+		<producer className="com.firstrain.content.producer.NFireProducer">
+			<property name="times" value="1"/>
+		</producer>
+		<processors>
+			<processor className="com.firstrain.nutch.expirychecker.ContentCheckSimpleProcessor">
+				<property name="inputSource" value="{PROP_INPUT_DATA_FILE}"/>
+				<!-- Either of them can be used at a time, solrServerConfigUrl has high precedence. -->
+				<!--  property name="solrUrl" value="{PROP_SOLR_DOC_SERVER_URL}"/ -->
+				<property name="solrServerConfigUrl" value="http://{PROP_SERVER_HOST}/solr/entity/admin/file/?file=DistributedDocServer.xml"/>
+				<property name="summaryField" value="summary"/>
+				<property name="crawlerConfigLocation" value="D:\mi4\sourcing\NutchCrawler\conf\nutch-conf"/>
+				<property name="crawlerConfigFiles" value="crawler-default.xml;crawler-site.xml"/>
+				<property name="expireThreshold" value="25"/>
+			</processor>
+		</processors>
+	</pipeline>
+</framework>
