@@ -115,19 +115,23 @@
 </section>
 
 <ng-template #impersonationModal
-  style="width:600px"
+  class="impersonation-modal"
   let-close="close">
     <div class="df-modal__header mt-3">
+      <button class="df-modal__close-btn"
+        (click)="close()">
+        <span class="df-modal__close-icon"></span>
+      </button>
       <div modal-header>Impersonate User</div>
     </div>
-  <div class="modal-body"
-    modal-body>
+  <div class="modal-body" 
+  modal-body>
     <div>
       <div class="form-group">
         <input
           type="text"
           class="form-control"
-          (keyup)="updateImpersonationEmail($event)"
+          [formControl]="impersonationEmailControl"
           placeholder="Please enter user's email"
           name="impersonationEmail">
       </div>
@@ -136,7 +140,7 @@
           <button 
             (click)="submitImpersonation(close)"
             id="submitImpersonation"
-            [disabled]="true"
+            [disabled]="isButtonDisabled()"
             class="btn btn-primary pl-4 pr-4">
             Ok
           </button>

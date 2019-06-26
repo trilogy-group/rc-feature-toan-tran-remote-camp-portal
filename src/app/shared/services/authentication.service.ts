@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 
 declare var signOut: any;
 
@@ -17,13 +15,12 @@ export class AuthenticationService {
     tmsUrl: ''
   };
 
-  private api = 'https://dev-remoteu-backend.webproxy.aureacentral.com/api';
+  private api = 'https://dev-remoteu.webproxy.aureacentral.com/api';
 
   private LOGIN = `${this.api}/AuthenticationGoogleToken`;
   private IMPERSONATE = `${this.api}/Impersonation`;
 
   public constructor(
-    private _router: Router,
     private http: HttpClient
   ) {}
 

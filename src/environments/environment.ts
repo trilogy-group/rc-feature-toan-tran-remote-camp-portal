@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   envName: 'undefined',
   gitHash: 'GIT_HASH_PLACEHOLDER',
-  apiUrl: 'https://dev-remoteu-backend.webproxy.aureacentral.com/api'
+  apiUrl: '/api'
 };
 
 /*
