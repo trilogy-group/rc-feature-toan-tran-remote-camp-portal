@@ -1,5 +1,6 @@
 String NG_BUILD_CONFIG
 String STAGE
+String HOST_HEALTH_CHECK_PORT
 String GIT_HASH
 String DEPLOY_DATE
 String OLD_DEPLOYMENTS
@@ -50,8 +51,10 @@ pipeline {
             script {
               NG_BUILD_CONFIG="--configuration=dev"
               STAGE = "dev"
+              HOST_HEALTH_CHECK_PORT = 9201
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
+              echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
             }
           }
         }
@@ -64,8 +67,10 @@ pipeline {
             script {
               NG_BUILD_CONFIG="" // TODO Add 'qa' configuration
               STAGE = "qa"
+              HOST_HEALTH_CHECK_PORT = 9202
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
+              echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
             }
           }
         }
@@ -78,8 +83,10 @@ pipeline {
             script {
               NG_BUILD_CONFIG="--configuration=prod"
               STAGE = "staging"
+              HOST_HEALTH_CHECK_PORT = 9203
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
+              echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
             }
           }
         }
@@ -142,7 +149,7 @@ pipeline {
           set -e
           docker run -d --rm \
                      --name ${ARTIFACT_ID}-${BRANCH_NAME} \
-                     -p ${HOST_PORT}:${CONTAINER_PORT} \
+                     -p ${HOST_HEALTH_CHECK_PORT}:${CONTAINER_PORT} \
                      ${ARTIFACT_ID}-${BRANCH_NAME}:latest
         """
       }
@@ -154,10 +161,10 @@ pipeline {
         sh """
           set -e
           for x in {1..30} ; do
-            [[ \$(curl -s -X GET 127.0.0.1:${HOST_PORT}${HEALTH_CHECK_ENDPOINT}) ]] && echo "Received response from '${ARTIFACT_ID}-${BRANCH_NAME}'" && break
+            [[ \$(curl -s -X GET 127.0.0.1:${HOST_HEALTH_CHECK_PORT}${HEALTH_CHECK_ENDPOINT}) ]] && echo "Received response from '${ARTIFACT_ID}-${BRANCH_NAME}'" && break
             sleep 3
           done
-          curl -I -X GET 127.0.0.1:${HOST_PORT}${HEALTH_CHECK_ENDPOINT} --fail
+          curl -I -X GET 127.0.0.1:${HOST_HEALTH_CHECK_PORT}${HEALTH_CHECK_ENDPOINT} --fail
         """
         echo "Ran a successful Docker container health-check on '${ARTIFACT_ID}-${BRANCH_NAME}'"
       }
@@ -265,7 +272,7 @@ jenkins.job=${JOB_NAME}" \
                   -l "com.trilogy.service=${SERVICE}" \
                   -m "2048m" \
                   --cpu-quota 100000 \
-                  -p 80 \
+                  -p ${HOST_PORT} \
                   ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                 """
                 echo "Deployed container '${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
@@ -367,7 +374,7 @@ jenkins.job=${JOB_NAME}" \
                       -l "com.trilogy.service=${SERVICE}" \
                       -m "2048m" \
                       --cpu-quota 100000 \
-                      -p 80 \
+                      -p ${HOST_PORT} \
                       ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                     """
                     echo "Deployed container 'prod_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
