@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+<property>
+  <name>http.agent.name</name>
+  <value>Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0; fr_crawler)</value>
+  <description>HTTP 'User-Agent' request header. MUST NOT be empty, taken from main crawler.</description>
+</property>
+
+<property>
+  <name>http.robots.agents</name>
+  <value>Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0; fr_crawler), *</value>
+  <description>The agent strings we'll look for in robots.txt files,
+  comma-separated, in decreasing order of precedence. You should
+  put the value of http.agent.name as the first agent name, and keep the
+  default * at the end of the list. E.g.: BlurflDev,Blurfl,*
+  </description>
+</property>
+
+<property>
+  <name>fetcher.threads.fetch</name>
+  <value>10</value>
+  <description>The number of FetcherThreads the fetcher should use.
+    This is also determines the maximum number of requests that are 
+    made at once (each FetcherThread handles one connection).</description>
+</property>
+
+<property>
+  <name>http.timeout</name>
+  <value>100000</value>
+  <description>The default network timeout, in milliseconds.</description>
+</property>
+
+<property>
+  <name>http.content.limit</name>
+  <value>524288</value>
+  <description>The length limit for downloaded content, in bytes.
+  If this value is nonnegative (>=0), content longer than it will be truncated;
+  otherwise, no truncation at all.
+  </description>
+</property>
+
+<property>
+  <name>http.agent.version</name>
+  <value>V1</value>
+  <description>A version string to advertise in the User-Agent header.</description>
+</property>
+
+<property>
+ <name>fetcher.max.crawl.delay</name>
+ <value>-1</value>
+ <description>
+ If the Crawl-Delay in robots.txt is set to greater than this value (in
+ seconds) then the fetcher will skip this page, generating an error report.
+ If set to -1 the fetcher will never skip such pages and will wait the
+ amount of time retrieved from robots.txt Crawl-Delay, however long that
+ might be.
+ </description>
+</property>
+
+<property>
+  <name>file.content.limit</name>
+  <value>524288</value>
+  <description>The length limit for downloaded content, in bytes.
+  If this value is nonnegative (>=0), content longer than it will be truncated;
+  otherwise, no truncation at all.
+  </description>
+</property>
+
+<property>
+  <name>ftp.content.limit</name>
+  <value>524288</value> 
+  <description>The length limit for downloaded content, in bytes.
+  If this value is nonnegative (>=0), content longer than it will be truncated;
+  otherwise, no truncation at all.
+  Caution: classical ftp RFCs never defines partial transfer and, in fact,
+  some ftp servers out there do not handle client side forced close-down very
+  well. Our implementation tries its best to handle such situations smoothly.
+  </description>
+</property>
+
+<property>
+  <name>plugin.folders</name>
+  <value>D:\MI4\lib\nutch10\plugins</value>
+  <description>Directories where nutch plugins are located.  Each
+  element may be a relative or absolute path.  If absolute, it is used
+  as is.  If relative, it is searched for on the classpath.</description>
+</property>
+
+<property>
+  <name>plugin.includes</name>
+  <value>protocol-httpclient|urlfilter-regex|urlnormalizer-(pass|regex|basic)</value>
+</property>
+
+</configuration>

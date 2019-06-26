@@ -1,0 +1,21 @@
+<Context docBase="{PROP_WEBAPP_DEPLOY_PATH}">
+
+	<!-- reference global jdbc resources used by this application, see below for define local jdbc resource -->
+	<ResourceLink name="jdbc/TestDB" global="jdbc/TestDB" type="javax.sql.DataSource" />
+
+	<!-- below two parameter is for PipelineDriver's jsp sets. Entry jsp being PipelineInfo.jsp -->
+	<Parameter name="PipelineConfigPath" value="{PROP_INSTANCE_DEPLOY_PATH}\conf\PipelineConfig.xml" override="false"/>
+	<Parameter name="Log4jConfigPath" value="{PROP_INSTANCE_DEPLOY_PATH}\conf\cpflog4j.properties" override="false"/>
+
+	<Resource auth="Container" description="Links DB Connection"
+		name="jdbc/LINKSDS"
+		type="javax.sql.DataSource"
+		driverClassName="com.mysql.jdbc.Driver"
+		username="{PROP_LINKSDB_USERNAME}" 
+		password="{PROP_LINKSDB_PASSWORD}"
+		maxWait="5000"
+		validationQuery="select 1"
+		url="jdbc:mysql://{PROP_LINKSDB_HOSTNAME_MYSQL}:{PROP_LINKSDB_PORTNO_MYSQL}/{PROP_LINKSDB_NAME_MYSQL}?SelectMethod=direct&amp;allowMultiQueries=true"
+		maxActive="2"/>
+
+</Context>
