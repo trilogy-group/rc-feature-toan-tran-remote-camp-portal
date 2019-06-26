@@ -51,6 +51,7 @@ pipeline {
             script {
               NG_BUILD_CONFIG="--configuration=dev"
               STAGE = "dev"
+              HOST_HEALTH_CHECK_PORT = 9201
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
@@ -66,8 +67,10 @@ pipeline {
             script {
               NG_BUILD_CONFIG="" // TODO Add 'qa' configuration
               STAGE = "qa"
+              HOST_HEALTH_CHECK_PORT = 9202
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
+              echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
             }
           }
         }
@@ -80,6 +83,7 @@ pipeline {
             script {
               NG_BUILD_CONFIG="--configuration=prod"
               STAGE = "staging"
+              HOST_HEALTH_CHECK_PORT = 9203
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
@@ -159,10 +163,10 @@ pipeline {
         sh """
           set -e
           for x in {1..30} ; do
-            [[ \$(curl -s -X GET 127.0.0.1:${HOST_PORT}${HEALTH_CHECK_ENDPOINT}) ]] && echo "Received response from '${ARTIFACT_ID}-${BRANCH_NAME}'" && break
+            [[ \$(curl -s -X GET 127.0.0.1:${HOST_HEALTH_CHECK_PORT}${HEALTH_CHECK_ENDPOINT}) ]] && echo "Received response from '${ARTIFACT_ID}-${BRANCH_NAME}'" && break
             sleep 3
           done
-          curl -I -X GET 127.0.0.1:${HOST_PORT}${HEALTH_CHECK_ENDPOINT} --fail
+          curl -I -X GET 127.0.0.1:${HOST_HEALTH_CHECK_PORT}${HEALTH_CHECK_ENDPOINT} --fail
         """
         echo "Ran a successful Docker container health-check on '${ARTIFACT_ID}-${BRANCH_NAME}'"
       }
