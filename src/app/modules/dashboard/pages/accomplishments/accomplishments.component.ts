@@ -102,8 +102,8 @@ export class AccomplishmentsComponent implements OnInit {
         this.dailyProgressChart = this.dailyProgress.map(dailyObject => {
           return {
             xKey: `Day ${dailyObject.day.toString()}`,
-            productivity: dailyObject.productivity,
-            quality: dailyObject.quality ?  dailyObject.quality / 100 : 1
+            productivity: dailyObject.productivity.toFixed(2),
+            quality: dailyObject.quality ?  (dailyObject.quality / 100).toFixed(2) : 1
           };
         });
 
@@ -115,13 +115,13 @@ export class AccomplishmentsComponent implements OnInit {
         const productivityToDo = dailyProgressResponse.scoreSummary.toDo || 0;
         const ftarYes = dailyProgressResponse.qualitySummary.approved || 0;
 
-        this.productivityChart.push({ xKey: this.approved, yKey: productivityApproved });
-        this.productivityChart.push({ xKey: this.inReview, yKey: productivityInReview });
-        this.productivityChart.push({ xKey: this.inProgress, yKey: productivityInProgress });
-        this.productivityChart.push({ xKey: this.toDo, yKey: productivityToDo });
+        this.productivityChart.push({ xKey: this.approved, yKey: productivityApproved.toFixed(2) });
+        this.productivityChart.push({ xKey: this.inReview, yKey: productivityInReview.toFixed(2) });
+        this.productivityChart.push({ xKey: this.inProgress, yKey: productivityInProgress.toFixed(2) });
+        this.productivityChart.push({ xKey: this.toDo, yKey: productivityToDo.toFixed(2) });
 
-        this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: ftarYes });
-        this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: 1 - ftarYes });
+        this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: ftarYes.toFixed(2) });
+        this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: (1 - ftarYes).toFixed(2) });
         this.loaded = true;
 
         this.toasterService.popSuccess(`Welcome Back ${this.profile.name}!`);

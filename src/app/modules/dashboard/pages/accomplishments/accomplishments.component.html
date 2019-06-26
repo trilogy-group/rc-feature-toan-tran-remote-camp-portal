@@ -90,7 +90,7 @@
               [dftoolTipData]="{failedIn: hardestProblem.failedIn}"
               dfToolTipPlacement="left">
               <div class="w-100 d-flex justify-content-between">
-                <span><h4><a href="#">{{ hardestProblem.jiraKey }}</a></h4></span>
+                <span><h4><a [href]="'https://crossover.atlassian.net/browse/' + hardestProblem.jiraKey" target="_blank">{{ hardestProblem.jiraKey }}</a></h4></span>
                 <span dfToolTipColor="dark"
                   container="body"
                   dfToolTip="See failed tickets in Jira"
