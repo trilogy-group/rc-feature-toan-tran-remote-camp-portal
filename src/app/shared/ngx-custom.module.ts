@@ -3,7 +3,6 @@ import { DfButtonModule } from '@devfactory/ngx-df/button';
 import { DfCoreModule } from '@devfactory/ngx-df/core';
 import { DfGridModule } from '@devfactory/ngx-df/grid';
 import { DfLabelModule } from '@devfactory/ngx-df/label';
-import { DfLoadingSpinnerModule, DfLoadingSpinnerTypes } from '@devfactory/ngx-df/loading-spinner';
 import { DfSidebarModule } from '@devfactory/ngx-df/sidebar';
 import { DfTablePaginatorModule } from '@devfactory/ngx-df/table-paginator';
 import { DfToasterModule } from '@devfactory/ngx-df/toaster';
@@ -24,10 +23,6 @@ import { DfModalModule } from '@devfactory/ngx-df/modal';
     DfToasterModule.forRoot({
       autoCloseTime: 2500,
       hasAutoCloseTime: false,
-    }),
-    DfLoadingSpinnerModule.forRoot({
-      type: DfLoadingSpinnerTypes.SLIM,
-      blur: false,
     }),
     DfGridModule.forRoot(),
     DfTablePaginatorModule.forRoot({
@@ -50,7 +45,6 @@ import { DfModalModule } from '@devfactory/ngx-df/modal';
     DfSidebarModule,
     DfLabelModule,
     DfButtonModule,
-    DfLoadingSpinnerModule,
     DfToasterModule,
     DfGridModule,
     DfTablePaginatorModule,
@@ -70,7 +64,6 @@ export class NgxDfRootModule {}
     DfSidebarModule,
     DfLabelModule,
     DfButtonModule,
-    DfLoadingSpinnerModule,
     DfToasterModule,
     DfGridModule,
     DfTablePaginatorModule,
@@ -87,7 +80,6 @@ export class NgxDfRootModule {}
     DfSidebarModule,
     DfLabelModule,
     DfButtonModule,
-    DfLoadingSpinnerModule,
     DfToasterModule,
     DfGridModule,
     DfTablePaginatorModule,

@@ -5,9 +5,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class AccomplishmentsService {
-  private GET_PROFILE = `${environment.apiUrl}/profile`;
-  private GET_HARDEST_PROBLEMS = `${environment.apiUrl}/ProfileHardestProblems`;
-  private GET_PROFILE_ACCOMPLISHMENTS = `${environment.apiUrl}/ProfileAccomplishments`;
+  private api = 'https://dev-remoteu-backend.webproxy.aureacentral.com/api';
+  private GET_PROFILE = `${this.api}/profile`;
+  private GET_HARDEST_PROBLEMS = `${this.api}/ProfileHardestProblems`;
+  private GET_PROFILE_ACCOMPLISHMENTS = `${this.api}/ProfileAccomplishments`;
+
 
   public constructor(
     private http: HttpClient

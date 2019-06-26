@@ -17,8 +17,10 @@ export class AuthenticationService {
     tmsUrl: ''
   };
 
-  private LOGIN = `${environment.apiUrl}/AuthenticationGoogleToken`;
-  private IMPERSONATE = `${environment.apiUrl}/Impersonation`;
+  private api = 'https://dev-remoteu-backend.webproxy.aureacentral.com/api';
+
+  private LOGIN = `${this.api}/AuthenticationGoogleToken`;
+  private IMPERSONATE = `${this.api}/Impersonation`;
 
   public constructor(
     private _router: Router,
