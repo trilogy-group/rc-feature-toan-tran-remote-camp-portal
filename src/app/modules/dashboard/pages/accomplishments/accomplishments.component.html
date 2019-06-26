@@ -18,9 +18,9 @@
 
     <div class="col-2 ">
       <div class="d-flex flex-column justify-content-between">
-        <a [href]="tmsUrl"
+        <a [href]="profile?.tmsUrl"
           target="_blank">TMS</a>
-        <a [href]="deckUrl"
+        <a [href]="profile?.deckUrl"
           target="_blank">Deck</a>
       </div>
     </div>
@@ -62,12 +62,6 @@
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
                 {{ item.values[3] != null ? (item.values[3] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[3] != null ? '%' : ''}}
-              </ng-template>
-            </df-grid-column>
-            <df-grid-column header="Week 5">
-              <ng-template let-item="rowData"
-                dfGridTemplate="body">
-                {{ item.values[4] != null ? (item.values[4] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[4] != null ? '%' : ''}}
               </ng-template>
             </df-grid-column>
             <df-grid-column header="Average">

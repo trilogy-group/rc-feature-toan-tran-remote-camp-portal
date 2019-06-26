@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class AccomplishmentsService {
-  private api = 'https://dev-remoteu-backend.webproxy.aureacentral.com/api';
+  private api = 'https://dev-remoteu.webproxy.aureacentral.com/api';
   private GET_PROFILE = `${this.api}/profile`;
   private GET_HARDEST_PROBLEMS = `${this.api}/ProfileHardestProblems`;
   private GET_PROFILE_ACCOMPLISHMENTS = `${this.api}/ProfileAccomplishments`;

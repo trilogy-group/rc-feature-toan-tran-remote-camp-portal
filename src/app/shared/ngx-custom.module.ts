@@ -13,9 +13,14 @@ import { DfBarModule } from '@devfactory/ngx-df/charts/bar';
 import { DfLineModule } from '@devfactory/ngx-df/charts/line';
 import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
 import { DfModalModule } from '@devfactory/ngx-df/modal';
+import { DfLoadingSpinnerModule, DfLoadingSpinnerTypes } from '@devfactory/ngx-df';
 
 @NgModule({
   imports: [
+    DfLoadingSpinnerModule.forRoot({
+      type: DfLoadingSpinnerTypes.SPIN,
+      blur: false,
+    }),
     DfCardModule.forRoot(),
     DfSidebarModule.forRoot(),
     DfLabelModule.forRoot(),
@@ -54,6 +59,7 @@ import { DfModalModule } from '@devfactory/ngx-df/modal';
     DfLineModule,
     DfGroupToggleModule,
     DfModalModule,
+    DfLoadingSpinnerModule
   ],
 })
 export class NgxDfRootModule {}
@@ -74,6 +80,7 @@ export class NgxDfRootModule {}
     DfLineModule,
     DfGroupToggleModule,
     DfModalModule,
+    DfLoadingSpinnerModule
   ],
   exports: [
     DfCardModule,
@@ -90,6 +97,7 @@ export class NgxDfRootModule {}
     DfLineModule,
     DfGroupToggleModule,
     DfModalModule,
+    DfLoadingSpinnerModule
   ],
 })
 export class NgxDfCustom {

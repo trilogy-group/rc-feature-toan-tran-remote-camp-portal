@@ -1,8 +1,10 @@
 import { OnInit, Component } from '@angular/core';
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
 import { forkJoin } from 'rxjs';
-import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfToasterService } from '@devfactory/ngx-df';
 import { differenceInDays, parse } from 'date-fns';
+import { DfToasterService } from '@devfactory/ngx-df/toaster';
+import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfLoadingSpinnerService } from '@devfactory/ngx-df';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-accomplishments',
@@ -52,7 +54,8 @@ export class AccomplishmentsComponent implements OnInit {
 
   constructor(
     private readonly accomplishmentsService: AccomplishmentsService,
-    private readonly toasterService: DfToasterService
+    private readonly toasterService: DfToasterService,
+    private readonly loadingSpinner: DfLoadingSpinnerService,
   ) {}
 
   public ngOnInit(): void {
@@ -63,7 +66,9 @@ export class AccomplishmentsComponent implements OnInit {
       this.accomplishmentsService.getHardestProblems(),
       this.accomplishmentsService.getProfile(),
       this.accomplishmentsService.getAcomplishmentsDailyProgress()
-    ).subscribe(([hardestProblems, profile, dailyProgressResponse]) => {
+    )
+    .pipe(finalize(() => this.loadingSpinner.hide()))
+    .subscribe(([hardestProblems, profile, dailyProgressResponse]) => {
       this.hardestProblems = hardestProblems;
       this.profile = profile;
       this.calculateDaysCompleted();
