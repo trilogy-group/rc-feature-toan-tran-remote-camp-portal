@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
     private readonly ngZone: NgZone,
     private readonly router: Router,
     private readonly authenticationService: AuthenticationService,
-    private readonly toasterService: DfToasterService,
     public readonly modal: DfModalService
   ) { }
 
@@ -67,7 +66,7 @@ export class LoginComponent implements OnInit {
         } else {
           this.ngZone.run(() => this.router.navigate(['/'])).then();
         }
-      }, () => this.toasterService.popError('Something went wrong')
+      }, () => {}
     );
   }
 
