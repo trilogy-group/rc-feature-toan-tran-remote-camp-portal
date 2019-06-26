@@ -3,7 +3,6 @@ import { DfButtonModule } from '@devfactory/ngx-df/button';
 import { DfCoreModule } from '@devfactory/ngx-df/core';
 import { DfGridModule } from '@devfactory/ngx-df/grid';
 import { DfLabelModule } from '@devfactory/ngx-df/label';
-import { DfLoadingSpinnerModule, DfLoadingSpinnerTypes } from '@devfactory/ngx-df/loading-spinner';
 import { DfSidebarModule } from '@devfactory/ngx-df/sidebar';
 import { DfTablePaginatorModule } from '@devfactory/ngx-df/table-paginator';
 import { DfToasterModule } from '@devfactory/ngx-df/toaster';
@@ -13,6 +12,7 @@ import { DfToolTipModule } from '@devfactory/ngx-df/tooltip/';
 import { DfBarModule } from '@devfactory/ngx-df/charts/bar';
 import { DfLineModule } from '@devfactory/ngx-df/charts/line';
 import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
+import { DfModalModule } from '@devfactory/ngx-df/modal';
 
 @NgModule({
   imports: [
@@ -23,10 +23,6 @@ import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
     DfToasterModule.forRoot({
       autoCloseTime: 2500,
       hasAutoCloseTime: false,
-    }),
-    DfLoadingSpinnerModule.forRoot({
-      type: DfLoadingSpinnerTypes.SLIM,
-      blur: false,
     }),
     DfGridModule.forRoot(),
     DfTablePaginatorModule.forRoot({
@@ -41,6 +37,7 @@ import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
     DfBarModule.forRoot(),
     DfLineModule.forRoot(),
     DfGroupToggleModule.forRoot(),
+    DfModalModule.forRoot(),
   ],
   providers: [],
   exports: [
@@ -48,7 +45,6 @@ import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
     DfSidebarModule,
     DfLabelModule,
     DfButtonModule,
-    DfLoadingSpinnerModule,
     DfToasterModule,
     DfGridModule,
     DfTablePaginatorModule,
@@ -56,7 +52,8 @@ import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
     DfToolTipModule,
     DfBarModule,
     DfLineModule,
-    DfGroupToggleModule
+    DfGroupToggleModule,
+    DfModalModule,
   ],
 })
 export class NgxDfRootModule {}
@@ -67,7 +64,6 @@ export class NgxDfRootModule {}
     DfSidebarModule,
     DfLabelModule,
     DfButtonModule,
-    DfLoadingSpinnerModule,
     DfToasterModule,
     DfGridModule,
     DfTablePaginatorModule,
@@ -76,14 +72,14 @@ export class NgxDfRootModule {}
     DfToolTipModule,
     DfBarModule,
     DfLineModule,
-    DfGroupToggleModule
+    DfGroupToggleModule,
+    DfModalModule,
   ],
   exports: [
     DfCardModule,
     DfSidebarModule,
     DfLabelModule,
     DfButtonModule,
-    DfLoadingSpinnerModule,
     DfToasterModule,
     DfGridModule,
     DfTablePaginatorModule,
@@ -92,7 +88,8 @@ export class NgxDfRootModule {}
     DfToolTipModule,
     DfBarModule,
     DfLineModule,
-    DfGroupToggleModule
+    DfGroupToggleModule,
+    DfModalModule,
   ],
 })
 export class NgxDfCustom {
