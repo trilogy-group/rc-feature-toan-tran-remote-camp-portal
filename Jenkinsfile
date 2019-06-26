@@ -1,3 +1,4 @@
+String NG_BUILD_CONFIG
 String STAGE
 String GIT_HASH
 String DEPLOY_DATE
@@ -7,9 +8,10 @@ pipeline {
 
   environment {
     PROJECT_ID = "remoteu-portal"
-    ARTIFACT_ID = "remoteu-portal-web"
+    ARTIFACT_ID = "remoteu-portal"
     HOST_PORT = 80
     CONTAINER_PORT = 80
+    HEALTH_CHECK_ENDPOINT = "/"
     DTR_URL = "registry2.swarm.devfactory.com"
     DTR_USERNAME = "drosson"
     DTR_PASSWORD = credentials("DTR_PW_DROSSON")
@@ -21,7 +23,6 @@ pipeline {
     PRODUCT = "remotecamp"
     SERVICE = "remoteu-portal"
     ENDPOINT = "remoteu-portal.internal-webproxy.aureacentral.com"
-    PROD_ENDPOINT = "remoteu.trilogy.com"
   }
 
   agent {
@@ -41,20 +42,6 @@ pipeline {
     stage ("1) Setup - check which branch") {
       stages {
 
-        stage("1.1) Set 'master' branch parameters") {
-          when {
-            branch 'master'
-          }
-          steps {
-            script {
-              NG_BUILD_CONFIG="--configuration=prod"
-              STAGE = "staging"
-              echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
-              echo "STAGE: ${STAGE}"
-            }
-          }
-        }
-
         stage("1.1) Set 'develop' branch parameters") {
           when {
             branch 'develop'
@@ -69,12 +56,41 @@ pipeline {
           }
         }
 
+        stage("1.1) Set 'release' branch parameters") {
+          when {
+            branch 'release'
+          }
+          steps {
+            script {
+              NG_BUILD_CONFIG="" // TODO Add 'qa' configuration
+              STAGE = "qa"
+              echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
+              echo "STAGE: ${STAGE}"
+            }
+          }
+        }
+
+        stage("1.1) Set 'master' branch parameters") {
+          when {
+            branch 'master'
+          }
+          steps {
+            script {
+              NG_BUILD_CONFIG="--configuration=prod"
+              STAGE = "staging"
+              echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
+              echo "STAGE: ${STAGE}"
+            }
+          }
+        }
+
         stage("1.1) Set 'other' branch parameters") {
           when {
             not {
               anyOf {
-                branch 'master'
                 branch 'develop'
+                branch 'release'
+                branch 'master'
               }
             }
           }
@@ -94,7 +110,7 @@ pipeline {
       steps {
         echo "Generating the 'GIT_HASH' value from the SCM checkout"
         script {
-          GIT_HASH = sh (script: """#!/bin/bash
+          GIT_HASH = sh (script: """
             set -e
             git rev-parse --short HEAD
           """, returnStdout: true).trim()
@@ -110,10 +126,10 @@ pipeline {
       }
     }
 
-    stage ("4) Run app container") {
+    stage ("4) Run container") {
       steps {
-        echo "Killing any existing Docker image..."
-        sh """#!/bin/bash
+        echo "Killing any existing Docker container running on the build agent..."
+        sh """
           set -e
           if [[ \$(docker ps -a | grep ${ARTIFACT_ID}-${BRANCH_NAME}) ]]; then
             docker kill ${ARTIFACT_ID}-${BRANCH_NAME} 2> /dev/null || true
@@ -122,7 +138,7 @@ pipeline {
         """
 
         echo "Starting the '${ARTIFACT_ID}' Docker container for '${BRANCH_NAME}' branch..."
-        sh """#!/bin/bash
+        sh """
           set -e
           docker run -d --rm \
                      --name ${ARTIFACT_ID}-${BRANCH_NAME} \
@@ -132,26 +148,27 @@ pipeline {
       }
     }
 
-    stage ("5) Health-check the app container") {
+    stage ("5) Health-check the container") {
       steps {
-        echo "Running a health-check of the app container..."
-        sh """#!/bin/bash
+        echo "Running a health-check of the container..."
+        sh """
           set -e
           for x in {1..30} ; do
-            [[ \$(curl -s 127.0.0.1:${HOST_PORT}/) ]] && echo "Received response from '${ARTIFACT_ID}-${BRANCH_NAME}'" && break
+            [[ \$(curl -s -X GET 127.0.0.1:${HOST_PORT}${HEALTH_CHECK_ENDPOINT}) ]] && echo "Received response from '${ARTIFACT_ID}-${BRANCH_NAME}'" && break
             sleep 3
           done
-          curl -I 127.0.0.1:${HOST_PORT}/ --fail
+          curl -I -X GET 127.0.0.1:${HOST_PORT}${HEALTH_CHECK_ENDPOINT} --fail
         """
         echo "Ran a successful Docker container health-check on '${ARTIFACT_ID}-${BRANCH_NAME}'"
       }
     }
 
-    stage ("Proceed when branch is 'master' or 'develop'") {
+    stage ("Proceed when branch is 'develop', 'release', or 'master'") {
       when {
         anyOf {
-          branch 'master'
           branch 'develop'
+          branch 'release'
+          branch 'master'
         }
       }
 
@@ -190,7 +207,7 @@ pipeline {
               steps {
                 echo "Finding old deployments on DL6..."
                 script {
-                  OLD_DEPLOYMENTS = sh (script: """#!/bin/bash
+                  OLD_DEPLOYMENTS = sh (script: """
                     set -e
                     docker -H ${DOCKER_LINUX_HOST} ps -q -f "label=SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}"
                   """, returnStdout: true).trim()
@@ -211,7 +228,7 @@ pipeline {
               steps {
                 echo "Generating the 'DEPLOY_DATE' value from the current date/time"
                 script {
-                  DEPLOY_DATE = sh (script: """#!/bin/bash
+                  DEPLOY_DATE = sh (script: """
                     set -e
                     date +'%Y-%m-%d_%H-%M-%S'
                   """, returnStdout: true).trim()
@@ -223,7 +240,7 @@ pipeline {
             stage ("8.3) Deploy new container to DL6") {
               steps {
                 echo "Deploying new container to DL6..."
-                sh """#!/bin/bash
+                sh """
                   set -e
                   docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH} \
@@ -252,7 +269,7 @@ jenkins.job=${JOB_NAME}" \
                   ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                 """
                 echo "Deployed container '${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
-                echo "DL6-hosted '${STAGE}' app available at http://${STAGE}-${ENDPOINT}"
+                echo "DL6-hosted '${STAGE}' container available at http://${STAGE}-${ENDPOINT}"
               }
             }
 
@@ -292,7 +309,7 @@ jenkins.job=${JOB_NAME}" \
                   steps {
                     echo "Finding old 'prod' deployments on DL6..."
                     script {
-                      OLD_DEPLOYMENTS = sh (script: """#!/bin/bash
+                      OLD_DEPLOYMENTS = sh (script: """
                         set -e
                         docker -H ${DOCKER_LINUX_HOST} ps -q -f "label=SERVICE_NAME=prod_${PRODUCT}_${SERVICE}"
                       """, returnStdout: true).trim()
@@ -313,7 +330,7 @@ jenkins.job=${JOB_NAME}" \
                   steps {
                     echo "Generating the 'DEPLOY_DATE' value from the current date/time"
                     script {
-                      DEPLOY_DATE = sh (script: """#!/bin/bash
+                      DEPLOY_DATE = sh (script: """
                         set -e
                         date +'%Y-%m-%d_%H-%M-%S'
                       """, returnStdout: true).trim()
@@ -325,7 +342,7 @@ jenkins.job=${JOB_NAME}" \
                 stage ("9.3) Deploy new 'prod' container to DL6") {
                   steps {
                     echo "Deploying new 'prod' container to DL6..."
-                    sh """#!/bin/bash
+                    sh """
                       set -e
                       docker -H ${DOCKER_LINUX_HOST} run -d --rm \
                       --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH} \
@@ -333,9 +350,10 @@ jenkins.job=${JOB_NAME}" \
                       -l "SERVICE_TAGS=\
 trilogy.expose-v2,\
 trilogy.redirecthttp,\
-trilogy.cert=trilogy-wildcard,\
+trilogy.cert=internal_default,\
 trilogy.https,\
-trilogy.endpoint=${PROD_ENDPOINT},\
+trilogy.internal,\
+trilogy.endpoint=${ENDPOINT},\
 deploy.date=${DEPLOY_DATE},\
 git.hash=${GIT_HASH},\
 jenkins.build=${BUILD_NUMBER},\
@@ -353,7 +371,7 @@ jenkins.job=${JOB_NAME}" \
                       ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                     """
                     echo "Deployed container 'prod_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
-                    echo "DL6-hosted 'prod' app available at http://${PROD_ENDPOINT}"
+                    echo "DL6-hosted 'prod' container available at http://${ENDPOINT}"
                   }
                 }
 
@@ -385,7 +403,7 @@ jenkins.job=${JOB_NAME}" \
   post {
     always {
       echo "Performing cleanup..."
-      sh """#!/bin/bash
+      sh """
         set -e
         if [[ \$(docker ps -a | grep ${ARTIFACT_ID}-${BRANCH_NAME}) ]]; then
           docker kill ${ARTIFACT_ID}-${BRANCH_NAME} 2> /dev/null || true
