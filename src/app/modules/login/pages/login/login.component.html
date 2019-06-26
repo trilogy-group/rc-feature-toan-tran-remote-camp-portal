@@ -113,3 +113,35 @@
     </a>
   </div>
 </section>
+
+<ng-template #impersonationModal
+  style="width:600px"
+  let-close="close">
+    <div class="df-modal__header mt-3">
+      <div modal-header>Impersonate User</div>
+    </div>
+  <div class="modal-body"
+    modal-body>
+    <div>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          (keyup)="updateImpersonationEmail($event)"
+          placeholder="Please enter user's email"
+          name="impersonationEmail">
+      </div>
+      <div class="row">
+        <div class="col text-right">
+          <button 
+            (click)="submitImpersonation(close)"
+            id="submitImpersonation"
+            [disabled]="true"
+            class="btn btn-primary pl-4 pr-4">
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

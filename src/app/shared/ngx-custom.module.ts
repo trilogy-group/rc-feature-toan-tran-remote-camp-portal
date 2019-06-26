@@ -13,6 +13,7 @@ import { DfToolTipModule } from '@devfactory/ngx-df/tooltip/';
 import { DfBarModule } from '@devfactory/ngx-df/charts/bar';
 import { DfLineModule } from '@devfactory/ngx-df/charts/line';
 import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
+import { DfModalModule } from '@devfactory/ngx-df/modal';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
     DfBarModule.forRoot(),
     DfLineModule.forRoot(),
     DfGroupToggleModule.forRoot(),
+    DfModalModule.forRoot(),
   ],
   providers: [],
   exports: [
@@ -56,7 +58,8 @@ import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
     DfToolTipModule,
     DfBarModule,
     DfLineModule,
-    DfGroupToggleModule
+    DfGroupToggleModule,
+    DfModalModule,
   ],
 })
 export class NgxDfRootModule {}
@@ -76,7 +79,8 @@ export class NgxDfRootModule {}
     DfToolTipModule,
     DfBarModule,
     DfLineModule,
-    DfGroupToggleModule
+    DfGroupToggleModule,
+    DfModalModule,
   ],
   exports: [
     DfCardModule,
@@ -92,7 +96,8 @@ export class NgxDfRootModule {}
     DfToolTipModule,
     DfBarModule,
     DfLineModule,
-    DfGroupToggleModule
+    DfGroupToggleModule,
+    DfModalModule,
   ],
 })
 export class NgxDfCustom {
