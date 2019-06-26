@@ -105,8 +105,10 @@ pipeline {
             script {
               NG_BUILD_CONFIG=""
               STAGE = "regression"
+              HOST_HEALTH_CHECK_PORT = 9204
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
+              echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
             }
           }
         }
