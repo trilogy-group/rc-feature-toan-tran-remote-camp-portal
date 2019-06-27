@@ -15,7 +15,7 @@ export class AuthenticationService {
     tmsUrl: ''
   };
 
-  private api = 'https://dev-remoteu.webproxy.aureacentral.com/api';
+  private api = '/api';
 
   private LOGIN = `${this.api}/AuthenticationGoogleToken`;
   private IMPERSONATE = `${this.api}/Impersonation`;
