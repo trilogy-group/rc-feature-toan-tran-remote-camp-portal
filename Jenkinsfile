@@ -185,7 +185,7 @@ pipeline {
 
         stage ("6) Tag Docker image") {
           steps {
-            echo "Applying 'GIT_HASH', and 'latest' tags to the Docker image..."
+            echo "Applying 'GIT_HASH' and 'latest' tags to the Docker image..."
             sh "docker tag ${ARTIFACT_ID}-${BRANCH_NAME}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}"
             sh "docker tag ${ARTIFACT_ID}-${BRANCH_NAME}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:latest"
           }
@@ -252,7 +252,7 @@ pipeline {
                 sh """
                   set -e
                   docker -H ${DOCKER_LINUX_HOST} run -d --rm \
-                  --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH} \
+                  --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
                   -l "SERVICE_TAGS=\
 trilogy.expose-v2,\
@@ -277,7 +277,7 @@ jenkins.job=${JOB_NAME}" \
                   -p ${HOST_PORT} \
                   ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                 """
-                echo "Deployed container '${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
+                echo "Deployed container '${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER}'"
                 echo "DL6-hosted '${STAGE}' container available at http://${STAGE}-${ENDPOINT}"
               }
             }
@@ -354,7 +354,7 @@ jenkins.job=${JOB_NAME}" \
                     sh """
                       set -e
                       docker -H ${DOCKER_LINUX_HOST} run -d --rm \
-                      --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH} \
+                      --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER} \
                       -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
                       -l "SERVICE_TAGS=\
 trilogy.expose-v2,\
@@ -379,7 +379,7 @@ jenkins.job=${JOB_NAME}" \
                       -p ${HOST_PORT} \
                       ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                     """
-                    echo "Deployed container 'prod_${PRODUCT}_${SERVICE}_${GIT_HASH}'"
+                    echo "Deployed container 'prod_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER}'"
                     echo "DL6-hosted 'prod' container available at http://${ENDPOINT}"
                   }
                 }
