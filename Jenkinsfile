@@ -185,7 +185,7 @@ pipeline {
 
         stage ("6) Tag Docker image") {
           steps {
-            echo "Applying 'GIT_HASH', and 'latest' tags to the Docker image..."
+            echo "Applying 'GIT_HASH' and 'latest' tags to the Docker image..."
             sh "docker tag ${ARTIFACT_ID}-${BRANCH_NAME}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}"
             sh "docker tag ${ARTIFACT_ID}-${BRANCH_NAME}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:latest"
           }
