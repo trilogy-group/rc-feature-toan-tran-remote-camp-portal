@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class AccomplishmentsService {
-  private api = 'https://dev-remoteu.webproxy.aureacentral.com/api';
+  private api = '/api';
   private GET_PROFILE = `${this.api}/profile`;
   private GET_HARDEST_PROBLEMS = `${this.api}/ProfileHardestProblems`;
   private GET_PROFILE_ACCOMPLISHMENTS = `${this.api}/ProfileAccomplishments`;
