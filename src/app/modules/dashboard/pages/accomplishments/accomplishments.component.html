@@ -118,7 +118,7 @@
       </div>
     </div>
   </div>
-  <div class="row ml-5 mb-5 mt-3 mr-3 hardest-problems overflow-hidden">
+  <div class="row ml-5 mb-5 mt-3 mr-3 hardest-problems-container overflow-visible position-relative">
     <div class="col-4 px-0">
       <div class="d-flex flex-column px-4">
         <div class="my-0">
@@ -129,17 +129,14 @@
             class="col mx-2 my-1 overflow-visible">
             <df-card-content class="d-flex flex-column"
               dfToolTipColor="dark"
-              container=".hardest-problems"
+              container=".hardest-problems-container"
               dfToolTip="empty"
               [dftoolTipTemplate]="hardestProblemTooltip"
               [dftoolTipData]="{failedIn: hardestProblem.failedIn}"
-              dfToolTipPlacement="top">
+              dfToolTipPlacement="right">
               <div class="w-100 d-flex justify-content-between">
                 <span><h4><a [href]="'https://crossover.atlassian.net/browse/' + hardestProblem.jiraKey" target="_blank">{{ hardestProblem.jiraKey }}</a></h4></span>
-                <span dfToolTipColor="dark"
-                  container=".hardest-problems"
-                  dfToolTip="See failed tickets in Jira"
-                  dfToolTipPlacement="top">
+                <span matTooltip="See failed tickets in Jira">
                   <h4>
                     <a [href]="hardestProblem.failedInJiraLink"
                       target="_blank">
@@ -148,7 +145,7 @@
                   </h4>
                 </span>
               </div>
-              <span class="text-muted">{{ hardestProblem.summary}} </span>
+              <span class="text-muted">{{ hardestProblem.summary}}</span>
             </df-card-content>
           </df-card>
         </div>
