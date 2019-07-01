@@ -1,4 +1,4 @@
-<div class="d-flex flex-column mx-4">
+<div class="d-flex flex-column mx-4 my-2">
   <div class="row mt-1">
     <df-card *ngFor="let hardestProblems of week1; let i = index"
       class="col day-problem px-0"
@@ -25,7 +25,7 @@
       class="col day-problem px-0"
       [class.invisible]="!hardestProblems.items">
       <df-card-header class="py-1 pr-2 text-right w-100">
-          <div class="w-100 text-right">Day {{ i + 8 }}</div>
+          <div class="w-100 text-right">Day {{ i + 6 }}</div>
       </df-card-header>
       <df-card-content class="d-flex flex-column pr-0 py-1 overflow-auto day-problem__content">
         <span *ngFor="let item of hardestProblems.items"
@@ -46,7 +46,7 @@
       class="col day-problem px-0"
       [class.invisible]="!hardestProblems.items">
       <df-card-header class="py-1 pr-2 text-right w-100">
-          <div class="w-100 text-right">Day {{ i + 15 }}</div>
+          <div class="w-100 text-right">Day {{ i + 11 }}</div>
       </df-card-header>
       <df-card-content class="d-flex flex-column pr-0 py-1 overflow-auto day-problem__content">
         <span *ngFor="let item of hardestProblems.items"
@@ -67,7 +67,7 @@
       class="col day-problem px-0"
       [class.invisible]="!hardestProblems.items">
       <df-card-header class="py-1 pr-2 text-right w-100">
-          <div class="w-100 text-right">Day {{ i + 22 }}</div>
+          <div class="w-100 text-right">Day {{ i + 16 }}</div>
       </df-card-header>
       <df-card-content class="d-flex flex-column pr-0 py-1 overflow-auto day-problem__content">
         <span *ngFor="let item of hardestProblems.items"

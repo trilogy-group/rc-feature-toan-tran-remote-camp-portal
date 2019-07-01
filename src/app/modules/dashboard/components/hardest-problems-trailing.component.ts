@@ -6,6 +6,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./hardest-problems-trailing.component.scss']
 })
 export class HardestProblemsTrailingComponent implements OnInit {
+  private workweekLength = 5;
+
   @Input()
   public hardestProblemsByDay: any[];
 
@@ -19,8 +21,8 @@ export class HardestProblemsTrailingComponent implements OnInit {
 
   public ngOnInit(): void {
     for (let i = 0; i < 4; i++) {
-      this[`week${i + 1}`] = this.hardestProblemsByDay.slice(i * 7, (i + 1) * 7);
-      while (this[`week${i + 1}`].length !== 0 && this[`week${i + 1}`].length !== 7) {
+      this[`week${i + 1}`] = this.hardestProblemsByDay.slice(i * this.workweekLength, (i + 1) * this.workweekLength);
+      while (this[`week${i + 1}`].length !== 0 && this[`week${i + 1}`].length !== this.workweekLength) {
         this[`week${i + 1}`].push({ });
       }
     }

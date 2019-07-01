@@ -47,7 +47,12 @@
   }
 
   .line-chart {
-    height: 310px !important;
+    height: 300px !important;
+  }
+
+  .line-chart-container {
+    height: 194px !important;
+    max-height: 194px !important;
   }
 
   .daily-progress-grid {

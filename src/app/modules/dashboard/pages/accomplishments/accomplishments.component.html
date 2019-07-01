@@ -105,20 +105,22 @@
           </ng-template>
         </df-grid-column>
       </df-grid>
-      <df-line-chart *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].text"
-        class="line-chart"
-        [data]="dailyProgressChart"
-        [showDots]="true"
-        [showValues]="true"
-        [smoothLine]="false"
-        [options]="dailyProgressChartOptions">
-        
-      </df-line-chart>
+      <div class="line-chart-container"
+      *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].text">
+        <df-line-chart
+          class="line-chart"
+          [data]="dailyProgressChart"
+          [showDots]="true"
+          [showValues]="true"
+          [smoothLine]="false"
+          [options]="dailyProgressChartOptions">
+        </df-line-chart>
+      </div>
     </div>
   </div>
   <div class="row ml-5 mb-5 mt-3 mr-3 hardest-problems overflow-hidden">
-    <div class="col-2 px-0">
-      <div class="d-flex flex-column px-3">
+    <div class="col-4 px-0">
+      <div class="d-flex flex-column px-4">
         <div class="my-0">
           <h2>Overall Problems</h2>
         </div>
@@ -152,7 +154,7 @@
         </div>
       </div>
     </div>
-    <div class="col-10 px-0">
+    <div class="col-8 px-0">
       <div class="d-flex flex-column problem-resolution px-3">
         <div class="my-0">
           <h2>Problem Resolution Progress</h2>
