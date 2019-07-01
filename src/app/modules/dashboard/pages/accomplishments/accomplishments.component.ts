@@ -37,7 +37,7 @@ export class AccomplishmentsComponent implements OnInit {
   ];
   public loaded = false;
 
-  dailyProgressChartOptions = new DfLineChartConfiguration();
+  public dailyProgressChartOptions = new DfLineChartConfiguration();
 
   public currentProductivityDisplay: string;
   public accomplishmentsSummary: any[] = [];
@@ -48,6 +48,7 @@ export class AccomplishmentsComponent implements OnInit {
   public qualityTarget: number;
   public productivityTarget: number;
   public hardestProblems = [];
+  public hardestProblemsByDay = [];
 
   public daysCompleted: number;
   public profile: any = { };
@@ -65,10 +66,11 @@ export class AccomplishmentsComponent implements OnInit {
     forkJoin(
       this.accomplishmentsService.getHardestProblems(),
       this.accomplishmentsService.getProfile(),
-      this.accomplishmentsService.getAcomplishmentsDailyProgress()
+      this.accomplishmentsService.getAcomplishmentsDailyProgress(),
+      this.accomplishmentsService.getHardestProblemsByDay()
     )
     .pipe(finalize(() => this.loadingSpinner.hide()))
-    .subscribe(([hardestProblems, profile, dailyProgressResponse]) => {
+    .subscribe(([hardestProblems, profile, dailyProgressResponse, hardestProblemsByDay]) => {
       this.hardestProblems = hardestProblems;
       this.profile = profile;
       this.calculateDaysCompleted();
@@ -122,6 +124,8 @@ export class AccomplishmentsComponent implements OnInit {
 
         this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: ftarYes.toFixed(2) });
         this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: (1 - ftarYes).toFixed(2) });
+        this.hardestProblemsByDay = hardestProblemsByDay;
+
         this.loaded = true;
 
         this.toasterService.popSuccess(`Welcome Back ${this.profile.name}!`);
