@@ -7,17 +7,21 @@ import { AuthenticationGuard } from 'src/app/shared/guards/authentication.guard'
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
-  },
-  {
-    path: 'dashboard',
     component: MainLayoutComponent,
+    canActivate: [AuthenticationGuard],
     children: [
       {
         path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
         loadChildren: './modules/dashboard/dashboard.module#DashboardModule',
-        canActivate: [AuthenticationGuard]
+      },
+      {
+        path: 'calendar',
+        loadChildren: './modules/calendar/calendar.module#CalendarModule',
       }
     ]
   },

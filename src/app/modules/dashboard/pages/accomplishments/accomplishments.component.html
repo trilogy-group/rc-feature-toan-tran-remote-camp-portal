@@ -106,7 +106,7 @@
         </df-grid-column>
       </df-grid>
       <div class="line-chart-container"
-      *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].text">
+        *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].text">
         <df-line-chart
           class="line-chart"
           [data]="dailyProgressChart"
@@ -122,7 +122,7 @@
     <div class="col-4 px-0">
       <div class="d-flex flex-column px-4">
         <div class="my-0">
-          <h2>Overall Problems</h2>
+          <h2>Overall Hardest Problems</h2>
         </div>
         <div class="row">
           <df-card *ngFor="let hardestProblem of hardestProblems"
@@ -136,7 +136,8 @@
               dfToolTipPlacement="right">
               <div class="w-100 d-flex justify-content-between">
                 <span><h4><a [href]="'https://crossover.atlassian.net/browse/' + hardestProblem.jiraKey" target="_blank">{{ hardestProblem.jiraKey }}</a></h4></span>
-                <span matTooltip="See failed tickets in Jira">
+                <span matTooltip="See failed tickets in Jira"
+                  matTooltipPosition="right">
                   <h4>
                     <a [href]="hardestProblem.failedInJiraLink"
                       target="_blank">
