@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         () => {
           const role = this.authenticationTokenService.getUserRole();
-          if (role && role.toLowerCase() === this.admin) {          
+          if (role && role.toLowerCase() === this.admin) {
             this.modal.open(this.impersonationModal, { backdrop: true });
           } else {
             this.router.navigate(['']);
@@ -86,9 +86,9 @@ export class LoginComponent implements OnInit {
     .subscribe(() => {
       this.ngZone.run(() => this.router.navigate([''])).then();
       close();
-    }, error => { 
+    }, error => {
       this.handleError(error);
-      if (error.status == 401 || error.status == 403) {
+      if (error.status === 401 || error.status === 403) {
         close();
       }
     });
@@ -99,10 +99,10 @@ export class LoginComponent implements OnInit {
     if (error && error.error) {
       errorMessage = error.error;
     } else if (error.status === 401) {
-      errorMessage = "Session Expired"
+      errorMessage = 'Session Expired';
     } else if (error && error.message) {
       errorMessage = error.message;
-    } 
+    }
 
     this.toasterService.popError(errorMessage);
   }

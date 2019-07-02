@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiClientService } from './api-client.service';
 import { AuthenticationTokenService } from './authentication-token.service';
-import { map } from 'rxjs/operators'; 
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationService {

@@ -40,7 +40,7 @@ export class ApiClientService {
 
         const token = this.authenticationTokenService.getToken();
         if (!!token) {
-            headers = headers.append('Authorization', `Bearer ${token}`)
+            headers = headers.append('Authorization', `Bearer ${token}`);
         }
         return headers;
     }

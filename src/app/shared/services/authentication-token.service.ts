@@ -4,7 +4,7 @@ declare var signOutGoogle: any;
 
 @Injectable()
 export class AuthenticationTokenService {
-    private TOKEN_KEY : string = 'sessionToken';
+    private TOKEN_KEY = 'sessionToken';
 
     constructor (
         private readonly router: Router
@@ -15,13 +15,13 @@ export class AuthenticationTokenService {
     }
 
     public isLoggedIn(): boolean {
-        var token = localStorage.getItem(this.TOKEN_KEY);
+        const token = localStorage.getItem(this.TOKEN_KEY);
         if (!token) {
             return false;
         }
 
-        var jwt = this.parseJwt(token);
-        var current_time = new Date().getTime() / 1000;
+        const jwt = this.parseJwt(token);
+        const current_time = new Date().getTime() / 1000;
         return current_time < jwt.exp - 10;
     }
 
@@ -39,7 +39,7 @@ export class AuthenticationTokenService {
         if (!this.isLoggedIn()) {
             return null;
         }
-        var sessionToken = localStorage.getItem(this.TOKEN_KEY);
+        const sessionToken = localStorage.getItem(this.TOKEN_KEY);
         const user = this.parseJwt(sessionToken);
         return user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
     }
