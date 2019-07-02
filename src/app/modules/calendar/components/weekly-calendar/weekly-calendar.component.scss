@@ -3,7 +3,7 @@
 
 :host ::ng-deep {
   .df-grid {
-    width: 450px !important;
+    width: 454px !important;
   }
 
   table {
@@ -14,10 +14,18 @@
     th:last-child {
       width: 50px;
     }
+
+    tr:last-child {
+      font-weight: bold;
+    }
   }
 
   .df-checkbox__icon {
     margin-right: 0px;
+  }
+
+  .df-accordion-content__wrapper {
+    overflow: auto;
   }
 }
 

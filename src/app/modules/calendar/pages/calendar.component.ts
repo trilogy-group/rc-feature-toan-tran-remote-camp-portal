@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { CalendarService } from 'src/app/shared/services/calendar.service';
 
 @Component({
@@ -18,7 +19,7 @@ export class CalendarComponent implements OnInit {
 
   public ngOnInit(): void {
     this.calendarService.getWeeklyPlanning().subscribe(weeklyPlanning => {
-      this.weeklyPlanning = weeklyPlanning.slice();
+      this.weeklyPlanning = cloneDeep(weeklyPlanning);
     });
   }
 

@@ -1,6 +1,6 @@
 <div class="d-block">
   <div *ngFor="let plan of weeklyPlanning; let i = index"
-    class="row ml-5 mb-5 mt-3 mr-3">
+    class="row ml-5 my-3 mr-3">
     <app-weekly-calendar class="w-100"
       [weekPlanning]="plan"
       (updateActionEvent)="updateAction($event)"
