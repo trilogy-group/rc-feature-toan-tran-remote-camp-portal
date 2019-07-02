@@ -16,7 +16,7 @@
       <b>Days Completed:</b>&nbsp;{{ daysCompleted }}
     </div>
 
-    <div class="col-2 ">
+    <div class="col-2">
       <div class="d-flex flex-column justify-content-between">
         <a [href]="profile?.tmsUrl"
           target="_blank">TMS</a>
@@ -26,10 +26,10 @@
     </div>
   </div>
   <div class="row ml-5 mb-5 mt-3 mr-3">
-    <div class="col-6">
+    <div class="col">
       <div class="d-flex flex-column">
-        <div class="my-0">
-          <h2 class="ml-3">Weekly Summary</h2>
+        <div class="my-0 d-flex">
+          <h3 class="ml-3">Weekly Summary</h3>
         </div>
         <div class="accomplishments-summary">
           <df-grid *ngIf="loaded"
@@ -74,44 +74,7 @@
         </div>
       </div>
     </div>
-    <div class="col-6">
-      <div class="d-flex flex-column">
-        <div class="my-0">
-          <h2>Hardest Problems</h2>
-        </div>
-        <div class="row hardest-problems">
-          <df-card *ngFor="let hardestProblem of hardestProblems"
-            class="col-5 mx-2 my-1 overflow-visible">
-            <df-card-content class="d-flex flex-column"
-              dfToolTipColor="dark"
-              container=".hardest-problems"
-              dfToolTip="empty"
-              [dftoolTipTemplate]="hardestProblemTooltip"
-              [dftoolTipData]="{failedIn: hardestProblem.failedIn}"
-              dfToolTipPlacement="left">
-              <div class="w-100 d-flex justify-content-between">
-                <span><h4><a [href]="'https://crossover.atlassian.net/browse/' + hardestProblem.jiraKey" target="_blank">{{ hardestProblem.jiraKey }}</a></h4></span>
-                <span dfToolTipColor="dark"
-                  container="body"
-                  dfToolTip="See failed tickets in Jira"
-                  dfToolTipPlacement="left">
-                  <h4>
-                    <a [href]="hardestProblem.failedInJiraLink"
-                      target="_blank">
-                      <mat-icon>open_in_new</mat-icon>
-                    </a>
-                  </h4>
-                </span>
-              </div>
-              <span class="text-muted">{{ hardestProblem.summary}} </span>
-            </df-card-content>
-          </df-card>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row ml-5 mt-4 bottom-charts">
-    <div class="col-4">
+    <div class="col">
       <div class="d-flex row">
         <h3 class="ml-3">Daily Progress</h3>
         <df-group-toggle [items]="productivityDisplayTypes"
@@ -142,17 +105,67 @@
           </ng-template>
         </df-grid-column>
       </df-grid>
-      <df-line-chart *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].text"
-        class="line-chart"
-        [data]="dailyProgressChart"
-        [showDots]="true"
-        [showValues]="true"
-        [smoothLine]="false"
-        [options]="dailyProgressChartOptions">
-        
-      </df-line-chart>
+      <div class="line-chart-container"
+      *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].text">
+        <df-line-chart
+          class="line-chart"
+          [data]="dailyProgressChart"
+          [showDots]="true"
+          [showValues]="true"
+          [smoothLine]="false"
+          [options]="dailyProgressChartOptions">
+        </df-line-chart>
+      </div>
     </div>
-    <div class="col-8">
+  </div>
+  <div class="row ml-5 mb-5 mt-3 mr-3 hardest-problems-container overflow-visible position-relative">
+    <div class="col-4 px-0">
+      <div class="d-flex flex-column px-4">
+        <div class="my-0">
+          <h2>Overall Problems</h2>
+        </div>
+        <div class="row">
+          <df-card *ngFor="let hardestProblem of hardestProblems"
+            class="col mx-2 my-1 overflow-visible">
+            <df-card-content class="d-flex flex-column"
+              dfToolTipColor="dark"
+              container=".hardest-problems-container"
+              dfToolTip="empty"
+              [dftoolTipTemplate]="hardestProblemTooltip"
+              [dftoolTipData]="{failedIn: hardestProblem.failedIn}"
+              dfToolTipPlacement="right">
+              <div class="w-100 d-flex justify-content-between">
+                <span><h4><a [href]="'https://crossover.atlassian.net/browse/' + hardestProblem.jiraKey" target="_blank">{{ hardestProblem.jiraKey }}</a></h4></span>
+                <span matTooltip="See failed tickets in Jira">
+                  <h4>
+                    <a [href]="hardestProblem.failedInJiraLink"
+                      target="_blank">
+                      <mat-icon>open_in_new</mat-icon>
+                    </a>
+                  </h4>
+                </span>
+              </div>
+              <span class="text-muted">{{ hardestProblem.summary}}</span>
+            </df-card-content>
+          </df-card>
+        </div>
+      </div>
+    </div>
+    <div class="col-8 px-0">
+      <div class="d-flex flex-column problem-resolution px-3">
+        <div class="my-0">
+          <h2>Problem Resolution Progress</h2>
+        </div>
+        <div class="overflow-y-auto overflow-x-hidden">
+          <app-hardest-problems-trailing *ngIf="loaded"
+            [hardestProblemsByDay]="hardestProblemsByDay">
+          </app-hardest-problems-trailing>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row ml-5 mt-4 bottom-charts">
+    <div class="col">
       <div class="row">
         <div class="col-6">
           <div class="d-flex flex-column">
@@ -172,6 +185,7 @@
             <h3>Quality Target: {{ qualityTarget }}%</h3>
             <div class="chart-container quality-pie">
               <df-pie *ngIf="loaded"
+                class="mt-4"
                 [data]="qualityChart"
                 [colors]="qualityColors"
                 labelType="inner"

@@ -2,6 +2,8 @@ import { MatButtonModule, MatIconModule, MatListModule, MatMenuModule, MatToolti
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { DfSidebarModule, DfHttpLoaderInterceptorModule } from '@devfactory/ngx-df';
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { MainLayoutComponent } from 'src/app/layout/main/main-layout.component';
@@ -10,11 +12,9 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
 import { ApiClientService } from 'src/app/shared/services/api-client.service';
 import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
+import { AppComponent } from 'src/app/app.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
-import { DfSidebarModule, DfHttpLoaderInterceptorModule } from '@devfactory/ngx-df';
-import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,7 @@ import { HttpClientModule } from '@angular/common/http';
     SharedModule,
     HttpClientModule,
     HttpClientModule,
-    DfHttpLoaderInterceptorModule.forRoot()
+    DfHttpLoaderInterceptorModule.forRoot(),
   ],
   providers: [
     AuthenticationGuard,
