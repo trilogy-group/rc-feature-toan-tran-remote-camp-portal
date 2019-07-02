@@ -32,8 +32,7 @@ export class AccomplishmentsComponent implements OnInit {
   public readonly productivityColors = [
     DF_COLORS.GREEN,
     DF_COLORS.YELLOW,
-    DF_COLORS.BLUE,
-    DF_COLORS.LIGHT_GREY,
+    DF_COLORS.BLUE
   ];
   public loaded = false;
 
@@ -75,7 +74,7 @@ export class AccomplishmentsComponent implements OnInit {
       this.profile = profile;
       this.calculateDaysCompleted();
 
-      const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality ? week.quality * 100 : 100);
+      const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality ? week.quality * 100 : null);
         this.accomplishmentsSummary.push({
           stat: this.FTAR,
           values: weeklyQuality,
@@ -105,7 +104,7 @@ export class AccomplishmentsComponent implements OnInit {
           return {
             xKey: `Day ${dailyObject.day.toString()}`,
             productivity: dailyObject.productivity.toFixed(2),
-            quality: dailyObject.quality ?  (dailyObject.quality / 100).toFixed(2) : 1
+            quality: dailyObject.quality ? (dailyObject.quality / 100).toFixed(2) : 1
           };
         });
 
@@ -114,13 +113,11 @@ export class AccomplishmentsComponent implements OnInit {
         const productivityApproved = dailyProgressResponse.scoreSummary.approved || 0;
         const productivityInReview = dailyProgressResponse.scoreSummary.inReview || 0;
         const productivityInProgress = dailyProgressResponse.scoreSummary.inProgress || 0;
-        const productivityToDo = dailyProgressResponse.scoreSummary.toDo || 0;
         const ftarYes = dailyProgressResponse.qualitySummary.approved || 0;
 
         this.productivityChart.push({ xKey: this.approved, yKey: productivityApproved.toFixed(2) });
         this.productivityChart.push({ xKey: this.inReview, yKey: productivityInReview.toFixed(2) });
         this.productivityChart.push({ xKey: this.inProgress, yKey: productivityInProgress.toFixed(2) });
-        this.productivityChart.push({ xKey: this.toDo, yKey: productivityToDo.toFixed(2) });
 
         this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: ftarYes.toFixed(2) });
         this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: (1 - ftarYes).toFixed(2) });
