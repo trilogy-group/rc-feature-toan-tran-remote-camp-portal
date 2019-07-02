@@ -29,8 +29,9 @@
           <mat-icon class="mat-right-icon">open_in_new</mat-icon>
         </a>
         <mat-divider></mat-divider>
-        <a href="/" 
-          onclick="signOut();"
+        <a 
+          (click)="logout()"
+          [routerLink]=""
           class="d-flex"
           style="padding: 0 16px; height: 48px;"><div class="d-flex align-items-center">
             Sign Out

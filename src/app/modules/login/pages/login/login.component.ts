@@ -1,5 +1,6 @@
 import { Component, OnInit, NgZone, TemplateRef, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 import { Router } from '@angular/router';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { DfModalService } from '@devfactory/ngx-df/modal';
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit {
     private readonly modal: DfModalService,
     private readonly toasterService: DfToasterService,
     private readonly loadingSpinner: DfLoadingSpinnerService,
+    private readonly authenticationTokenService: AuthenticationTokenService
   ) { }
 
   public ngOnInit(): void {
@@ -52,6 +54,7 @@ export class LoginComponent implements OnInit {
   }
 
   public onFailure(error: any): void {
+    this.toasterService.popError('Something went wrong. Coud not login to Google');
     console.log(error);
   }
 
@@ -60,14 +63,12 @@ export class LoginComponent implements OnInit {
       this.authenticationService.login(googleToken)
       .pipe(finalize(() => this.loadingSpinner.hide()))
       .subscribe(
-        sessionToken => {
-          localStorage.setItem('sessionToken', sessionToken);
-          const user = this.parseJwt(sessionToken);
-          const role = user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-          if (role && role.toLowerCase() === this.admin) {
+        () => {
+          const role = this.authenticationTokenService.getUserRole();
+          if (role && role.toLowerCase() === this.admin) {          
             this.modal.open(this.impersonationModal, { backdrop: true });
           } else {
-            this.router.navigate(['/']);
+            this.router.navigate(['']);
           }
         },
         error => this.handleError(error)
@@ -82,23 +83,27 @@ export class LoginComponent implements OnInit {
   public submitImpersonation(close: Function): void {
     this.authenticationService.impersonate(this.impersonationEmailControl.value.trim())
     .pipe(finalize(() => this.loadingSpinner.hide()))
-    .subscribe(sessionToken => {
-      localStorage.setItem('sessionToken', sessionToken);
-      this.ngZone.run(() => this.router.navigate(['/'])).then();
+    .subscribe(() => {
+      this.ngZone.run(() => this.router.navigate([''])).then();
       close();
-    }, error => this.handleError(error));
-  }
-
-  private parseJwt (token): any {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(jsonPayload);
+    }, error => { 
+      this.handleError(error);
+      if (error.status == 401 || error.status == 403) {
+        close();
+      }
+    });
   }
 
   private handleError(error): void {
-    this.toasterService.popError(error && error.message ? error.message : 'Something went wrong');
+    let errorMessage = 'Something went wrong';
+    if (error && error.error) {
+      errorMessage = error.error;
+    } else if (error.status === 401) {
+      errorMessage = "Session Expired"
+    } else if (error && error.message) {
+      errorMessage = error.message;
+    } 
+
+    this.toasterService.popError(errorMessage);
   }
 }

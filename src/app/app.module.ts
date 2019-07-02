@@ -8,6 +8,8 @@ import { MainLayoutComponent } from 'src/app/layout/main/main-layout.component';
 import { AuthenticationGuard } from 'src/app/shared/guards/authentication.guard';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
+import { ApiClientService } from 'src/app/shared/services/api-client.service';
+import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 
 import { DfSidebarModule, DfHttpLoaderInterceptorModule } from '@devfactory/ngx-df';
 import { AppComponent } from './app.component';
@@ -37,7 +39,9 @@ import { HttpClientModule } from '@angular/common/http';
   providers: [
     AuthenticationGuard,
     AuthenticationService,
-    AccomplishmentsService
+    AccomplishmentsService,
+    ApiClientService,
+    AuthenticationTokenService
   ],
   bootstrap: [AppComponent]
 })

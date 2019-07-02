@@ -1,39 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApiClientService } from './api-client.service';
 
 @Injectable()
 export class AccomplishmentsService {
-  private api = '/api';
-  private GET_PROFILE = `${this.api}/profile`;
-  private GET_HARDEST_PROBLEMS = `${this.api}/ProfileHardestProblems`;
-  private GET_PROFILE_ACCOMPLISHMENTS = `${this.api}/ProfileAccomplishments`;
-
+  private GET_PROFILE = 'profile';
+  private GET_HARDEST_PROBLEMS = 'ProfileHardestProblems';
+  private GET_PROFILE_ACCOMPLISHMENTS = 'ProfileAccomplishments';
 
   public constructor(
-    private http: HttpClient
+    private apiClient: ApiClientService
   ) {}
 
   public getAcomplishmentsDailyProgress(): Observable<any> {
-    const headers = this.createAuthorizationHeader();
-    return this.http.get(this.GET_PROFILE_ACCOMPLISHMENTS, { headers });
+    return this.apiClient.get(this.GET_PROFILE_ACCOMPLISHMENTS);
   }
 
   public getHardestProblems(): Observable<any> {
-    const headers = this.createAuthorizationHeader();
-    return this.http.get(this.GET_HARDEST_PROBLEMS, { headers });
+    return this.apiClient.get(this.GET_HARDEST_PROBLEMS);
   }
 
   public getProfile(): Observable<any> {
-    const headers = this.createAuthorizationHeader();
-    return this.http.get(this.GET_PROFILE, { headers });
-  }
-
-  private createAuthorizationHeader(): HttpHeaders {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('sessionToken')}`,
-      'content-type': 'application/json',
-    });
-    return headers;
+    return this.apiClient.get(this.GET_PROFILE);
   }
 }
