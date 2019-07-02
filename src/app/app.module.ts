@@ -12,6 +12,7 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
 import { AppComponent } from 'src/app/app.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { CalendarService } from './shared/services/calendar.service';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   providers: [
     AuthenticationGuard,
     AuthenticationService,
-    AccomplishmentsService
+    AccomplishmentsService,
+    CalendarService
   ],
   bootstrap: [AppComponent]
 })

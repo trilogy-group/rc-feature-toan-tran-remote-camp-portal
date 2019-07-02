@@ -79,13 +79,12 @@
         <h3 class="ml-3">Daily Progress</h3>
         <df-group-toggle [items]="productivityDisplayTypes"
           class="ml-2"
-          (change)="onDailyProgressDisplayChange($event.text)">
+          (change)="onDailyProgressDisplayChange($event.id)">
         </df-group-toggle>
       </div>
-      <df-grid *ngIf="currentProductivityDisplay == productivityDisplayTypes[0].text"
+      <df-grid *ngIf="currentProductivityDisplay == productivityDisplayTypes[0].id"
         class="daily-progress-grid"
-        [value]="dailyProgress"
-        tableStyleClass="df-grid--striped">
+        [value]="dailyProgress">
         <df-grid-column header="Day">
           <ng-template let-item="rowData"
             dfGridTemplate="body">
@@ -106,7 +105,7 @@
         </df-grid-column>
       </df-grid>
       <div class="line-chart-container"
-        *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].text">
+        *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].id">
         <df-line-chart
           class="line-chart"
           [data]="dailyProgressChart"
