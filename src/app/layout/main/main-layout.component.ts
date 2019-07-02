@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 import { DfSidebar } from '@devfactory/ngx-df/sidebar';
 
 @Component({
@@ -13,11 +13,11 @@ export class MainLayoutComponent {
   private sideBar: DfSidebar;
 
   public constructor(
-    private _authenticationService: AuthenticationService
+    private _authenticationTokenService: AuthenticationTokenService
   ) {}
 
   public logout(): void {
-    this._authenticationService.logout();
+    this._authenticationTokenService.logout();
   }
 
   public toggleSideBar(): void {

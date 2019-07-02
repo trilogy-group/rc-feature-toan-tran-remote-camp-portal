@@ -2,7 +2,7 @@ import { MatButtonModule, MatIconModule, MatListModule, MatMenuModule, MatToolti
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DfSidebarModule, DfHttpLoaderInterceptorModule } from '@devfactory/ngx-df';
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
@@ -10,10 +10,11 @@ import { MainLayoutComponent } from 'src/app/layout/main/main-layout.component';
 import { AuthenticationGuard } from 'src/app/shared/guards/authentication.guard';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
+import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 import { AppComponent } from 'src/app/app.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { CalendarService } from './shared/services/calendar.service';
-
+import { CalendarService } from 'src/app/shared/services/calendar.service';
+import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,10 +37,16 @@ import { CalendarService } from './shared/services/calendar.service';
     DfHttpLoaderInterceptorModule.forRoot(),
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AllHttpInterceptor,
+      multi: true,
+    },
     AuthenticationGuard,
     AuthenticationService,
     AccomplishmentsService,
-    CalendarService
+    CalendarService,
+    AuthenticationTokenService
   ],
   bootstrap: [AppComponent]
 })

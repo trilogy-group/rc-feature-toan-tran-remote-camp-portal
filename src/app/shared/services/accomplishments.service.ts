@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AccomplishmentsService {
+  private GET_PROFILE = `${environment.apiUrl}/profile`;
+  private GET_HARDEST_PROBLEMS = `${environment.apiUrl}/ProfileHardestProblems`;
+  private GET_PROFILE_ACCOMPLISHMENTS = `${environment.apiUrl}/ProfileAccomplishments`;
   private hardestProblemsByDayMock = [{
     items: [{
       jiraKey: 'RIQB-90248',
@@ -83,40 +88,23 @@ export class AccomplishmentsService {
     }]
   }];
 
-  private api = 'https://dev-remoteu.trilogy.com/api';
-  private GET_PROFILE = `${this.api}/profile`;
-  private GET_HARDEST_PROBLEMS = `${this.api}/ProfileHardestProblems`;
-  private GET_PROFILE_ACCOMPLISHMENTS = `${this.api}/ProfileAccomplishments`;
-
-
   public constructor(
-    private http: HttpClient
+    private httpClient: HttpClient
   ) {}
 
   public getAcomplishmentsDailyProgress(): Observable<any> {
-    const headers = this.createAuthorizationHeader();
-    return this.http.get(this.GET_PROFILE_ACCOMPLISHMENTS, { headers });
+    return this.httpClient.get(this.GET_PROFILE_ACCOMPLISHMENTS);
   }
 
   public getHardestProblems(): Observable<any> {
-    const headers = this.createAuthorizationHeader();
-    return this.http.get(this.GET_HARDEST_PROBLEMS, { headers });
+    return this.httpClient.get(this.GET_HARDEST_PROBLEMS);
   }
 
   public getProfile(): Observable<any> {
-    const headers = this.createAuthorizationHeader();
-    return this.http.get(this.GET_PROFILE, { headers });
+    return this.httpClient.get(this.GET_PROFILE);
   }
 
   public getHardestProblemsByDay(): Observable<any> {
     return of(this.hardestProblemsByDayMock);
-  }
-
-  private createAuthorizationHeader(): HttpHeaders {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('sessionToken')}`,
-      'content-type': 'application/json',
-    });
-    return headers;
   }
 }
