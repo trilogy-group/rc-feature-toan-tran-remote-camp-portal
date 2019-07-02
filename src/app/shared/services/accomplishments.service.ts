@@ -77,12 +77,6 @@ export class AccomplishmentsService {
   }, {
     items: []
   }, {
-    items: []
-  }, {
-    items: []
-  }, {
-    items: []
-  }, {
     items: [{
       jiraKey: 'RIQB-300',
     }]
