@@ -16,9 +16,13 @@
     <div class="center"></div>
 
     <div class="right">
-      <button mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="User Profile">
-        <mat-icon class="avatar">
-          <img src="https://www.infrascan.net/demo/assets/img/avatar5.png" />
+      <button
+        class="d-flex justify-content-center" 
+        mat-icon-button
+        [matMenuTriggerFor]="userMenu"
+        matTooltip="User Profile">
+        <mat-icon class="avatar d-flex align-items-center">
+          <img src="/assets/images/user.png" />
         </mat-icon>
       </button>
 
