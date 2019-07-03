@@ -14,7 +14,6 @@ import { DfLineModule } from '@devfactory/ngx-df/charts/line';
 import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
 import { DfModalModule } from '@devfactory/ngx-df/modal';
 import { DfLoadingSpinnerModule, DfLoadingSpinnerTypes } from '@devfactory/ngx-df/loading-spinner';
-import { DfIconModule } from '@devfactory/ngx-df/icon';
 
 @NgModule({
   imports: [
@@ -44,7 +43,6 @@ import { DfIconModule } from '@devfactory/ngx-df/icon';
     DfLineModule.forRoot(),
     DfGroupToggleModule.forRoot(),
     DfModalModule.forRoot(),
-    DfIconModule.forRoot(),
   ],
   providers: [],
   exports: [
@@ -62,7 +60,6 @@ import { DfIconModule } from '@devfactory/ngx-df/icon';
     DfGroupToggleModule,
     DfModalModule,
     DfLoadingSpinnerModule,
-    DfIconModule
   ],
 })
 export class NgxDfRootModule {}
@@ -84,7 +81,6 @@ export class NgxDfRootModule {}
     DfGroupToggleModule,
     DfModalModule,
     DfLoadingSpinnerModule,
-    DfIconModule
   ],
   exports: [
     DfCardModule,
@@ -102,7 +98,6 @@ export class NgxDfRootModule {}
     DfGroupToggleModule,
     DfModalModule,
     DfLoadingSpinnerModule,
-    DfIconModule
   ],
 })
 export class NgxDfCustom {

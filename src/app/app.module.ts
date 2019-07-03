@@ -14,7 +14,7 @@ import { AuthenticationTokenService } from 'src/app/shared/services/authenticati
 import { AppComponent } from 'src/app/app.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interceptor';
-
+import { ProfileService } from 'src/app/shared/services/profile.service';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,8 @@ import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interce
     AuthenticationGuard,
     AuthenticationService,
     AccomplishmentsService,
-    AuthenticationTokenService
+    AuthenticationTokenService,
+    ProfileService
   ],
   bootstrap: [AppComponent]
 })
