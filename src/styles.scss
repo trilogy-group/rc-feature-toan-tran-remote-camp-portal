@@ -1,4 +1,5 @@
 @import '~@devfactory/ngx-df/core/_core';
+@import '~@angular/cdk/overlay-prebuilt.css';
 
 body {
   @import '~@devfactory/ngx-df/core/theming/aurea-skin/main';
@@ -19,4 +20,20 @@ html, body {
   font-family: 'Montserrat', sans-serif;
   font-size: 14px;
   background: #fefefe;
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.overflow-hidden {
+  overflow: hidden;
 }

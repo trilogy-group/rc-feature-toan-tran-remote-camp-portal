@@ -1,0 +1,86 @@
+<div class="d-flex flex-column mx-4 my-2">
+  <div class="row mt-1">
+    <df-card *ngFor="let hardestProblems of week1; let i = index"
+      class="col day-problem px-0"
+      [class.invisible]="!hardestProblems.items">
+      <df-card-header class="py-1 pr-2">
+        <div class="w-100 text-right">Day {{ i + 1 }}</div>
+      </df-card-header>
+      <df-card-content class="d-flex flex-column pr-0 py-1 overflow-auto day-problem__content">
+        <span *ngFor="let item of hardestProblems.items"
+          class="hardest-problem d-flex">
+          <mat-icon *ngIf="item.resolved"
+            class="day-problem__icon--success">check</mat-icon>
+          <mat-icon *ngIf="!item.resolved"
+            class="day-problem__icon--warning">error_outline</mat-icon>
+          <a [href]="'https://crossover.atlassian.net/browse/' + item.jiraKey"
+            target="_blank"
+            [class.strike-through]="item.resolved">{{ item.jiraKey }}</a>
+        </span>
+      </df-card-content>
+    </df-card>
+  </div>
+  <div class="row mt-2">
+    <df-card *ngFor="let hardestProblems of week2; let i = index"
+      class="col day-problem px-0"
+      [class.invisible]="!hardestProblems.items">
+      <df-card-header class="py-1 pr-2 text-right w-100">
+          <div class="w-100 text-right">Day {{ i + 6 }}</div>
+      </df-card-header>
+      <df-card-content class="d-flex flex-column pr-0 py-1 overflow-auto day-problem__content">
+        <span *ngFor="let item of hardestProblems.items"
+          class="hardest-problem d-flex">
+          <mat-icon *ngIf="item.resolved"
+            class="day-problem__icon--success">check</mat-icon>
+          <mat-icon *ngIf="!item.resolved"
+            class="day-problem__icon--warning">error_outline</mat-icon>
+          <a [href]="'https://crossover.atlassian.net/browse/' + item.jiraKey"
+            target="_blank"
+            [class.strike-through]="item.resolved">{{ item.jiraKey }}</a>
+        </span>
+      </df-card-content>
+    </df-card>
+  </div>
+  <div class="row mt-2">
+    <df-card *ngFor="let hardestProblems of week3; let i = index"
+      class="col day-problem px-0"
+      [class.invisible]="!hardestProblems.items">
+      <df-card-header class="py-1 pr-2 text-right w-100">
+          <div class="w-100 text-right">Day {{ i + 11 }}</div>
+      </df-card-header>
+      <df-card-content class="d-flex flex-column pr-0 py-1 overflow-auto day-problem__content">
+        <span *ngFor="let item of hardestProblems.items"
+          class="hardest-problem d-flex">
+          <mat-icon *ngIf="item.resolved"
+            class="day-problem__icon--success">check</mat-icon>
+          <mat-icon *ngIf="!item.resolved"
+            class="day-problem__icon--warning">error_outline</mat-icon>
+          <a [href]="'https://crossover.atlassian.net/browse/' + item.jiraKey"
+            target="_blank"
+            [class.strike-through]="item.resolved">{{ item.jiraKey }}</a>
+        </span>
+      </df-card-content>
+    </df-card>
+  </div>
+  <div class="row mt-2">
+    <df-card *ngFor="let hardestProblems of week4; let i = index"
+      class="col day-problem px-0"
+      [class.invisible]="!hardestProblems.items">
+      <df-card-header class="py-1 pr-2 text-right w-100">
+          <div class="w-100 text-right">Day {{ i + 16 }}</div>
+      </df-card-header>
+      <df-card-content class="d-flex flex-column pr-0 py-1 overflow-auto day-problem__content">
+        <span *ngFor="let item of hardestProblems.items"
+          class="hardest-problem d-flex">
+          <mat-icon *ngIf="item.resolved"
+            class="day-problem__icon--success">check</mat-icon>
+          <mat-icon *ngIf="!item.resolved"
+            class="day-problem__icon--warning">error_outline</mat-icon>
+          <a [href]="'https://crossover.atlassian.net/browse/' + item.jiraKey"
+            target="_blank"
+            [class.strike-through]="item.resolved">{{ item.jiraKey }}</a>
+        </span>
+      </df-card-content>
+    </df-card>
+  </div>
+</div>
