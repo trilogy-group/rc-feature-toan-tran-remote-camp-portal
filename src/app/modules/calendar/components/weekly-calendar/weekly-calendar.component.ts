@@ -22,6 +22,9 @@ export class WeeklyCalendarComponent implements OnInit {
   @Output()
   public updateActionEvent = new EventEmitter<{}>();
 
+  @Output()
+  public openWeekEvent = new EventEmitter<{}>();
+
   public readonly TOTAL = 'Total';
 
   public ngOnInit(): void {
@@ -37,5 +40,9 @@ export class WeeklyCalendarComponent implements OnInit {
   public updateAction(action: any, complete: any): void {
     action.complete = complete;
     this.updateActionEvent.emit(action);
+  }
+
+  public openWeek(): void {
+    this.openWeekEvent.emit(this.index);
   }
 }
