@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <df-card class="mt-4">
+    <df-card-header>
+      <h3>Profile Settings and Setup</h3>
+    </df-card-header>
+    <df-card-content>
+      <div class="d-flex flex-column">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <span class="profile-label">XO Id</span>
+            <!-- <mat-icon>info</mat-icon> -->
+            <input
+              type="text"
+              class="form-control"
+              placeholder="e.g.: janesmith">
+          </div>
+        </div>
+        <div class="d-flex mt-3 justify-content-between">
+          <div class="d-flex">
+            <span class="profile-label">Jira Id</span>
+            <!-- <mat-icon>info</mat-icon> -->
+            <input
+              type="text"
+              class="form-control"
+              placeholder="e.g.: jane.smith">
+          </div>
+        </div>
+        <div class="d-flex mt-3 justify-content-between">
+          <div class="d-flex">
+            <a href=""
+              target="_blank">
+              <span>Deck</span>
+            </a>
+            <!-- <mat-icon>info</mat-icon> -->
+          </div>
+          <div class="d-flex">
+            <a href=""
+              target="_blank">
+              <span>TMS</span>
+            </a>
+            <!-- <mat-icon>info</mat-icon> -->
+          </div>
+          <div class="d-flex">
+            <a href=""
+              target="_blank">
+              <span>Contract</span>
+            </a>
+            <!-- <mat-icon>info</mat-icon> -->
+          </div>
+        </div>
+        <div class="d-flex mt-3 justify-content-end">
+          <button 
+            (click)="submitImpersonation(close)"
+            id="submitImpersonation"
+            class="btn btn-primary">
+            Save
+          </button>
+        </div>
+      </div>
+    </df-card-content>
+  </df-card>
+</div>

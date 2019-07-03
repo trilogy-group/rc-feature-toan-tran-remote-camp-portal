@@ -24,9 +24,19 @@
 
       <mat-menu #userMenu="matMenu">
         <mat-divider></mat-divider>
-        <a mat-menu-item href="https://app.crossover.com/x/login" target="_blank">
+        <a class="d-flex justify-content-start"
+          mat-menu-item
+          [routerLink]="['/profile/settings']">
+          <mat-icon class="mat-left-icon align-self-center">settings</mat-icon>
+          Settings
+        </a>
+        <mat-divider></mat-divider>
+        <a class="d-flex justify-content-start" 
+          mat-menu-item
+          href="https://app.crossover.com/x/login"
+          target="_blank">
+          <mat-icon class="mat-left-icon align-self-center">open_in_new</mat-icon>
           Crossover Application
-          <mat-icon class="mat-right-icon">open_in_new</mat-icon>
         </a>
         <mat-divider></mat-divider>
         <a 
@@ -51,7 +61,7 @@
         [hasNestedMenu]="false">
         <a
           class="h5 d-flex align-items-center"
-          [routerLink]="['/dashboard', '']">
+          [routerLink]="['/dashboard']">
           <mat-icon class="ml-1">home</mat-icon>
           <span class="ml-2"
             [class.d-none]="!sideBar.isOpen">Accomplishments Dashboard</span>
