@@ -21,8 +21,8 @@ export class AccomplishmentsComponent implements OnInit {
   public readonly toDo = 'To Do';
   public readonly inProgress = 'In Progress';
   public readonly productivityDisplayTypes = [
-    { text: '', id: 1, icon: 'fa fa-th' },
     { text: '', id: 0, icon: 'fa fa-line-chart' },
+    { text: '', id: 1, icon: 'fa fa-th' },
   ];
 
   public readonly qualityColors = [

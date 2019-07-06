@@ -25,105 +25,129 @@
       </div>
     </div>
   </div>
-  <div class="row ml-5 mb-5 mt-3 mr-3">
+  <div class="row ml-5 mb-3 mt-3 mr-3">
+    <div class="col d-flex justify-content-center align-items-center">
+      <df-card>
+        <df-card-content>
+          <div class="d-flex flex-column">
+            <div class="my-0 d-flex">
+              <h4 class="ml-3">Weekly Summary</h4>
+            </div>
+            <div class="accomplishments-summary mb-3">
+              <df-grid *ngIf="loaded"
+                [value]="accomplishmentsSummary">
+                <df-grid-column header="">
+                  <ng-template let-item="rowData"
+                    dfGridTemplate="body">
+                    {{ item.stat }}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column header="Week 1">
+                  <ng-template let-item="rowData"
+                    dfGridTemplate="body">
+                    {{ item.values[0] != null ? (item.values[0] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[0] != null ? '%' : ''}}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column header="Week 2">
+                  <ng-template let-item="rowData"
+                    dfGridTemplate="body">
+                    {{ item.values[1] != null ? (item.values[1] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[1] != null ? '%' : ''}}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column header="Week 3">
+                  <ng-template let-item="rowData"
+                    dfGridTemplate="body">
+                    {{ item.values[2] != null ? (item.values[2] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[2] != null ? '%' : ''}}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column header="Week 4">
+                  <ng-template let-item="rowData"
+                    dfGridTemplate="body">
+                    {{ item.values[3] != null ? (item.values[3] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[3] != null ? '%' : ''}}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column header="Average">
+                  <ng-template let-item="rowData"
+                    dfGridTemplate="body">
+                    {{ item.average ? (item.average | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.average != null ? '%' : ''}}
+                  </ng-template>
+                </df-grid-column>
+              </df-grid>
+            </div>
+          </div>
+        </df-card-content>
+      </df-card>
+    </div>
     <div class="col">
-      <div class="d-flex flex-column">
-        <div class="my-0 d-flex">
-          <h3 class="ml-3">Weekly Summary</h3>
-        </div>
-        <div class="accomplishments-summary">
-          <df-grid *ngIf="loaded"
-            [value]="accomplishmentsSummary">
-            <df-grid-column header="">
+      <df-card>
+        <df-card-content class="daily-progress-card">
+          <div class="d-flex row">
+            <h4 class="ml-3">Daily Progress</h4>
+            <df-group-toggle [items]="productivityDisplayTypes"
+              class="ml-2"
+              (change)="onDailyProgressDisplayChange($event.id)">
+            </df-group-toggle>
+          </div>
+          <df-grid *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].id"
+            class="daily-progress-grid"
+            [value]="dailyProgress">
+            <df-grid-column header="Day">
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
-                {{ item.stat }}
+                {{ item.day }}
               </ng-template>
             </df-grid-column>
-            <df-grid-column header="Week 1">
+            <df-grid-column header="Productivity">
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
-                {{ item.values[0] != null ? (item.values[0] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[0] != null ? '%' : ''}}
+                {{ item.productivity != null ? (item.productivity | number:'1.2') : '-' }}
               </ng-template>
             </df-grid-column>
-            <df-grid-column header="Week 2">
+            <df-grid-column header="Quality">
               <ng-template let-item="rowData"
                 dfGridTemplate="body">
-                {{ item.values[1] != null ? (item.values[1] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[1] != null ? '%' : ''}}
-              </ng-template>
-            </df-grid-column>
-            <df-grid-column header="Week 3">
-              <ng-template let-item="rowData"
-                dfGridTemplate="body">
-                {{ item.values[2] != null ? (item.values[2] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[2] != null ? '%' : ''}}
-              </ng-template>
-            </df-grid-column>
-            <df-grid-column header="Week 4">
-              <ng-template let-item="rowData"
-                dfGridTemplate="body">
-                {{ item.values[3] != null ? (item.values[3] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[3] != null ? '%' : ''}}
-              </ng-template>
-            </df-grid-column>
-            <df-grid-column header="Average">
-              <ng-template let-item="rowData"
-                dfGridTemplate="body">
-                {{ item.average ? (item.average | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.average != null ? '%' : ''}}
+                {{ item.quality != null ? ((item.quality | number:'1.2') + '%') : '-' }}
               </ng-template>
             </df-grid-column>
           </df-grid>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="d-flex row">
-        <h3 class="ml-3">Daily Progress</h3>
-        <df-group-toggle [items]="productivityDisplayTypes"
-          class="ml-2"
-          (change)="onDailyProgressDisplayChange($event.id)">
-        </df-group-toggle>
-      </div>
-      <df-grid *ngIf="currentProductivityDisplay == productivityDisplayTypes[0].id"
-        class="daily-progress-grid"
-        [value]="dailyProgress">
-        <df-grid-column header="Day">
-          <ng-template let-item="rowData"
-            dfGridTemplate="body">
-            {{ item.day }}
-          </ng-template>
-        </df-grid-column>
-        <df-grid-column header="Productivity">
-          <ng-template let-item="rowData"
-            dfGridTemplate="body">
-            {{ item.productivity != null ? (item.productivity | number:'1.2') : '-' }}
-          </ng-template>
-        </df-grid-column>
-        <df-grid-column header="Quality">
-          <ng-template let-item="rowData"
-            dfGridTemplate="body">
-            {{ item.quality != null ? ((item.quality | number:'1.2') + '%') : '-' }}
-          </ng-template>
-        </df-grid-column>
-      </df-grid>
-      <div class="line-chart-container"
-        *ngIf="currentProductivityDisplay == productivityDisplayTypes[1].id">
-        <df-line-chart
-          class="line-chart"
-          [data]="dailyProgressChart"
-          [showDots]="true"
-          [showValues]="true"
-          [smoothLine]="false"
-          [options]="dailyProgressChartOptions">
-        </df-line-chart>
-      </div>
+          <div class="line-chart-container"
+            *ngIf="currentProductivityDisplay == productivityDisplayTypes[0].id">
+            <df-line-chart
+              class="line-chart"
+              [data]="dailyProgressChart"
+              [showDots]="true"
+              [showValues]="true"
+              [smoothLine]="false"
+              [options]="dailyProgressChartOptions">
+            </df-line-chart>
+          </div>
+        </df-card-content>
+      </df-card>
     </div>
   </div>
-  <div class="row ml-5 mb-5 mt-3 mr-3 hardest-problems-container overflow-visible position-relative">
-    <div class="col-4 px-0">
+  <div class="row ml-5 mb-3 mt-3 mr-3 overflow-visible position-relative">
+    <div class="col-6 px-3">
+      <df-card>
+        <df-card-content>
+          <div class="d-flex flex-column problem-resolution px-3">
+            <div class="my-0">
+              <h4>Problem Resolution Progress</h4>
+            </div>
+            <div class="overflow-y-auto overflow-x-hidden">
+              <app-hardest-problems-trailing *ngIf="loaded"
+                [hardestProblemsByDay]="hardestProblemsByDay">
+              </app-hardest-problems-trailing>
+            </div>
+          </div>
+        </df-card-content>
+      </df-card>
+    </div>
+    <div class="col-6 px-5">
       <div class="d-flex flex-column px-4">
         <div class="my-0">
-          <h2>Overall Hardest Problems</h2>
+          <h4>Overall Hardest Problems</h4>
         </div>
-        <div class="row">
+        <div class="row hardest-problems-container">
           <df-card *ngFor="let hardestProblem of hardestProblems"
             class="col mx-2 my-1 overflow-visible">
             <df-card-content class="d-flex flex-column"
@@ -132,7 +156,7 @@
               dfToolTip="empty"
               [dftoolTipTemplate]="hardestProblemTooltip"
               [dftoolTipData]="{failedIn: hardestProblem.failedIn}"
-              dfToolTipPlacement="right">
+              dfToolTipPlacement="left">
               <div class="w-100 d-flex justify-content-between">
                 <span><h4><a [href]="'https://crossover.atlassian.net/browse/' + hardestProblem.jiraKey" target="_blank">{{ hardestProblem.jiraKey }}</a></h4></span>
                 <span matTooltip="See failed tickets in Jira"
@@ -151,48 +175,43 @@
         </div>
       </div>
     </div>
-    <div class="col-8 px-0">
-      <div class="d-flex flex-column problem-resolution px-3">
-        <div class="my-0">
-          <h2>Problem Resolution Progress</h2>
-        </div>
-        <div class="overflow-y-auto overflow-x-hidden">
-          <app-hardest-problems-trailing *ngIf="loaded"
-            [hardestProblemsByDay]="hardestProblemsByDay">
-          </app-hardest-problems-trailing>
-        </div>
-      </div>
-    </div>
   </div>
-  <div class="row ml-5 mt-4 bottom-charts">
+  <div class="row ml-5 mt-3 bottom-charts">
     <div class="col">
       <div class="row">
-        <div class="col-6">
-          <div class="d-flex flex-column">
-            <h3>Productivity Target: {{ productivityTarget }} Units</h3>
-            <div class="chart-container">
-              <df-bar *ngIf="loaded"
-                [data]="productivityChart"
-                [padding]="0.2"
-                [colors]="productivityColors"
-                [valueTicksCount]="10">
-              </df-bar>
-            </div>
-          </div>
+        <div class="col-6 px-4 d-flex justify-content-center">
+          <df-card class="productivity-card">
+            <df-card-content>
+              <div class="d-flex flex-column">
+                <h4>Productivity Target: {{ productivityTarget }} Units</h4>
+                <div class="chart-container">
+                  <df-bar *ngIf="loaded"
+                    [data]="productivityChart"
+                    [padding]="0.4"
+                    [colors]="productivityColors"
+                    [valueTicksCount]="10">
+                  </df-bar>
+                </div>
+              </div>
+            </df-card-content>
+          </df-card>
         </div>
-        <div class="col-6">
-          <div class="d-flex flex-column">
-            <h3>Quality Target: {{ qualityTarget }}%</h3>
-            <div class="chart-container quality-pie">
-              <df-pie *ngIf="loaded"
-                class="mt-4"
-                [data]="qualityChart"
-                [colors]="qualityColors"
-                labelType="inner"
-                [selectable]="false">
-              </df-pie>
-            </div>
-          </div>
+        <div class="col-6 px-4 d-flex justify-content-center">
+          <df-card class="quality-target-card">
+            <df-card-content>
+              <div class="d-flex flex-column">
+                <h4>Quality Target: {{ qualityTarget }}%</h4>
+                <div class="pie-chart-container quality-pie mt-5">
+                  <df-pie *ngIf="loaded"
+                    [data]="qualityChart"
+                    [colors]="qualityColors"
+                    labelType="inner"
+                    [selectable]="false">
+                  </df-pie>
+                </div>
+              </div>
+            </df-card-content>
+          </df-card>
         </div>
       </div>
     </div>
