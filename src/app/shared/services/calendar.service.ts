@@ -1,11 +1,12 @@
 import { Observable, of } from 'rxjs';
 
 export class CalendarService {
-  private readonly weeklyPlanning = [
+  private readonly weeklyPlanningMock = [
     {
       header: '',
       week: [{
         day: 'Friday',
+        // this is just a mock
         // tslint:disable-next-line:max-line-length
         description: 'You are technically and menthally prepared to the adventure. All is set up. Your assignments will be available on Monday',
         actions: [{
@@ -506,7 +507,7 @@ export class CalendarService {
     }];
 
   public getWeeklyPlanning(): Observable<any> {
-    return of(this.weeklyPlanning);
+    return of(this.weeklyPlanningMock);
   }
 
   public saveAction(complete: boolean): Observable<any> {
