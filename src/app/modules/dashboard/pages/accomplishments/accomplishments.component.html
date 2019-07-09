@@ -83,7 +83,15 @@
         <div class="my-0">
           <h4>Hardest Problems</h4>
         </div>
-        <div class="row hardest-problems">
+        <div class="row hardest-problems mt-3"
+          [class.justify-content-center]="!hardestProblems || hardestProblems.length === 0">
+          <div *ngIf="loaded && (!hardestProblems || hardestProblems.length === 0)">
+            <df-card>
+              <df-card-content>
+                <h5>🎉&nbsp;Congratulations! You have no quality issues! Keep it up!&nbsp;🎉</h5>
+              </df-card-content>
+            </df-card>
+          </div>
           <df-card *ngFor="let hardestProblem of hardestProblems"
             class="col-5 mx-2 my-1 overflow-visible">
             <df-card-content class="d-flex flex-column"
