@@ -85,7 +85,7 @@
         </div>
         <div class="row hardest-problems mt-3"
           [class.justify-content-center]="!hardestProblems || hardestProblems.length === 0">
-          <div *ngIf="!hardestProblems || hardestProblems.length === 0">
+          <div *ngIf="loaded && (!hardestProblems || hardestProblems.length === 0)">
             <df-card>
               <df-card-content>
                 <h5>🎉&nbsp;Congratulations! You have no quality issues! Keep it up!&nbsp;🎉</h5>
