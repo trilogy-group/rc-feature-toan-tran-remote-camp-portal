@@ -42,28 +42,11 @@
                     {{ item.stat }}
                   </ng-template>
                 </df-grid-column>
-                <df-grid-column header="Week 1">
+                <df-grid-column *ngFor="let week of weeks; let i = index"
+                  header="Week {{ i + 1 }}">
                   <ng-template let-item="rowData"
                     dfGridTemplate="body">
-                    {{ item.values[0] != null ? (item.values[0] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[0] != null ? '%' : ''}}
-                  </ng-template>
-                </df-grid-column>
-                <df-grid-column header="Week 2">
-                  <ng-template let-item="rowData"
-                    dfGridTemplate="body">
-                    {{ item.values[1] != null ? (item.values[1] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[1] != null ? '%' : ''}}
-                  </ng-template>
-                </df-grid-column>
-                <df-grid-column header="Week 3">
-                  <ng-template let-item="rowData"
-                    dfGridTemplate="body">
-                    {{ item.values[2] != null ? (item.values[2] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[2] != null ? '%' : ''}}
-                  </ng-template>
-                </df-grid-column>
-                <df-grid-column header="Week 4">
-                  <ng-template let-item="rowData"
-                    dfGridTemplate="body">
-                    {{ item.values[3] != null ? (item.values[3] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[3] != null ? '%' : ''}}
+                    {{ item.values[i] != null ? (item.values[i] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[i] != null ? '%' : ''}}
                   </ng-template>
                 </df-grid-column>
                 <df-grid-column header="Average">

@@ -51,6 +51,7 @@ export class AccomplishmentsComponent implements OnInit {
 
   public daysCompleted: number;
   public profile: any = { };
+  public weeks = [0, 1, 2, 3];
 
   constructor(
     private readonly accomplishmentsService: AccomplishmentsService,
@@ -74,7 +75,7 @@ export class AccomplishmentsComponent implements OnInit {
       this.profile = profile;
       this.calculateDaysCompleted();
 
-      const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality ? week.quality * 100 : null);
+      const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality != null ? week.quality * 100 : null);
         this.accomplishmentsSummary.push({
           stat: this.FTAR,
           values: weeklyQuality,
