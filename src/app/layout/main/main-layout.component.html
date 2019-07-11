@@ -28,7 +28,9 @@
 
       <mat-menu #userMenu="matMenu">
         <mat-divider></mat-divider>
-        <a mat-menu-item href="https://app.crossover.com/x/login" target="_blank">
+        <a mat-menu-item
+          href="https://app.crossover.com/x/login"
+          target="_blank">
           Crossover Application
           <mat-icon class="mat-right-icon">open_in_new</mat-icon>
         </a>
@@ -50,22 +52,36 @@
       #sideBar
       [open]="false"
       [disableButton]="true">
-      <df-sidebar-item 
+      <df-sidebar-item
         [hasIcon]="false"
+        matTooltip="Dashboard"
+        matTooltipPosition="right"
         [hasNestedMenu]="false">
         <a
           class="h5 d-flex align-items-center"
-          [routerLink]="['/dashboard', '']">
+          [routerLink]="['/dashboard']">
           <mat-icon class="ml-1">home</mat-icon>
           <span class="ml-2"
-            [class.d-none]="!sideBar.isOpen">Accomplishments Dashboard</span>
+            [class.d-none]="!sideBar.isOpen">Dashboard</span>
         </a>
       </df-sidebar-item>
+      <!-- <df-sidebar-item
+        [hasIcon]="false"
+        matTooltip="Calendar"
+        matTooltipPosition="right"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/calendar']">
+          <mat-icon class="ml-1">calendar_today</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Calendar</span>
+        </a>
+      </df-sidebar-item> -->
     </df-sidebar>
 
     <main class="col p-0">
       <router-outlet></router-outlet>
     </main>
   </div>
-
 </div>

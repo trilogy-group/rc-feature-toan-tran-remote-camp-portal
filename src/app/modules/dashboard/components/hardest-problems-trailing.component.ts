@@ -21,7 +21,26 @@ export class HardestProblemsTrailingComponent implements OnInit {
 
   public ngOnInit(): void {
     for (let i = 0; i < 4; i++) {
-      this[`week${i + 1}`] = this.hardestProblemsByDay.slice(i * this.workweekLength, (i + 1) * this.workweekLength);
+      const weekProblems = this.hardestProblemsByDay.slice(i * this.workweekLength, (i + 1) * this.workweekLength);
+      weekProblems.forEach(day => {
+          day.items.sort((itemA, itemB) => {
+            if (!!itemA.resolved === !!itemB.resolved) {
+              return 0;
+            }
+
+            if (!itemA.resolved && itemB.resolved) {
+              return -1;
+            }
+
+            return 1;
+          });
+          let goodDay = day.items
+            .map(items => items.resolved)
+            .reduce((resolvedA, resolvedB) => goodDay = goodDay && !!resolvedA && !!resolvedB, true);
+          day.goodDay = goodDay;
+        }
+      );
+      this[`week${i + 1}`] = weekProblems;
       while (this[`week${i + 1}`].length !== 0 && this[`week${i + 1}`].length !== this.workweekLength) {
         this[`week${i + 1}`].push({ });
       }

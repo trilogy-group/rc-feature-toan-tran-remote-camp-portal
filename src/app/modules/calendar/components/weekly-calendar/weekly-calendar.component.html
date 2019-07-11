@@ -1,0 +1,72 @@
+<div *ngIf="!!weekPlanning.week.length"
+  class="d-flex flex-column">
+  <df-accordion>
+    <df-accordion-panel (open)="openWeek($event)">
+      <df-accordion-header>
+        <df-accordion-header-title>
+          <div class="my-0 d-flex">
+            <h4 class="ml-3 mr-5"><strong>Week {{ index }}</strong></h4>
+            <h5 class="d-flex align-items-center">{{ weekPlanning.header }}</h5>
+          </div>
+        </df-accordion-header-title>
+      </df-accordion-header>
+      <df-accordion-content>
+        <div class="d-flex">
+          <div *ngFor="let dayPlan of weekPlanning.week" 
+            class="col">
+            <h5 class="mt-2"><strong>{{ dayPlan.day }}</strong></h5>
+            By the end of the day:
+            <p class="mb-0"><em>{{ dayPlan.description}}</em></p>
+            <df-grid [value]="dayPlan.actions"
+              [editable]="true">
+              <df-grid-column header="Action">
+                <ng-template let-item="rowData"
+                  dfGridTemplate="body">
+                  <span *ngIf="!item.url">
+                    {{ item.description }}
+                  </span>
+                  <a *ngIf="item.url"
+                    [href]="item.url"
+                    target="_blank">
+                    {{ item.description }}
+                  </a>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column header="Time (min)">
+                <ng-template let-item="rowData"
+                  dfGridTemplate="body">
+                  {{ item.duration }}
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column header="Time (hours)">
+                <ng-template let-item="rowData"
+                  dfGridTemplate="body">
+                  {{ item.duration / 60 | number:'1.2' }}
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column header="Done"
+                [editable]="true">
+                <ng-template let-col
+                  let-item="rowData"
+                  dfGridTemplate="editor">
+                  <df-checkbox *ngIf="item.description !== TOTAL"
+                    [ngModel]="item.complete"
+                    (ngModelChange)="updateAction(item, $event)">
+                  </df-checkbox>
+                </ng-template>
+                <ng-template let-col
+                  let-item="rowData"
+                  dfGridTemplate="body">
+                  <df-checkbox *ngIf="item.description !== TOTAL"
+                    [ngModel]="item.complete"
+                    (ngModelChange)="updateAction(item, $event)">
+                  </df-checkbox>
+                </ng-template>
+              </df-grid-column>
+            </df-grid>
+          </div>
+        </div>
+      </df-accordion-content>
+    </df-accordion-panel>
+  </df-accordion>
+</div>

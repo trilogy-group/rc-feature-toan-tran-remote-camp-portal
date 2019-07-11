@@ -11,6 +11,14 @@
 
 .day-problem {
   height: 98px;
+  
+  &--good {
+    background: #bfebdc;
+  }
+
+  &--bad {
+    background: #f9cece;
+  }
 
   &__content {
     font-size: 12px;
@@ -35,6 +43,11 @@
     width: 2px;
     height: 2px;
     background-color: #f5f5f5;
+  }
+
+  .df-card {
+    border-top-color: red;
+    border-top-width: 3px;
   }
 
   &::-webkit-scrollbar-thumb {
