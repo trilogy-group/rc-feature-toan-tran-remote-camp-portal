@@ -13,8 +13,8 @@ import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.
 import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 import { AppComponent } from 'src/app/app.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { CalendarService } from 'src/app/shared/services/calendar.service';
 import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interceptor';
-
 
 @NgModule({
   declarations: [
@@ -45,6 +45,7 @@ import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interce
     AuthenticationGuard,
     AuthenticationService,
     AccomplishmentsService,
+    CalendarService,
     AuthenticationTokenService
   ],
   bootstrap: [AppComponent]
