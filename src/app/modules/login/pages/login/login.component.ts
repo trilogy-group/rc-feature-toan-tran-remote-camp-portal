@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
           if (role && role.toLowerCase() === this.admin) {
             this.modal.open(this.impersonationModal, { backdrop: true });
           } else {
-            this.router.navigate(['']);
+            this.navigateToAccomplishments();
           }
         },
         error => this.handleError(error)
@@ -80,11 +80,16 @@ export class LoginComponent implements OnInit {
     return !this.emailRegex.test(this.impersonationEmailControl.value);
   }
 
+  public navigateToAccomplishments(): any {
+    localStorage.setItem('showWelcomeMessage', 'true');
+    return this.router.navigate(['']);
+  }
+
   public submitImpersonation(close: Function): void {
     this.authenticationService.impersonate(this.impersonationEmailControl.value.trim())
     .pipe(finalize(() => this.loadingSpinner.hide()))
     .subscribe(() => {
-      this.ngZone.run(() => this.router.navigate([''])).then();
+      this.ngZone.run(() => this.navigateToAccomplishments()).then();
       close();
     }, error => {
       this.handleError(error);

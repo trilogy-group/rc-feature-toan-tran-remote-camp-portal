@@ -52,6 +52,7 @@ export class AccomplishmentsComponent implements OnInit {
   public daysCompleted: number;
   public profile: any = { };
   public weeks = [0, 1, 2, 3];
+  public showWelcome: boolean;
 
   constructor(
     private readonly accomplishmentsService: AccomplishmentsService,
@@ -62,7 +63,8 @@ export class AccomplishmentsComponent implements OnInit {
   public ngOnInit(): void {
     this.dailyProgressChartOptions.xAxisScale = DfLineChartScaleType.Linear;
     this.dailyProgressChartOptions.showDots = true;
-
+    this.showWelcome = localStorage.getItem('showWelcomeMessage') === 'true';
+    localStorage.removeItem('showWelcomeMessage');
     forkJoin(
       this.accomplishmentsService.getHardestProblems(),
       this.accomplishmentsService.getProfile(),
@@ -126,7 +128,9 @@ export class AccomplishmentsComponent implements OnInit {
 
         this.loaded = true;
 
-        this.toasterService.popSuccess(`Welcome Back ${this.profile.name}!`);
+        if (this.showWelcome) {
+          this.toasterService.popSuccess(`Welcome Back ${this.profile.name}!`);
+        }
     }, () => this.toasterService.popError('Something went wrong'));
   }
 
