@@ -1,7 +1,7 @@
 import { OnInit, Component } from '@angular/core';
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
 import { forkJoin } from 'rxjs';
-import { differenceInDays, parse } from 'date-fns';
+import { differenceInDays, parse, isSaturday, isSunday } from 'date-fns';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfLoadingSpinnerService } from '@devfactory/ngx-df';
 import { finalize } from 'rxjs/operators';
@@ -135,7 +135,14 @@ export class AccomplishmentsComponent implements OnInit {
   }
 
   private calculateDaysCompleted(): void {
+    const now = new Date();
     const daysBetween = differenceInDays(new Date(), parse(this.profile.startDate));
-    this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7);
+    if (isSaturday(now)) {
+      this.daysCompleted = daysBetween - 2 * Math.floor(daysBetween / 7);
+    } else if (isSunday(now)) {
+      this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7) + 1;
+    } else {
+      this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7);
+    }
   }
 }
