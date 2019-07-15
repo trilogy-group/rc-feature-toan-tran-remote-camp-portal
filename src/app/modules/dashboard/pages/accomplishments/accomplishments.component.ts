@@ -116,12 +116,12 @@ export class AccomplishmentsComponent implements OnInit {
         const productivityInProgress = dailyProgressResponse.scoreSummary.inProgress || 0;
         const ftarYes = dailyProgressResponse.qualitySummary.approved || 0;
 
-        this.productivityChart.push({ xKey: this.approved, yKey: productivityApproved.toFixed(2) });
-        this.productivityChart.push({ xKey: this.inReview, yKey: productivityInReview.toFixed(2) });
-        this.productivityChart.push({ xKey: this.inProgress, yKey: productivityInProgress.toFixed(2) });
+        this.productivityChart.push({ xKey: this.approved, yKey: Number(productivityApproved.toFixed(2)) });
+        this.productivityChart.push({ xKey: this.inReview, yKey: Number(productivityInReview.toFixed(2)) });
+        this.productivityChart.push({ xKey: this.inProgress, yKey: Number(productivityInProgress.toFixed(2)) });
 
-        this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: ftarYes.toFixed(2) });
-        this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: (1 - ftarYes).toFixed(2) });
+        this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: Number(ftarYes.toFixed(2)) });
+        this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: Number((1 - ftarYes).toFixed(2)) });
         this.hardestProblemsByDay = hardestProblemsByDay;
 
         this.loaded = true;
