@@ -1,7 +1,7 @@
 import { OnInit, Component } from '@angular/core';
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
 import { forkJoin } from 'rxjs';
-import { differenceInDays, parse } from 'date-fns';
+import { differenceInDays, parse, isSaturday, isSunday } from 'date-fns';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfLoadingSpinnerService } from '@devfactory/ngx-df';
 import { finalize } from 'rxjs/operators';
@@ -51,6 +51,7 @@ export class AccomplishmentsComponent implements OnInit {
 
   public daysCompleted: number;
   public profile: any = { };
+  public weeks = [0, 1, 2, 3];
 
   constructor(
     private readonly accomplishmentsService: AccomplishmentsService,
@@ -74,7 +75,7 @@ export class AccomplishmentsComponent implements OnInit {
       this.profile = profile;
       this.calculateDaysCompleted();
 
-      const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality ? week.quality * 100 : null);
+      const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality != null ? week.quality * 100 : null);
         this.accomplishmentsSummary.push({
           stat: this.FTAR,
           values: weeklyQuality,
@@ -115,12 +116,12 @@ export class AccomplishmentsComponent implements OnInit {
         const productivityInProgress = dailyProgressResponse.scoreSummary.inProgress || 0;
         const ftarYes = dailyProgressResponse.qualitySummary.approved || 0;
 
-        this.productivityChart.push({ xKey: this.approved, yKey: productivityApproved.toFixed(2) });
-        this.productivityChart.push({ xKey: this.inReview, yKey: productivityInReview.toFixed(2) });
-        this.productivityChart.push({ xKey: this.inProgress, yKey: productivityInProgress.toFixed(2) });
+        this.productivityChart.push({ xKey: this.approved, yKey: Number(productivityApproved.toFixed(2)) });
+        this.productivityChart.push({ xKey: this.inReview, yKey: Number(productivityInReview.toFixed(2)) });
+        this.productivityChart.push({ xKey: this.inProgress, yKey: Number(productivityInProgress.toFixed(2)) });
 
-        this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: ftarYes.toFixed(2) });
-        this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: (1 - ftarYes).toFixed(2) });
+        this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: Number(ftarYes.toFixed(2)) });
+        this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: Number((1 - ftarYes).toFixed(2)) });
         this.hardestProblemsByDay = hardestProblemsByDay;
 
         this.loaded = true;
@@ -134,7 +135,14 @@ export class AccomplishmentsComponent implements OnInit {
   }
 
   private calculateDaysCompleted(): void {
+    const now = new Date();
     const daysBetween = differenceInDays(new Date(), parse(this.profile.startDate));
-    this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7);
+    if (isSaturday(now)) {
+      this.daysCompleted = daysBetween - 2 * Math.floor(daysBetween / 7);
+    } else if (isSunday(now)) {
+      this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7) + 1;
+    } else {
+      this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7);
+    }
   }
 }
