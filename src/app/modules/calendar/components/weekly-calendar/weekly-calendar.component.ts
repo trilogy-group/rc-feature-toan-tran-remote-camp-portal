@@ -28,17 +28,19 @@ export class WeeklyCalendarComponent implements OnInit {
   public readonly TOTAL = 'Total';
 
   public ngOnInit(): void {
-    this.weekPlanning.week.forEach(plan => {
-      const duration = plan.actions.map(action => action.duration).reduce((durationA, durationB) => durationA + durationB);
-      plan.actions.push({
-        description: this.TOTAL,
-        duration,
+    if (this.weekPlanning && this.weekPlanning.week) {
+      this.weekPlanning.week.forEach(plan => {
+        const duration = plan.actions.map(action => action.duration).reduce((durationA, durationB) => durationA + durationB);
+        plan.actions.push({
+          description: this.TOTAL,
+          duration,
+        });
       });
-    });
+    }
   }
 
-  public updateAction(action: any, complete: any): void {
-    action.complete = complete;
+  public updateAction(action: any, isCompleted: any): void {
+    action.isCompleted = isCompleted;
     this.updateActionEvent.emit(action);
   }
 
