@@ -50,7 +50,7 @@
                   let-item="rowData"
                   dfGridTemplate="editor">
                   <df-checkbox *ngIf="item.description !== TOTAL"
-                    [ngModel]="item.complete"
+                    [ngModel]="item.isCompleted"
                     (ngModelChange)="updateAction(item, $event)">
                   </df-checkbox>
                 </ng-template>
@@ -58,7 +58,7 @@
                   let-item="rowData"
                   dfGridTemplate="body">
                   <df-checkbox *ngIf="item.description !== TOTAL"
-                    [ngModel]="item.complete"
+                    [ngModel]="item.isCompleted"
                     (ngModelChange)="updateAction(item, $event)">
                   </df-checkbox>
                 </ng-template>
