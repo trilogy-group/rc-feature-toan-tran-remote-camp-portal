@@ -4,6 +4,10 @@
 :host ::ng-deep {
   .df-grid {
     width: 454px !important;
+
+    .df-grid-table-body__cell {
+      padding: 0 5.5px;
+    }
   }
 
   table {

@@ -25,6 +25,6 @@ export class CalendarComponent implements OnInit {
   }
 
   public updateAction(action: any): void {
-    this.calendarService.saveAction(action.complete).subscribe();
+    this.calendarService.saveAction(action.userCalendarActionItemId, action.isCompleted).subscribe();
   }
 }
