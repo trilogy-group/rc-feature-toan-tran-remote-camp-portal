@@ -14,6 +14,8 @@ import { DfLineModule } from '@devfactory/ngx-df/charts/line';
 import { DfGroupToggleModule } from '@devfactory/ngx-df/group-toggle';
 import { DfModalModule } from '@devfactory/ngx-df/modal';
 import { DfLoadingSpinnerModule, DfLoadingSpinnerTypes } from '@devfactory/ngx-df/loading-spinner';
+import { DfCheckboxModule } from '@devfactory/ngx-df/checkbox';
+import { DfAccordionModule } from '@devfactory/ngx-df/accordion';
 
 @NgModule({
   imports: [
@@ -43,6 +45,8 @@ import { DfLoadingSpinnerModule, DfLoadingSpinnerTypes } from '@devfactory/ngx-d
     DfLineModule.forRoot(),
     DfGroupToggleModule.forRoot(),
     DfModalModule.forRoot(),
+    DfCheckboxModule.forRoot(),
+    DfAccordionModule.forRoot()
   ],
   providers: [],
   exports: [
@@ -60,6 +64,8 @@ import { DfLoadingSpinnerModule, DfLoadingSpinnerTypes } from '@devfactory/ngx-d
     DfGroupToggleModule,
     DfModalModule,
     DfLoadingSpinnerModule,
+    DfCheckboxModule,
+    DfAccordionModule
   ],
 })
 export class NgxDfRootModule {}
@@ -81,6 +87,8 @@ export class NgxDfRootModule {}
     DfGroupToggleModule,
     DfModalModule,
     DfLoadingSpinnerModule,
+    DfCheckboxModule,
+    DfAccordionModule
   ],
   exports: [
     DfCardModule,
@@ -98,6 +106,8 @@ export class NgxDfRootModule {}
     DfGroupToggleModule,
     DfModalModule,
     DfLoadingSpinnerModule,
+    DfCheckboxModule,
+    DfAccordionModule
   ],
 })
 export class NgxDfCustom {

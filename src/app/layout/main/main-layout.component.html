@@ -58,15 +58,30 @@
       #sideBar
       [open]="false"
       [disableButton]="true">
-      <df-sidebar-item 
+      <df-sidebar-item
         [hasIcon]="false"
+        matTooltip="Dashboard"
+        matTooltipPosition="right"
         [hasNestedMenu]="false">
         <a
           class="h5 d-flex align-items-center"
           [routerLink]="['/dashboard']">
           <mat-icon class="ml-1">home</mat-icon>
           <span class="ml-2"
-            [class.d-none]="!sideBar.isOpen">Accomplishments Dashboard</span>
+            [class.d-none]="!sideBar.isOpen">Dashboard</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item
+        [hasIcon]="false"
+        matTooltip="Calendar"
+        matTooltipPosition="right"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/calendar']">
+          <mat-icon class="ml-1">calendar_today</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Calendar</span>
         </a>
       </df-sidebar-item>
     </df-sidebar>
@@ -75,5 +90,4 @@
       <router-outlet></router-outlet>
     </main>
   </div>
-
 </div>

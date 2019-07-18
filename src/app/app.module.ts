@@ -13,6 +13,7 @@ import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.
 import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 import { AppComponent } from 'src/app/app.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { CalendarService } from 'src/app/shared/services/calendar.service';
 import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interceptor';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 
@@ -46,7 +47,9 @@ import { ProfileService } from 'src/app/shared/services/profile.service';
     AuthenticationService,
     AccomplishmentsService,
     AuthenticationTokenService,
-    ProfileService
+    ProfileService,
+    CalendarService,
+    AuthenticationTokenService
   ],
   bootstrap: [AppComponent]
 })

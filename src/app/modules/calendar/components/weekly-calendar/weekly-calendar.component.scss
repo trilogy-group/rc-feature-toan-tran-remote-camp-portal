@@ -1,0 +1,34 @@
+@import '~@devfactory/ngx-df/core/theming/palette';
+@import '~@devfactory/ngx-df/core/theming/aurea-skin/theming';
+
+:host ::ng-deep {
+  .df-grid {
+    width: 454px !important;
+
+    .df-grid-table-body__cell {
+      padding: 0 5.5px;
+    }
+  }
+
+  table {
+    th:nth-child(1) {
+      width: 300px;
+    }
+
+    th:last-child {
+      width: 50px;
+    }
+
+    tr:last-child {
+      font-weight: bold;
+    }
+  }
+
+  .df-checkbox__icon {
+    margin-right: 0px;
+  }
+
+  .df-accordion-content__wrapper {
+    overflow: auto;
+  }
+}

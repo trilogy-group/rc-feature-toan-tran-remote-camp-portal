@@ -22,6 +22,10 @@ const routes: Routes = [
       {
         path: 'profile',
         loadChildren: './modules/profile/profile.module#ProfileModule',
+      },
+      {
+        path: 'calendar',
+        loadChildren: './modules/calendar/calendar.module#CalendarModule',
       }
     ]
   },
