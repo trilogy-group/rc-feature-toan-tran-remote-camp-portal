@@ -1,12 +1,14 @@
 import { Component, OnInit, NgZone, TemplateRef, ViewChild } from '@angular/core';
-import { AuthenticationService } from 'src/app/shared/services/authentication.service';
-import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 import { Router } from '@angular/router';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { DfModalService } from '@devfactory/ngx-df/modal';
 import { FormControl } from '@angular/forms';
 import { DfLoadingSpinnerService } from '@devfactory/ngx-df/loading-spinner';
 import { finalize } from 'rxjs/operators';
+
+import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
+import { Roles } from 'src/app/constants/roles.constants';
 
 declare var gapi: any;
 
@@ -64,8 +66,7 @@ export class LoginComponent implements OnInit {
       .pipe(finalize(() => this.loadingSpinner.hide()))
       .subscribe(
         () => {
-          const role = this.authenticationTokenService.getUserRole();
-          if (role && role.toLowerCase() === this.admin) {
+          if (this.authenticationTokenService.isUserAdmin()) {
             this.modal.open(this.impersonationModal, { backdrop: true });
           } else {
             this.navigateToAccomplishments();

@@ -23,4 +23,13 @@ export class MainLayoutComponent {
   public toggleSideBar(): void {
     this.sideBar.toogleOpen();
   }
+
+  public isDashboardVisible(): boolean {
+    return false;
+  }
+
+  public isGradebookVisible(): boolean {
+    // return this._authenticationTokenService.isUserAdmin();
+    return true;
+  }
 }

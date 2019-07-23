@@ -63,7 +63,7 @@
         matTooltip="Dashboard"
         matTooltipPosition="right"
         [hasNestedMenu]="false">
-        <a
+        <a *ngIf="isDashboardVisible()"
           class="h5 d-flex align-items-center"
           [routerLink]="['/dashboard']">
           <mat-icon class="ml-1">home</mat-icon>
@@ -82,6 +82,19 @@
           <mat-icon class="ml-1">calendar_today</mat-icon>
           <span class="ml-2"
             [class.d-none]="!sideBar.isOpen">Calendar</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item *ngIf="isGradebookVisible()"
+        [hasIcon]="false"
+        matTooltip="Gradebook"
+        matTooltipPosition="right"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/gradebook']">
+          <mat-icon class="ml-1">school</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Gradebook</span>
         </a>
       </df-sidebar-item>
     </df-sidebar>

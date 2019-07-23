@@ -26,6 +26,10 @@ const routes: Routes = [
       {
         path: 'calendar',
         loadChildren: './modules/calendar/calendar.module#CalendarModule',
+      },
+      {
+        path: 'gradebook',
+        loadChildren: './modules/gradebook/gradebook.module#GradebookModule',
       }
     ]
   },

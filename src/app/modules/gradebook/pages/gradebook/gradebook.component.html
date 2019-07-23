@@ -1,0 +1,84 @@
+<div class="ml-5 d-flex flex-column">
+  <div class="container-fluid">
+    <div class="row section__header">
+      <div class="col py-3">
+        <h1 class="m-0">
+          Gradebook
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center">
+    <df-card>
+      <df-card-content>
+        <df-grid *ngIf="loaded"
+          [value]="gradebookData">
+          <df-grid-column 
+            header="IC Name">
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              <a [routerLink]="['/gradebook/dashboard/' + item.email]">{{ item.icName }}</a>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column 
+            header="Pipeline Name">
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              {{ item.pipeline }}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column 
+            header="SEM">
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              {{ item.manager }}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column 
+            header="RemoteU Start">
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              {{ item.start }}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column 
+            header="Approved">
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              {{ (item.scoreSummary?.approved | number:'1.2') }}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column 
+            header="Approved + In Review">
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              {{ (getApprovedPlusInReviewScore(item) | number:'1.2') }}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column 
+            header="Target for Today">
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              {{ (item.scoreSummary?.targetForToday | number:'1.2') }}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column 
+            header="Approved">
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              {{ (item.qualitySummary?.approved | number:'1.2') }}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column 
+            header="Targer for Today">
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              {{ (item.qualitySummary?.targetForToday | number:'1.2') }}
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+      </df-card-content>
+    </df-card>
+  </div>
+</div>
+
