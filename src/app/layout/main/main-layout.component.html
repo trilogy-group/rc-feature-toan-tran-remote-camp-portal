@@ -16,7 +16,7 @@
     <div class="center"></div>
 
     <div class="right">
-        <button
+      <button
         class="d-flex justify-content-center" 
         mat-icon-button
         [matMenuTriggerFor]="userMenu"
@@ -29,10 +29,16 @@
       <mat-menu #userMenu="matMenu">
         <mat-divider></mat-divider>
         <a mat-menu-item
+          [routerLink]="['/profile/settings']">
+          <mat-icon class="mat-left-icon align-self-center">settings</mat-icon>
+          Settings
+        </a>
+        <mat-divider></mat-divider>
+        <a  mat-menu-item
           href="https://app.crossover.com/x/login"
           target="_blank">
+          <mat-icon class="mat-left-icon align-self-center">open_in_new</mat-icon>
           Crossover Application
-          <mat-icon class="mat-right-icon">open_in_new</mat-icon>
         </a>
         <mat-divider></mat-divider>
         <a 

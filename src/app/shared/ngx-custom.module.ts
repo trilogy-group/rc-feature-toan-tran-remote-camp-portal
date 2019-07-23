@@ -16,6 +16,7 @@ import { DfModalModule } from '@devfactory/ngx-df/modal';
 import { DfLoadingSpinnerModule, DfLoadingSpinnerTypes } from '@devfactory/ngx-df/loading-spinner';
 import { DfCheckboxModule } from '@devfactory/ngx-df/checkbox';
 import { DfAccordionModule } from '@devfactory/ngx-df/accordion';
+import { DfFileUploadModule } from '@devfactory/ngx-df/file-upload';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { DfAccordionModule } from '@devfactory/ngx-df/accordion';
     DfGroupToggleModule.forRoot(),
     DfModalModule.forRoot(),
     DfCheckboxModule.forRoot(),
-    DfAccordionModule.forRoot()
+    DfAccordionModule.forRoot(),
+    DfFileUploadModule.forRoot(),
   ],
   providers: [],
   exports: [
@@ -65,7 +67,8 @@ import { DfAccordionModule } from '@devfactory/ngx-df/accordion';
     DfModalModule,
     DfLoadingSpinnerModule,
     DfCheckboxModule,
-    DfAccordionModule
+    DfAccordionModule,
+    DfFileUploadModule,
   ],
 })
 export class NgxDfRootModule {}
@@ -88,7 +91,8 @@ export class NgxDfRootModule {}
     DfModalModule,
     DfLoadingSpinnerModule,
     DfCheckboxModule,
-    DfAccordionModule
+    DfAccordionModule,
+    DfFileUploadModule,
   ],
   exports: [
     DfCardModule,
@@ -107,7 +111,8 @@ export class NgxDfRootModule {}
     DfModalModule,
     DfLoadingSpinnerModule,
     DfCheckboxModule,
-    DfAccordionModule
+    DfAccordionModule,
+    DfFileUploadModule
   ],
 })
 export class NgxDfCustom {

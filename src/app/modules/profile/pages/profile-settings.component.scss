@@ -1,0 +1,29 @@
+.profile-label {
+  width: 150px;
+}
+
+.mat-icon {
+  font-size: 18px;
+}
+
+.profile-card {
+  width: 600px;
+}
+
+:host ::ng-deep {
+  .df-file-upload__table {
+    th:nth-child(3), td:nth-child(3) {
+      display: none;
+    }
+
+    td {
+      .df-button.success {
+        display: none;
+      }
+    }
+  }
+
+  .df-file-upload__global-actions {
+    display: none;
+  }
+}
