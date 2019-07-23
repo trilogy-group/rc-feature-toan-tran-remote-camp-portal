@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { DfSidebarModule, DfHttpLoaderInterceptorModule } from '@devfactory/ngx-df';
+import { DfSidebarModule, DfHttpLoaderInterceptorModule, DfFileUploadService } from '@devfactory/ngx-df';
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { MainLayoutComponent } from 'src/app/layout/main/main-layout.component';
@@ -15,6 +15,7 @@ import { AppComponent } from 'src/app/app.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CalendarService } from 'src/app/shared/services/calendar.service';
 import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interceptor';
+import { ProfileService } from 'src/app/shared/services/profile.service';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,9 @@ import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interce
     AuthenticationGuard,
     AuthenticationService,
     AccomplishmentsService,
+    AuthenticationTokenService,
+    ProfileService,
+    DfFileUploadService,
     CalendarService,
     AuthenticationTokenService
   ],

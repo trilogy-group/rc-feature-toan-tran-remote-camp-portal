@@ -78,59 +78,60 @@ export class AccomplishmentsComponent implements OnInit {
       this.calculateDaysCompleted();
 
       const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality != null ? week.quality * 100 : null);
-        this.accomplishmentsSummary.push({
-          stat: this.FTAR,
-          values: weeklyQuality,
-          average: weeklyQuality.reduce((a, b) => (a + b)) / (weeklyQuality.length || 1)
-        });
+      const weeklyProductivity = dailyProgressResponse.weekly.map(week => week.productivity ? week.productivity : 0);
 
-        const weeklyProductivity = dailyProgressResponse.weekly.map(week => week.productivity ? week.productivity : 0);
-        this.accomplishmentsSummary.push({
-          stat: this.score,
-          values: weeklyProductivity,
-          average: weeklyProductivity.reduce((a, b) => (a + b)) / (weeklyProductivity.length || 1)
-        });
+      this.accomplishmentsSummary.push({
+        stat: this.FTAR,
+        values: weeklyQuality,
+        average: this.getWeightedFtarAverage(weeklyQuality, weeklyProductivity)
+      });
 
-        this.productivityTarget = dailyProgressResponse.scoreSummary.targetForToday;
-        this.qualityTarget = dailyProgressResponse.qualitySummary.targetForToday * 100;
-        let day = 1;
-        this.dailyProgress = dailyProgressResponse.daily.map(
-          dailyObject => {
-            if (dailyObject.quality != null) {
-              dailyObject.quality = dailyObject.quality * 100;
-            }
-            return { day: day++, ...dailyObject };
+      this.accomplishmentsSummary.push({
+        stat: this.score,
+        values: weeklyProductivity,
+        average: weeklyProductivity.reduce((a, b) => (a + b)) / (weeklyProductivity.length || 1)
+      });
+
+      this.productivityTarget = dailyProgressResponse.scoreSummary.targetForToday;
+      this.qualityTarget = dailyProgressResponse.qualitySummary.targetForToday * 100;
+      let day = 1;
+      this.dailyProgress = dailyProgressResponse.daily.map(
+        dailyObject => {
+          if (dailyObject.quality != null) {
+            dailyObject.quality = dailyObject.quality * 100;
           }
-        );
-
-        this.dailyProgressChart = this.dailyProgress.map(dailyObject => {
-          return {
-            xKey: `Day ${dailyObject.day.toString()}`,
-            productivity: dailyObject.productivity.toFixed(2),
-            quality: dailyObject.quality ? (dailyObject.quality / 100).toFixed(2) : 1
-          };
-        });
-
-        this.dailyProgress = this.dailyProgress.reverse();
-
-        const productivityApproved = dailyProgressResponse.scoreSummary.approved || 0;
-        const productivityInReview = dailyProgressResponse.scoreSummary.inReview || 0;
-        const productivityInProgress = dailyProgressResponse.scoreSummary.inProgress || 0;
-        const ftarYes = dailyProgressResponse.qualitySummary.approved || 0;
-
-        this.productivityChart.push({ xKey: this.approved, yKey: Number(productivityApproved.toFixed(2)) });
-        this.productivityChart.push({ xKey: this.inReview, yKey: Number(productivityInReview.toFixed(2)) });
-        this.productivityChart.push({ xKey: this.inProgress, yKey: Number(productivityInProgress.toFixed(2)) });
-
-        this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: Number(ftarYes.toFixed(2)) });
-        this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: Number((1 - ftarYes).toFixed(2)) });
-        this.hardestProblemsByDay = hardestProblemsByDay;
-
-        this.loaded = true;
-
-        if (this.showWelcome) {
-          this.toasterService.popSuccess(`Welcome Back ${this.profile.name}!`);
+          return { day: day++, ...dailyObject };
         }
+      );
+
+      this.dailyProgressChart = this.dailyProgress.map(dailyObject => {
+        return {
+          xKey: `Day ${dailyObject.day.toString()}`,
+          productivity: dailyObject.productivity.toFixed(2),
+          quality: dailyObject.quality ? (dailyObject.quality / 100).toFixed(2) : 1
+        };
+      });
+
+      this.dailyProgress = this.dailyProgress.reverse();
+
+      const productivityApproved = dailyProgressResponse.scoreSummary.approved || 0;
+      const productivityInReview = dailyProgressResponse.scoreSummary.inReview || 0;
+      const productivityInProgress = dailyProgressResponse.scoreSummary.inProgress || 0;
+      const ftarYes = dailyProgressResponse.qualitySummary.approved || 0;
+
+      this.productivityChart.push({ xKey: this.approved, yKey: Number(productivityApproved.toFixed(2)) });
+      this.productivityChart.push({ xKey: this.inReview, yKey: Number(productivityInReview.toFixed(2)) });
+      this.productivityChart.push({ xKey: this.inProgress, yKey: Number(productivityInProgress.toFixed(2)) });
+
+      this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: Number(ftarYes.toFixed(2)) });
+      this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: Number((1 - ftarYes).toFixed(2)) });
+      this.hardestProblemsByDay = hardestProblemsByDay;
+
+      this.loaded = true;
+
+      if (this.showWelcome) {
+        this.toasterService.popSuccess(`Welcome Back ${this.profile.name}!`);
+      }
     }, () => this.toasterService.popError('Something went wrong'));
   }
 
@@ -148,5 +149,21 @@ export class AccomplishmentsComponent implements OnInit {
     } else {
       this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7);
     }
+  }
+
+  private getWeightedFtarAverage(weeklyQuality: number[], weeklyProductivity: number[]): number {
+    let ftarAvg = 0;
+
+    const totalProductivity = weeklyProductivity.reduce((a, b) => (a + b), 0);
+    weeklyProductivity.forEach((weekProductivity, index) => {
+      let weekQuality = weeklyQuality[index];
+      if (weekQuality == null) {
+        weekQuality = 100;
+        weeklyQuality[index] = weekQuality;
+      }
+      ftarAvg += weekProductivity * weekQuality / totalProductivity;
+    });
+
+    return ftarAvg;
   }
 }

@@ -1,0 +1,88 @@
+<div class="d-flex justify-content-center">
+  <df-card class="mt-4 profile-card">
+    <df-card-header>
+      <h3>Profile Settings</h3>
+    </df-card-header>
+    <df-card-content>
+      <form [formGroup]="form">
+        <div class="d-flex flex-column">
+          <div class="d-flex justify-content-between">
+            <div class="d-flex w-100">
+              <span class="d-flex align-items-center profile-label">XO Id</span>
+              <input
+                type="text"
+                disabled
+                formControlName="xoId"
+                class="form-control">
+            </div>
+          </div>
+          <div class="d-flex mt-3 justify-content-between">
+            <div class="d-flex w-100">
+              <span class="d-flex align-items-center profile-label">Jira Id</span>
+              <input
+                type="text"
+                disabled
+                formControlName="jiraId"
+                class="form-control">
+            </div>
+          </div>
+          <div class="d-flex mt-3 justify-content-between">
+            <div class="d-flex w-100">
+              <span class="d-flex align-items-center profile-label">Company Email</span>
+              <input
+                type="text"
+                disabled
+                formControlName="companyEmail"
+                class="form-control">
+            </div>
+          </div>
+          <div class="d-flex mt-3 justify-content-between">
+            <div class="d-flex w-100">
+              <span class="d-flex align-items-center profile-label">IC Name</span>
+              <input
+                type="text"
+                disabled
+                formControlName="icName"
+                class="form-control">
+            </div>
+          </div>
+          <div class="d-flex mt-3 justify-content-between">
+            <div class="d-flex w-100">
+              <span class="d-flex align-items-center profile-label">Deck Link</span>
+              <input
+                type="text"
+                formControlName="deckUrl"
+                class="form-control">
+            </div>
+          </div>
+          <div class="d-flex mt-3 justify-content-between">
+            <div class="d-flex w-100">
+              <span class="d-flex align-items-center profile-label">TMS Link</span>
+              <input
+                type="text"
+                formControlName="tmsUrl"
+                class="form-control">
+            </div>
+          </div>
+          <div class="d-flex mt-3 justify-content-between">
+            <div class="d-flex w-100">
+              <span class="d-flex align-items-center profile-label">Contract Link {{ form.get('contractUrl')?.value }}</span>
+              <df-file-upload [fileUploader]="fileUploader"
+                  (uploadFile)="onUploadFileEvent()"
+                  (removeFile)="onRemoveFileEvent()">
+              </df-file-upload>
+            </div>
+          </div>
+          <div class="d-flex mt-3 justify-content-end">
+            <button 
+              (click)="saveProfile()"
+              [disabled]="form.invalid"
+              class="btn btn-primary">
+              Save
+            </button>
+          </div>
+        </div>
+      </form>
+    </df-card-content>
+  </df-card>
+</div>

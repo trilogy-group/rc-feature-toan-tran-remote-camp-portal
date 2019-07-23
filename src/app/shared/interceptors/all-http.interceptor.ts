@@ -4,16 +4,23 @@ import { Observable, of, throwError } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 
 import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
+import { ProfileService } from '../services/profile.service';
 
 @Injectable()
 export class AllHttpInterceptor implements HttpInterceptor {
   constructor(private readonly authenticationTokenService: AuthenticationTokenService) { }
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    };
+
+    let headers = {};
+    if (request.method === 'POST' && request.url.startsWith(ProfileService.SAVE_PROFILE)) {
+      headers = {};
+    } else {
+      headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      };
+    }
 
     const token = this.authenticationTokenService.getToken();
     if (!!token) {
