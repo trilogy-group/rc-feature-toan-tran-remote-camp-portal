@@ -12,29 +12,58 @@
     <df-card>
       <df-card-content>
         <df-grid *ngIf="loaded"
+          sortMode="single"
+          tableStyleClass="resizable-grid"
           [value]="gradebookData">
+          <df-grid-header-column-group>
+            <df-grid-row>
+              <df-grid-column header="Metadata"
+                              colspan="4">
+              </df-grid-column>
+              <df-grid-column header="Productivity"
+                              colspan="3">
+              </df-grid-column>
+              <df-grid-column header="Quality"
+                              colspan="2">
+              </df-grid-column>
+            </df-grid-row>
+          </df-grid-header-column-group>
           <df-grid-column 
+            [sortable]="true"
+            field="icName"
             header="IC Name">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
-              <a [routerLink]="['/gradebook/dashboard/' + item.email]">{{ item.icName }}</a>
+              <div
+                matTooltip="Go to IC's dashboard"
+                matTooltipPosition="above">
+                <a
+                  [routerLink]="['/gradebook/dashboard']"
+                  [queryParams]="{ icName: item.icNameShort }">{{ item.icName }}</a>
+              </div>
             </ng-template>
           </df-grid-column>
-          <df-grid-column 
+          <df-grid-column
+            [sortable]="true"
+            field="pipeline"
             header="Pipeline Name">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
               {{ item.pipeline }}
             </ng-template>
           </df-grid-column>
-          <df-grid-column 
+          <df-grid-column
+            [sortable]="true"
+            field="manager"
             header="SEM">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
               {{ item.manager }}
             </ng-template>
           </df-grid-column>
-          <df-grid-column 
+          <df-grid-column
+            [sortable]="true"
+            field="start"
             header="RemoteU Start">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
@@ -45,35 +74,45 @@
             header="Approved">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
-              {{ (item.scoreSummary?.approved | number:'1.2') }}
+              <div class="{{ getScoreColor(item, false) }}">
+                {{ (item.scoreSummary?.approved | number:'1.2') }}
+              </div>
             </ng-template>
           </df-grid-column>
           <df-grid-column 
             header="Approved + In Review">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
-              {{ (getApprovedPlusInReviewScore(item) | number:'1.2') }}
+              <div class="{{ getScoreColor(item, true) }}">
+                {{ (getApprovedPlusInReviewScore(item) | number:'1.2') }}
+              </div>
             </ng-template>
           </df-grid-column>
           <df-grid-column 
             header="Target for Today">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
-              {{ (item.scoreSummary?.targetForToday | number:'1.2') }}
+              <div class="{{ getScoreColor(item, true) }}">
+                {{ (item.scoreSummary?.targetForToday | number:'1.2') }}
+              </div>
             </ng-template>
           </df-grid-column>
           <df-grid-column 
             header="Approved">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
-              {{ (item.qualitySummary?.approved | number:'1.2') }}
+              <div class="{{ getQualityColor(item) }}">
+                {{ (item.qualitySummary?.approved | number:'1.2') }}
+              </div>
             </ng-template>
           </df-grid-column>
           <df-grid-column 
             header="Targer for Today">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
-              {{ (item.qualitySummary?.targetForToday | number:'1.2') }}
+              <div class="{{ getQualityColor(item) }}">
+                {{ (item.qualitySummary?.targetForToday | number:'1.2') }}
+              </div>
             </ng-template>
           </df-grid-column>
         </df-grid>

@@ -11,7 +11,7 @@ const routes: Routes = [
     component: GradebookComponent
   },
   {
-    path: 'dashboard/:email',
+    path: 'dashboard',
     component: IcDashboardComponent
   }
 ];

@@ -1,4 +1,5 @@
 import { OnInit, Component } from '@angular/core';
+
 import { GradebookService } from 'src/app/shared/services/gradebook.service';
 
 @Component({
@@ -10,12 +11,14 @@ export class GradebookComponent implements OnInit {
   public gradebookData: any[];
   public loaded = false;
 
-  constructor(private gradebookService: GradebookService) { }
+  constructor(
+    private gradebookService: GradebookService,
+  ) { }
 
   public ngOnInit(): void {
-    this.gradebookService.getGradebookData().subscribe(data => {
+    this.gradebookService.getGradebookData().subscribe(gradebookData => {
+      this.gradebookData = gradebookData;
       this.loaded = true;
-      this.gradebookData = data;
     });
   }
 
@@ -27,4 +30,28 @@ export class GradebookComponent implements OnInit {
     }
     return combined;
   }
+
+  public getScoreColor(icRow: any, combined: boolean): string {
+    if (icRow.scoreSummary && icRow.scoreSummary.approved != null) {
+      if (!combined) {
+        return icRow.scoreSummary.approved >= icRow.scoreSummary.targetForToday ?
+        'above-average' : 'below-average';
+      } else if (icRow.scoreSummary.inReview != null) {
+        return icRow.scoreSummary.approved + icRow.scoreSummary.inReview >= icRow.scoreSummary.targetForToday ?
+        'above-average' : 'below-average';
+      }
+    }
+
+    return '';
+  }
+
+  public getQualityColor(icRow: any): string {
+    if (icRow.qualitySummary && icRow.qualitySummary.approved != null) {
+      return icRow.qualitySummary.approved >= icRow.qualitySummary.targetForToday ?
+        'above-average' : 'below-average';
+    }
+
+    return '';
+  }
+
 }

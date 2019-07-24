@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
           if (this.authenticationTokenService.isUserAdmin()) {
             this.modal.open(this.impersonationModal, { backdrop: true });
           } else {
-            this.navigateToAccomplishments();
+            this.navigateToHomePage();
           }
         },
         error => this.handleError(error)
@@ -81,8 +81,11 @@ export class LoginComponent implements OnInit {
     return !this.emailRegex.test(this.impersonationEmailControl.value);
   }
 
-  public navigateToAccomplishments(): any {
+  public navigateToHomePage(): any {
     localStorage.setItem('showWelcomeMessage', 'true');
+    if (this.authenticationTokenService.isUserAdmin()) {
+      return this.router.navigate(['/gradebook']);
+    }
     return this.router.navigate(['']);
   }
 
@@ -90,7 +93,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.impersonate(this.impersonationEmailControl.value.trim())
     .pipe(finalize(() => this.loadingSpinner.hide()))
     .subscribe(() => {
-      this.ngZone.run(() => this.navigateToAccomplishments()).then();
+      this.ngZone.run(() => this.navigateToHomePage()).then();
       close();
     }, error => {
       this.handleError(error);
@@ -98,6 +101,11 @@ export class LoginComponent implements OnInit {
         close();
       }
     });
+  }
+
+  public skipImpersonation(close: Function): void {
+    close();
+    this.ngZone.run(() => this.navigateToHomePage()).then();
   }
 
   private handleError(error): void {

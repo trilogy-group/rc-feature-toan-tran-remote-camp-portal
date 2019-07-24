@@ -24,12 +24,7 @@ export class MainLayoutComponent {
     this.sideBar.toogleOpen();
   }
 
-  public isDashboardVisible(): boolean {
-    return false;
-  }
-
-  public isGradebookVisible(): boolean {
-    // return this._authenticationTokenService.isUserAdmin();
-    return true;
+  public isAdmin(): boolean {
+    return this._authenticationTokenService.isUserAdmin();
   }
 }

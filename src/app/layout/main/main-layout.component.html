@@ -28,7 +28,8 @@
 
       <mat-menu #userMenu="matMenu">
         <mat-divider></mat-divider>
-        <a mat-menu-item
+        <a *ngIf="!isAdmin()" 
+          mat-menu-item
           [routerLink]="['/profile/settings']">
           <mat-icon class="mat-left-icon align-self-center">settings</mat-icon>
           Settings
@@ -58,12 +59,12 @@
       #sideBar
       [open]="false"
       [disableButton]="true">
-      <df-sidebar-item
+      <df-sidebar-item *ngIf="!isAdmin()"
         [hasIcon]="false"
         matTooltip="Dashboard"
         matTooltipPosition="right"
         [hasNestedMenu]="false">
-        <a *ngIf="isDashboardVisible()"
+        <a
           class="h5 d-flex align-items-center"
           [routerLink]="['/dashboard']">
           <mat-icon class="ml-1">home</mat-icon>
@@ -71,7 +72,7 @@
             [class.d-none]="!sideBar.isOpen">Dashboard</span>
         </a>
       </df-sidebar-item>
-      <df-sidebar-item
+      <df-sidebar-item *ngIf="!isAdmin()"
         [hasIcon]="false"
         matTooltip="Calendar"
         matTooltipPosition="right"
@@ -84,7 +85,7 @@
             [class.d-none]="!sideBar.isOpen">Calendar</span>
         </a>
       </df-sidebar-item>
-      <df-sidebar-item *ngIf="isGradebookVisible()"
+      <df-sidebar-item *ngIf="isAdmin()"
         [hasIcon]="false"
         matTooltip="Gradebook"
         matTooltipPosition="right"

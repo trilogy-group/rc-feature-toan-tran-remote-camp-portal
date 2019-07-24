@@ -1,0 +1,30 @@
+.above-average {
+  border-bottom: 4px solid #6dbd70;
+  color: inherit;
+}
+
+.below-average {
+  border-bottom: 4px solid #fa605d;
+  color: #fa605d;
+}
+
+:host ::ng-deep {
+  .df-grid {
+    td {
+      padding: 0 0;
+      line-height: 30px !important;
+    }
+  }
+
+  .df-grid-column__cell-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  .resizable-grid th, .resizable-grid td {
+    border-right: 1px solid #eee;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: rgb(238, 238, 238);
+  }
+}
