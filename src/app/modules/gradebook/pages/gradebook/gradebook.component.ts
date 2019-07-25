@@ -33,15 +33,34 @@ export class GradebookComponent implements OnInit {
 
   public getScoreColor(icRow: any, combined: boolean): string {
     if (icRow.scoreSummary && icRow.scoreSummary.approved != null) {
-      if (!combined) {
-        return icRow.scoreSummary.approved >= icRow.scoreSummary.targetForToday ?
-        'above-average' : 'below-average';
-      } else if (icRow.scoreSummary.inReview != null) {
-        return icRow.scoreSummary.approved + icRow.scoreSummary.inReview >= icRow.scoreSummary.targetForToday ?
-        'above-average' : 'below-average';
-      }
+      return icRow.scoreSummary.approved >= icRow.scoreSummary.targetForToday ?
+      'above-average' : 'below-average';
     }
 
+    return '';
+  }
+
+  public getCombinedScoreColor(icRow: any): string {
+    if (icRow.scoreSummary && icRow.scoreSummary.approved != null && icRow.scoreSummary.inReview != null) {
+      return icRow.scoreSummary.approved + icRow.scoreSummary.inReview >= icRow.scoreSummary.targetForToday ?
+      'above-average' : 'below-average';
+    }
+
+    return '';
+  }
+
+  public getTargetScoreColor(icRow: any): string {
+    if (icRow.scoreSummary.approved >= icRow.scoreSummary.targetForToday) {
+      return 'above-average';
+    }
+
+    if (icRow.scoreSummary.approved + icRow.scoreSummary.inReview < icRow.scoreSummary.targetForToday) {
+      return 'below-average';
+    }
+
+    if (icRow.scoreSummary.approved + icRow.scoreSummary.inReview >= icRow.scoreSummary.targetForToday) {
+      return 'matches-average';
+    }
     return '';
   }
 
@@ -51,6 +70,30 @@ export class GradebookComponent implements OnInit {
         'above-average' : 'below-average';
     }
 
+    return '';
+  }
+
+  public getCombinedQualityColor(icRow: any): string {
+    if (icRow.qualitySummary && icRow.qualitySummary.approved != null && icRow.qualitySummary.inReview != null) {
+      return icRow.qualitySummary.approved + icRow.qualitySummary.inReview >= icRow.qualitySummary.targetForToday ?
+      'above-average' : 'below-average';
+    }
+
+    return '';
+  }
+
+  public getTargetQualityColor(icRow: any): string {
+    if (icRow.qualitySummary.approved >= icRow.qualitySummary.targetForToday) {
+      return 'above-average';
+    }
+
+    if (icRow.qualitySummary.approved + icRow.qualitySummary.inReview < icRow.qualitySummary.targetForToday) {
+      return 'below-average';
+    }
+
+    if (icRow.qualitySummary.approved + icRow.qualitySummary.inReview >= icRow.qualitySummary.targetForToday) {
+      return 'matches-average';
+    }
     return '';
   }
 

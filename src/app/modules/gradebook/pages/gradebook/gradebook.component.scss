@@ -8,6 +8,11 @@
   color: #fa605d;
 }
 
+.matches-average {
+  border-bottom: 4px solid #ffab2d;
+  color: inherit;
+}
+
 :host ::ng-deep {
   .df-grid {
     td {

@@ -12,7 +12,7 @@ export class GradebookService {
       'pipeline': 'QA Automation Engineer',
       'manager': 'Deniz Yavas',
       'start': '2019/07/01',
-      'qualitySummary': { 'approved': 0.935064935064935, 'targetForToday': 0.9 },
+      'qualitySummary': { 'approved': 0.935064935064935, 'inReview': 0.0, 'targetForToday': 0.9 },
       'scoreSummary': { 'approved': 9.625, 'inReview': 0.0, 'inProgress': 1.75, 'targetForToday': 9.0 }
     },
     {
@@ -22,7 +22,7 @@ export class GradebookService {
       'pipeline': 'QA Automation Engineer',
       'manager': 'Deniz Yavas',
       'start': '2019/07/01',
-      'qualitySummary': { 'approved': 0.935064935064935, 'targetForToday': 0.9 },
+      'qualitySummary': { 'approved': 0.935064935064935, 'inReview': 0.0, 'targetForToday': 0.9 },
       'scoreSummary': { 'approved': 8.00, 'inReview': 1.2, 'inProgress': 1.75, 'targetForToday': 9.0 }
     },
     {
@@ -32,7 +32,7 @@ export class GradebookService {
       'pipeline': 'QA Automation Engineer',
       'manager': 'Deniz Yavas',
       'start': '2019/07/01',
-      'qualitySummary': { 'approved': 0.935064935064935, 'targetForToday': 0.9 },
+      'qualitySummary': { 'approved': 0.935064935064935, 'inReview': 0.0, 'targetForToday': 0.9 },
       'scoreSummary': { 'approved': 6.625, 'inReview': 0.0, 'inProgress': 1.75, 'targetForToday': 9.0 }
     },
   ];

@@ -1,14 +1,12 @@
 import { Component, OnInit, NgZone, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
-import { DfModalService } from '@devfactory/ngx-df/modal';
 import { FormControl } from '@angular/forms';
 import { DfLoadingSpinnerService } from '@devfactory/ngx-df/loading-spinner';
 import { finalize } from 'rxjs/operators';
 
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
-import { Roles } from 'src/app/constants/roles.constants';
 
 declare var gapi: any;
 
@@ -18,20 +16,12 @@ declare var gapi: any;
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  private readonly admin = 'admin';
-  // tslint:disable-next-line:max-line-length
-  private readonly emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-  @ViewChild('impersonationModal')
-  public impersonationModal: TemplateRef<any>;
-
   public impersonationEmailControl = new FormControl();
 
   public constructor(
     private readonly ngZone: NgZone,
     private readonly router: Router,
     private readonly authenticationService: AuthenticationService,
-    private readonly modal: DfModalService,
     private readonly toasterService: DfToasterService,
     private readonly loadingSpinner: DfLoadingSpinnerService,
     private readonly authenticationTokenService: AuthenticationTokenService
@@ -66,19 +56,11 @@ export class LoginComponent implements OnInit {
       .pipe(finalize(() => this.loadingSpinner.hide()))
       .subscribe(
         () => {
-          if (this.authenticationTokenService.isUserAdmin()) {
-            this.modal.open(this.impersonationModal, { backdrop: true });
-          } else {
-            this.navigateToHomePage();
-          }
+          this.navigateToHomePage();
         },
         error => this.handleError(error)
       );
     });
-  }
-
-  public isButtonDisabled(): boolean {
-    return !this.emailRegex.test(this.impersonationEmailControl.value);
   }
 
   public navigateToHomePage(): any {
@@ -89,22 +71,7 @@ export class LoginComponent implements OnInit {
     return this.router.navigate(['']);
   }
 
-  public submitImpersonation(close: Function): void {
-    this.authenticationService.impersonate(this.impersonationEmailControl.value.trim())
-    .pipe(finalize(() => this.loadingSpinner.hide()))
-    .subscribe(() => {
-      this.ngZone.run(() => this.navigateToHomePage()).then();
-      close();
-    }, error => {
-      this.handleError(error);
-      if (error.status === 401 || error.status === 403) {
-        close();
-      }
-    });
-  }
-
-  public skipImpersonation(close: Function): void {
-    close();
+  public skipImpersonation(): void {
     this.ngZone.run(() => this.navigateToHomePage()).then();
   }
 

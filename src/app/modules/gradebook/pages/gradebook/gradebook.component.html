@@ -24,14 +24,25 @@
                               colspan="3">
               </df-grid-column>
               <df-grid-column header="Quality"
-                              colspan="2">
+                              colspan="3">
               </df-grid-column>
+            </df-grid-row>
+            <df-grid-row>
+              <df-grid-column header="IC Name"></df-grid-column>
+              <df-grid-column header="Pipeline Name"></df-grid-column>
+              <df-grid-column header="SEM"></df-grid-column>
+              <df-grid-column header="RemoteU Start"></df-grid-column>
+              <df-grid-column header="Approved"></df-grid-column>
+              <df-grid-column header="Approved + In Review"></df-grid-column>
+              <df-grid-column header="Target for Today"></df-grid-column>
+              <df-grid-column header="Approved"></df-grid-column>
+              <df-grid-column header="Approved + In Review"></df-grid-column>
+              <df-grid-column header="Target"></df-grid-column>
             </df-grid-row>
           </df-grid-header-column-group>
           <df-grid-column 
             [sortable]="true"
-            field="icName"
-            header="IC Name">
+            field="icName">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
               <div
@@ -45,8 +56,7 @@
           </df-grid-column>
           <df-grid-column
             [sortable]="true"
-            field="pipeline"
-            header="Pipeline Name">
+            field="pipeline">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
               {{ item.pipeline }}
@@ -54,8 +64,7 @@
           </df-grid-column>
           <df-grid-column
             [sortable]="true"
-            field="manager"
-            header="SEM">
+            field="manager">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
               {{ item.manager }}
@@ -63,15 +72,13 @@
           </df-grid-column>
           <df-grid-column
             [sortable]="true"
-            field="start"
-            header="RemoteU Start">
+            field="start">
             <ng-template let-item="rowData"
               dfGridTemplate="body">
               {{ item.start }}
             </ng-template>
           </df-grid-column>
-          <df-grid-column 
-            header="Approved">
+          <df-grid-column>
             <ng-template let-item="rowData"
               dfGridTemplate="body">
               <div class="{{ getScoreColor(item, false) }}">
@@ -79,26 +86,23 @@
               </div>
             </ng-template>
           </df-grid-column>
-          <df-grid-column 
-            header="Approved + In Review">
+          <df-grid-column>
             <ng-template let-item="rowData"
               dfGridTemplate="body">
-              <div class="{{ getScoreColor(item, true) }}">
+              <div class="{{ getCombinedScoreColor(item, true) }}">
                 {{ (getApprovedPlusInReviewScore(item) | number:'1.2') }}
               </div>
             </ng-template>
           </df-grid-column>
-          <df-grid-column 
-            header="Target for Today">
+          <df-grid-column>
             <ng-template let-item="rowData"
               dfGridTemplate="body">
-              <div class="{{ getScoreColor(item, true) }}">
+              <div class="{{ getTargetScoreColor(item, true) }}">
                 {{ (item.scoreSummary?.targetForToday | number:'1.2') }}
               </div>
             </ng-template>
           </df-grid-column>
-          <df-grid-column 
-            header="Approved">
+          <df-grid-column>
             <ng-template let-item="rowData"
               dfGridTemplate="body">
               <div class="{{ getQualityColor(item) }}">
@@ -106,8 +110,15 @@
               </div>
             </ng-template>
           </df-grid-column>
-          <df-grid-column 
-            header="Targer for Today">
+          <df-grid-column>
+            <ng-template let-item="rowData"
+              dfGridTemplate="body">
+              <div class="{{ getCombinedQualityColor(item) }}">
+                {{ (item.qualitySummary?.approved | number:'1.2') }}
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
             <ng-template let-item="rowData"
               dfGridTemplate="body">
               <div class="{{ getQualityColor(item) }}">
