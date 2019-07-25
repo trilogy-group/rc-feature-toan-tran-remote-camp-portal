@@ -15,8 +15,7 @@ export class AuthenticationGuard implements CanActivate {
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (route.url.toString().startsWith(`${environment.apiUrl}/gradebook`)) {
-      // return this._authenticationTokenService.isUserAdmin();
-      return true;
+      return this._authenticationTokenService.isUserAdmin();
     }
     if (this._authenticationTokenService.isLoggedIn()) {
       return true;
