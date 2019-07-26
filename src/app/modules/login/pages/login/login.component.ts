@@ -90,6 +90,20 @@ export class LoginComponent implements OnInit {
     return this.router.navigate(['']);
   }
 
+  public submitImpersonation(close: Function): void {
+    this.authenticationService.impersonate(this.impersonationEmailControl.value.trim())
+    .pipe(finalize(() => this.loadingSpinner.hide()))
+    .subscribe(() => {
+      this.ngZone.run(() => this.navigateToHomePage()).then();
+      close();
+    }, error => {
+      this.handleError(error);
+      if (error.status === 401 || error.status === 403) {
+        close();
+      }
+    });
+  }
+
   public skipImpersonation(): void {
     this.ngZone.run(() => this.navigateToHomePage()).then();
   }
