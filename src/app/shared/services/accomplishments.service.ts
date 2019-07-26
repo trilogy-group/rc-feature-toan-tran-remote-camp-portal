@@ -16,22 +16,26 @@ export class AccomplishmentsService {
   ) {}
 
   public getAcomplishmentsDailyProgress(icName?: string): Observable<any> {
-    const params = new HttpParams().set('icName', icName);
+    const params = this.getIcNameParameter(icName);
     return this.httpClient.get(this.GET_PROFILE_ACCOMPLISHMENTS, { params: params });
   }
 
   public getHardestProblems(icName?: string): Observable<any> {
-    const params = new HttpParams().set('icName', icName);
+    const params = this.getIcNameParameter(icName);
     return this.httpClient.get(this.GET_HARDEST_PROBLEMS, { params: params });
   }
 
   public getProfile(icName?: string): Observable<any> {
-    const params = new HttpParams().set('icName', icName);
+    const params = this.getIcNameParameter(icName);
     return this.httpClient.get(this.GET_PROFILE, { params: params });
   }
 
   public getHardestProblemsByDay(icName?: string): Observable<any> {
-    const params = new HttpParams().set('icName', icName);
+    const params = this.getIcNameParameter(icName);
     return this.httpClient.get(this.GET_HARDEST_PROBLEMS_BY_DAY, { params: params });
+  }
+  private getIcNameParameter(icName?: string)
+  {
+    return new HttpParams().set('icName', icName === undefined ? '' : icName);
   }
 }
