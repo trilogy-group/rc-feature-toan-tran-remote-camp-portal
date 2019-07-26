@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpParams } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
 
@@ -16,18 +16,22 @@ export class AccomplishmentsService {
   ) {}
 
   public getAcomplishmentsDailyProgress(icName?: string): Observable<any> {
-    return this.httpClient.get(this.GET_PROFILE_ACCOMPLISHMENTS);
+    const params = new HttpParams().set('icName', icName);
+    return this.httpClient.get(this.GET_PROFILE_ACCOMPLISHMENTS, { params: params });
   }
 
   public getHardestProblems(icName?: string): Observable<any> {
-    return this.httpClient.get(this.GET_HARDEST_PROBLEMS);
+    const params = new HttpParams().set('icName', icName);
+    return this.httpClient.get(this.GET_HARDEST_PROBLEMS,{ params: params });
   }
 
   public getProfile(icName?: string): Observable<any> {
-    return this.httpClient.get(this.GET_PROFILE);
+    const params = new HttpParams().set('icName', icName);
+    return this.httpClient.get(this.GET_PROFILE,{ params: params });
   }
 
   public getHardestProblemsByDay(icName?: string): Observable<any> {
-    return this.httpClient.get(this.GET_HARDEST_PROBLEMS_BY_DAY);
+    const params = new HttpParams().set('icName', icName);
+    return this.httpClient.get(this.GET_HARDEST_PROBLEMS_BY_DAY, { params: params });
   }
 }
