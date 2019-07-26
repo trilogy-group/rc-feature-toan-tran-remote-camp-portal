@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { HttpClient,HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
 
@@ -22,12 +22,12 @@ export class AccomplishmentsService {
 
   public getHardestProblems(icName?: string): Observable<any> {
     const params = new HttpParams().set('icName', icName);
-    return this.httpClient.get(this.GET_HARDEST_PROBLEMS,{ params: params });
+    return this.httpClient.get(this.GET_HARDEST_PROBLEMS, { params: params });
   }
 
   public getProfile(icName?: string): Observable<any> {
     const params = new HttpParams().set('icName', icName);
-    return this.httpClient.get(this.GET_PROFILE,{ params: params });
+    return this.httpClient.get(this.GET_PROFILE, { params: params });
   }
 
   public getHardestProblemsByDay(icName?: string): Observable<any> {
