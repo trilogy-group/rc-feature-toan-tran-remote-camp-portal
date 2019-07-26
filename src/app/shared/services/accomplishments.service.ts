@@ -34,8 +34,8 @@ export class AccomplishmentsService {
     const params = this.getIcNameParameter(icName);
     return this.httpClient.get(this.GET_HARDEST_PROBLEMS_BY_DAY, { params: params });
   }
-  private getIcNameParameter(icName?: string)
-  {
+
+  private getIcNameParameter(icName?: string) {
     return new HttpParams().set('icName', icName === undefined ? '' : icName);
   }
 }
