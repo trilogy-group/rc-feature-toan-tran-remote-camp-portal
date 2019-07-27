@@ -71,7 +71,6 @@ export class LoginComponent implements OnInit {
           } else {
             this.navigateToHomePage();
           }
-          this.navigateToHomePage();
         },
         error => this.handleError(error)
       );
@@ -104,8 +103,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  public skipImpersonation(): void {
-    this.ngZone.run(() => this.navigateToHomePage()).then();
+  public skipImpersonation(close: Function): void {
+    this.ngZone.run(() => this.navigateToHomePage()).then(close);
   }
 
   private handleError(error): void {
