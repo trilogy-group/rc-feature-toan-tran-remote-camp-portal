@@ -2,6 +2,7 @@ div.page {
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-x: hidden;
 
   .wrapper {
     display: flex;
