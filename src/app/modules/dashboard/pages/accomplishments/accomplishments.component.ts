@@ -6,6 +6,7 @@ import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfLoadingSpi
 import { finalize } from 'rxjs/operators';
 
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
+import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 
 @Component({
   selector: 'app-accomplishments',
@@ -63,6 +64,7 @@ export class AccomplishmentsComponent implements OnInit {
     private readonly accomplishmentsService: AccomplishmentsService,
     private readonly toasterService: DfToasterService,
     private readonly loadingSpinner: DfLoadingSpinnerService,
+    private readonly authenticationTokenService: AuthenticationTokenService
   ) {}
 
   public ngOnInit(): void {
@@ -134,7 +136,7 @@ export class AccomplishmentsComponent implements OnInit {
 
       this.loaded = true;
 
-      if (this.showWelcome) {
+      if (this.showWelcome && !this.authenticationTokenService.isUserAdmin()) {
         this.toasterService.popSuccess(`Welcome Back ${this.profile.name}!`);
       }
     }, () => this.toasterService.popError('Something went wrong'));

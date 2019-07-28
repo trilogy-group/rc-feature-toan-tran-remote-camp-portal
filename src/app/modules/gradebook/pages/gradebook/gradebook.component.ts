@@ -1,4 +1,5 @@
 import { OnInit, Component } from '@angular/core';
+import { DfToasterService } from '@devfactory/ngx-df/toaster';
 
 import { GradebookService } from 'src/app/shared/services/gradebook.service';
 
@@ -13,12 +14,19 @@ export class GradebookComponent implements OnInit {
 
   constructor(
     private gradebookService: GradebookService,
+    private toasterService: DfToasterService
   ) { }
 
   public ngOnInit(): void {
     this.gradebookService.getGradebookData().subscribe(gradebookData => {
+      const showWelcome = localStorage.getItem('showWelcomeMessage') === 'true';
+      localStorage.removeItem('showWelcomeMessage');
       this.gradebookData = gradebookData;
       this.loaded = true;
+
+      if (showWelcome) {
+        this.toasterService.popSuccess(`Welcome Back!`);
+      }
     });
   }
 
