@@ -146,6 +146,10 @@ export class AccomplishmentsComponent implements OnInit {
     this.currentProductivityDisplay = text;
   }
 
+  public isAdmin(): boolean {
+    return this.authenticationTokenService.isUserAdmin();
+  }
+
   private calculateDaysCompleted(): void {
     const now = new Date();
     const daysBetween = differenceInDays(new Date(), parse(this.profile.startDate));

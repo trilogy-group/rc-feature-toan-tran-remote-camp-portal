@@ -18,6 +18,31 @@
     td {
       padding: 0 0;
       line-height: 30px !important;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .df-grid-table-body__cell-data {
+      white-space: nowrap;
+    }
+
+    td:nth-child(1),
+    td:nth-child(2),
+    td:nth-child(3),
+    td:nth-child(4) {
+      padding-left: 5px;
+      padding-right: 5px;
+      text-align: unset;
+    }
+
+    td:nth-child(5),
+    td:nth-child(8) {
+      padding-left: 10px;
+    }
+
+    td:nth-child(7),
+    td:nth-child(10) {
+      padding-right: 10px;
     }
   }
 
