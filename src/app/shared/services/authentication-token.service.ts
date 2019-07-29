@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Roles } from 'src/app/constants/roles.constants';
 declare var signOutGoogle: any;
 
 @Injectable()
@@ -42,6 +43,11 @@ export class AuthenticationTokenService {
         const sessionToken = localStorage.getItem(this.TOKEN_KEY);
         const user = this.parseJwt(sessionToken);
         return user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    }
+
+    public isUserAdmin(): boolean {
+        const role = this.getUserRole();
+        return role && role.toLowerCase() === Roles.admin;
     }
 
     private parseJwt(token): any {

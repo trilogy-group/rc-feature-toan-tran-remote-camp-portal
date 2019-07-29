@@ -1,0 +1,60 @@
+.above-average {
+  border-bottom: 4px solid #6dbd70;
+  color: inherit;
+}
+
+.below-average {
+  border-bottom: 4px solid #fa605d;
+  color: #fa605d;
+}
+
+.matches-average {
+  border-bottom: 4px solid #ffab2d;
+  color: inherit;
+}
+
+:host ::ng-deep {
+  .df-grid {
+    td {
+      padding: 0 0;
+      line-height: 30px !important;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .df-grid-table-body__cell-data {
+      white-space: nowrap;
+    }
+
+    td:nth-child(1),
+    td:nth-child(2),
+    td:nth-child(3),
+    td:nth-child(4) {
+      padding-left: 5px;
+      padding-right: 5px;
+      text-align: unset;
+    }
+
+    td:nth-child(5),
+    td:nth-child(8) {
+      padding-left: 10px;
+    }
+
+    td:nth-child(7),
+    td:nth-child(10) {
+      padding-right: 10px;
+    }
+  }
+
+  .df-grid-column__cell-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  .resizable-grid th, .resizable-grid td {
+    border-right: 1px solid #eee;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: rgb(238, 238, 238);
+  }
+}

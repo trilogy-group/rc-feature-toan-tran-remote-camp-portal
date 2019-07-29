@@ -56,6 +56,8 @@ import { HardestProblemsTrailingComponent } from 'src/app/modules/dashboard/comp
     MatSelectModule,
     DashboardRoutingModule
   ],
-  exports: []
+  exports: [
+    AccomplishmentsComponent
+  ]
 })
 export class DashboardModule {}

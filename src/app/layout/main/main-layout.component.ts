@@ -23,4 +23,8 @@ export class MainLayoutComponent {
   public toggleSideBar(): void {
     this.sideBar.toogleOpen();
   }
+
+  public isAdmin(): boolean {
+    return this._authenticationTokenService.isUserAdmin();
+  }
 }

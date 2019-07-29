@@ -135,14 +135,19 @@
           placeholder="Please enter user's email"
           name="impersonationEmail">
       </div>
-      <div class="row">
-        <div class="col text-right">
+      <div class="d-flex justify-content-end">
+        <div class="d-block">
           <button 
             (click)="submitImpersonation(close)"
             id="submitImpersonation"
             [disabled]="isButtonDisabled()"
-            class="btn btn-primary pl-4 pr-4">
+            class="btn btn-primary pl-4 pr-4 mr-2">
             Ok
+          </button>
+          <button 
+            (click)="skipImpersonation(close)"
+            class="btn btn-outline-primary pl-4 pr-4">
+            Skip
           </button>
         </div>
       </div>

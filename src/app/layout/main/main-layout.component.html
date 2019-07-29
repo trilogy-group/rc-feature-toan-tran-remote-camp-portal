@@ -28,7 +28,8 @@
 
       <mat-menu #userMenu="matMenu">
         <mat-divider></mat-divider>
-        <a mat-menu-item
+        <a *ngIf="!isAdmin()" 
+          mat-menu-item
           [routerLink]="['/profile/settings']">
           <mat-icon class="mat-left-icon align-self-center">settings</mat-icon>
           Settings
@@ -58,7 +59,7 @@
       #sideBar
       [open]="false"
       [disableButton]="true">
-      <df-sidebar-item
+      <df-sidebar-item *ngIf="!isAdmin()"
         [hasIcon]="false"
         matTooltip="Dashboard"
         matTooltipPosition="right"
@@ -71,7 +72,7 @@
             [class.d-none]="!sideBar.isOpen">Dashboard</span>
         </a>
       </df-sidebar-item>
-      <df-sidebar-item
+      <df-sidebar-item *ngIf="!isAdmin()"
         [hasIcon]="false"
         matTooltip="Calendar"
         matTooltipPosition="right"
@@ -82,6 +83,19 @@
           <mat-icon class="ml-1">calendar_today</mat-icon>
           <span class="ml-2"
             [class.d-none]="!sideBar.isOpen">Calendar</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item *ngIf="isAdmin()"
+        [hasIcon]="false"
+        matTooltip="Gradebook"
+        matTooltipPosition="right"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/gradebook']">
+          <mat-icon class="ml-1">school</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Gradebook</span>
         </a>
       </df-sidebar-item>
     </df-sidebar>
