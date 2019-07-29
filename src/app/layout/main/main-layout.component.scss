@@ -2,6 +2,7 @@ div.page {
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-x: hidden;
 
   .wrapper {
     display: flex;
@@ -33,10 +34,6 @@ div.page {
       font-size: 18px;
     }
 
-    .center {
-      flex-grow: 1;
-    }
-
     .right {
       padding: 0 20px;
       box-sizing: border-box;
@@ -54,41 +51,6 @@ div.page {
     }
   }
 
-  .center {
-    display: flex;
-    flex-grow: 1;
-
-    .left-sidebar {
-      width: 320px;
-      min-width: 320px;
-      box-sizing: border-box;
-      padding: 20px;
-      background: #2C2C2C;
-      color: #fff;
-
-      a {
-        display: flex;
-        align-items: center;
-        padding: 10px 0;
-        color: #afafaf;
-        text-decoration: none;
-
-        mat-icon {
-          margin-right: 10px;
-        }
-
-        &:hover {
-          cursor: pointer;
-          color: #fff;
-        }
-      }
-    }
-
-    .main {
-      flex-grow: 1;
-    }
-  }
-
   footer.footer {
     display: flex;
     height: 50px;
@@ -103,6 +65,10 @@ div.page {
 ::ng-deep {
   mat-icon.mat-right-icon {
     margin: 0 0 0 20px !important;
+  }
+
+  .df-sidebar {
+    top: -14px !important;
   }
 
   .df-sidebar__item-container > a {

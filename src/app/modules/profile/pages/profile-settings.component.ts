@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+import {
+  DfToasterService,
+  DfFileUploader,
+  DfFile,
+  DfFileUploaderOptions,
+  DfFileUploaderActionOptions,
+  DfLoadingSpinnerService
+} from '@devfactory/ngx-df';
 
 import { ProfileService } from 'src/app/shared/services/profile.service';
-import { DfToasterService, DfFileUploader, DfFile, DfFileUploaderOptions, DfFileUploaderActionOptions } from '@devfactory/ngx-df';
 
 @Component({
   selector: 'app-profile-settings',
@@ -19,7 +27,8 @@ export class ProfileSettingsComponent implements OnInit {
   constructor(
     private readonly profileService: ProfileService,
     private readonly formBuilder: FormBuilder,
-    private readonly toasterServie: DfToasterService
+    private readonly toasterServie: DfToasterService,
+    private readonly loadingSpinner: DfLoadingSpinnerService,
   ) {
     const options: DfFileUploaderOptions = {
       fileTable: true,
@@ -47,10 +56,18 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   public saveProfile(): void {
-    this.form.get('contractUrl').setValue(this.fileUploader.filesQueue[0].file.name);
+    if (
+      this.fileUploader && this.fileUploader.filesQueue &&
+      this.fileUploader.filesQueue[0] && this.fileUploader.filesQueue[0].file &&
+      this.fileUploader.filesQueue[0].file.name
+    ) {
+      this.form.get('contractUrl').setValue(this.fileUploader.filesQueue[0].file.name);
+    }
     this.profileService.saveProfile(
       this.form.value, this.fileUploader.filesQueue[0]
-    ).subscribe(() => this.toasterServie.popSuccess('Profile Saved'));
+    )
+    .pipe(finalize(() => this.loadingSpinner.hide()))
+    .subscribe(() => this.toasterServie.popSuccess('Profile Saved'));
   }
 
   public onUploadFileEvent(): void {

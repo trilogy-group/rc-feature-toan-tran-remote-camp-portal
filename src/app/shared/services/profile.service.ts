@@ -23,22 +23,20 @@ export class ProfileService {
       headers.set('accept', 'text/plain');
 
       const formData = new FormData();
-      formData.append('files', file.file);
+      if (file && file.file) {
+        formData.append('files', file.file);
+        file.setInProgress();
+      }
       formData.append('profile', JSON.stringify(profile));
       const req = new HttpRequest('POST', url, formData, {
         headers: headers,
         reportProgress: true,
       });
-      file.setInProgress();
       return this.httpClient.request(req);
     };
     return this.fileUploadService
       .postFile(ProfileService.SAVE_PROFILE, fileToUpload, new HttpHeaders(), 'file')
       .pipe(
-        tap(response => {
-          DfFileUploaderUtils.OnProgressHandler(response, fileToUpload);
-          DfFileUploaderUtils.OnHttpResponseHandler(response, fileToUpload);
-        }),
         filter(response => {
           return response instanceof HttpHeaderResponse;
         }),
