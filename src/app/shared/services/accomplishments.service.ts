@@ -17,25 +17,26 @@ export class AccomplishmentsService {
 
   public getAcomplishmentsDailyProgress(icName?: string): Observable<any> {
     const params = this.getIcNameParameter(icName);
-    return this.httpClient.get(this.GET_PROFILE_ACCOMPLISHMENTS, { params: params });
+    return this.httpClient.get(`${this.GET_PROFILE_ACCOMPLISHMENTS}${params}`);
   }
 
   public getHardestProblems(icName?: string): Observable<any> {
     const params = this.getIcNameParameter(icName);
-    return this.httpClient.get(this.GET_HARDEST_PROBLEMS, { params: params });
+    return this.httpClient.get(`${this.GET_HARDEST_PROBLEMS}${params}`);
   }
 
   public getProfile(icName?: string): Observable<any> {
     const params = this.getIcNameParameter(icName);
-    return this.httpClient.get(this.GET_PROFILE, { params: params });
+    return this.httpClient.get(`${this.GET_PROFILE}${params}`);
   }
 
   public getHardestProblemsByDay(icName?: string): Observable<any> {
     const params = this.getIcNameParameter(icName);
-    return this.httpClient.get(this.GET_HARDEST_PROBLEMS_BY_DAY, { params: params });
+    return this.httpClient.get(`${this.GET_HARDEST_PROBLEMS_BY_DAY}${params}`);
   }
 
   private getIcNameParameter(icName?: string) {
-    return new HttpParams().set('email', icName === undefined ? '' : icName);
+    // tslint:disable-next-line:triple-equals
+    return icName == undefined ? '' : `/${icName}`;
   }
 }
