@@ -1,10 +1,12 @@
-import { OnInit, Component } from '@angular/core';
-import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
+import { OnInit, Component, Input } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { differenceInDays, parse, isSaturday, isSunday } from 'date-fns';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfLoadingSpinnerService } from '@devfactory/ngx-df';
 import { finalize } from 'rxjs/operators';
+
+import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
+import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 
 @Component({
   selector: 'app-accomplishments',
@@ -34,6 +36,10 @@ export class AccomplishmentsComponent implements OnInit {
     DF_COLORS.YELLOW,
     DF_COLORS.BLUE
   ];
+
+  @Input()
+  public icName: string;
+
   public loaded = false;
 
   public dailyProgressChartOptions = new DfLineChartConfiguration();
@@ -58,6 +64,7 @@ export class AccomplishmentsComponent implements OnInit {
     private readonly accomplishmentsService: AccomplishmentsService,
     private readonly toasterService: DfToasterService,
     private readonly loadingSpinner: DfLoadingSpinnerService,
+    private readonly authenticationTokenService: AuthenticationTokenService
   ) {}
 
   public ngOnInit(): void {
@@ -66,10 +73,10 @@ export class AccomplishmentsComponent implements OnInit {
     this.showWelcome = localStorage.getItem('showWelcomeMessage') === 'true';
     localStorage.removeItem('showWelcomeMessage');
     forkJoin(
-      this.accomplishmentsService.getHardestProblems(),
-      this.accomplishmentsService.getProfile(),
-      this.accomplishmentsService.getAcomplishmentsDailyProgress(),
-      this.accomplishmentsService.getHardestProblemsByDay()
+      this.accomplishmentsService.getHardestProblems(this.icName ? this.icName : undefined),
+      this.accomplishmentsService.getProfile(this.icName ? this.icName : undefined),
+      this.accomplishmentsService.getAcomplishmentsDailyProgress(this.icName ? this.icName : undefined),
+      this.accomplishmentsService.getHardestProblemsByDay(this.icName ? this.icName : undefined)
     )
     .pipe(finalize(() => this.loadingSpinner.hide()))
     .subscribe(([hardestProblems, profile, dailyProgressResponse, hardestProblemsByDay]) => {
@@ -129,7 +136,7 @@ export class AccomplishmentsComponent implements OnInit {
 
       this.loaded = true;
 
-      if (this.showWelcome) {
+      if (this.showWelcome && !this.authenticationTokenService.isUserAdmin()) {
         this.toasterService.popSuccess(`Welcome Back ${this.profile.name}!`);
       }
     }, () => this.toasterService.popError('Something went wrong'));
@@ -137,6 +144,10 @@ export class AccomplishmentsComponent implements OnInit {
 
   public onDailyProgressDisplayChange(text: string): void {
     this.currentProductivityDisplay = text;
+  }
+
+  public isAdmin(): boolean {
+    return this.authenticationTokenService.isUserAdmin();
   }
 
   private calculateDaysCompleted(): void {

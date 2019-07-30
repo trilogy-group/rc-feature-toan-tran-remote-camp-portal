@@ -16,6 +16,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { CalendarService } from 'src/app/shared/services/calendar.service';
 import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interceptor';
 import { ProfileService } from 'src/app/shared/services/profile.service';
+import { GradebookService } from 'src/app/shared/services/gradebook.service';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { ProfileService } from 'src/app/shared/services/profile.service';
     ProfileService,
     DfFileUploadService,
     CalendarService,
-    AuthenticationTokenService
+    AuthenticationTokenService,
+    GradebookService
   ],
   bootstrap: [AppComponent]
 })

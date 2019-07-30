@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
 
@@ -15,19 +15,28 @@ export class AccomplishmentsService {
     private httpClient: HttpClient
   ) {}
 
-  public getAcomplishmentsDailyProgress(): Observable<any> {
-    return this.httpClient.get(this.GET_PROFILE_ACCOMPLISHMENTS);
+  public getAcomplishmentsDailyProgress(icName?: string): Observable<any> {
+    const params = this.getIcNameParameter(icName);
+    return this.httpClient.get(`${this.GET_PROFILE_ACCOMPLISHMENTS}${params}`);
   }
 
-  public getHardestProblems(): Observable<any> {
-    return this.httpClient.get(this.GET_HARDEST_PROBLEMS);
+  public getHardestProblems(icName?: string): Observable<any> {
+    const params = this.getIcNameParameter(icName);
+    return this.httpClient.get(`${this.GET_HARDEST_PROBLEMS}${params}`);
   }
 
-  public getProfile(): Observable<any> {
-    return this.httpClient.get(this.GET_PROFILE);
+  public getProfile(icName?: string): Observable<any> {
+    const params = this.getIcNameParameter(icName);
+    return this.httpClient.get(`${this.GET_PROFILE}${params}`);
   }
 
-  public getHardestProblemsByDay(): Observable<any> {
-    return this.httpClient.get(this.GET_HARDEST_PROBLEMS_BY_DAY);
+  public getHardestProblemsByDay(icName?: string): Observable<any> {
+    const params = this.getIcNameParameter(icName);
+    return this.httpClient.get(`${this.GET_HARDEST_PROBLEMS_BY_DAY}${params}`);
+  }
+
+  private getIcNameParameter(icName?: string) {
+    // tslint:disable-next-line:triple-equals
+    return icName == undefined ? '' : `/${icName}`;
   }
 }
