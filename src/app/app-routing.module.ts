@@ -11,11 +11,6 @@ const routes: Routes = [
     canActivate: [AuthenticationGuard],
     children: [
       {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
-      {
         path: 'dashboard',
         loadChildren: './modules/dashboard/dashboard.module#DashboardModule',
       },
