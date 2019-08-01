@@ -2,6 +2,7 @@ import { OnInit, Component } from '@angular/core';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
 
 import { GradebookService } from 'src/app/shared/services/gradebook.service';
+import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 
 @Component({
   selector: 'app-gradebook',
@@ -10,18 +11,22 @@ import { GradebookService } from 'src/app/shared/services/gradebook.service';
 })
 export class GradebookComponent implements OnInit {
   public gradebookData: any[];
+  public lastRefreshed: Date;
   public loaded = false;
 
   constructor(
-    private gradebookService: GradebookService,
-    private toasterService: DfToasterService
+    private readonly gradebookService: GradebookService,
+    private readonly toasterService: DfToasterService,
+    private readonly authenticationTokenService: AuthenticationTokenService
   ) { }
 
   public ngOnInit(): void {
-    this.gradebookService.getGradebookData().subscribe(gradebookData => {
+    this.gradebookService.getGradebookData(this.authenticationTokenService.isUserAdmin())
+      .subscribe(gradebookData => {
       const showWelcome = localStorage.getItem('showWelcomeMessage') === 'true';
       localStorage.removeItem('showWelcomeMessage');
       this.gradebookData = gradebookData.gradeBook;
+      this.lastRefreshed = new Date(gradebookData.currentDateTimeStamp);
       this.loaded = true;
 
       if (showWelcome) {
@@ -46,6 +51,10 @@ export class GradebookComponent implements OnInit {
     }
 
     return '';
+  }
+
+  public isAdmin(): boolean {
+    return this.authenticationTokenService.isUserAdmin();
   }
 
   public getCombinedScoreColor(icRow: any): string {
