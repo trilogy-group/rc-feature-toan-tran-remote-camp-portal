@@ -21,7 +21,7 @@ export class GradebookComponent implements OnInit {
     this.gradebookService.getGradebookData().subscribe(gradebookData => {
       const showWelcome = localStorage.getItem('showWelcomeMessage') === 'true';
       localStorage.removeItem('showWelcomeMessage');
-      this.gradebookData = gradebookData;
+      this.gradebookData = gradebookData.gradeBook;
       this.loaded = true;
 
       if (showWelcome) {
