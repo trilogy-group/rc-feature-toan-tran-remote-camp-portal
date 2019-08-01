@@ -1,1 +1,58 @@
-sem check in
+<div class="ml-5 d-block">
+  <div class="container-fluid">
+    <div class="row section__header">
+      <div class="col py-3">
+        <h1 class="m-0 d-flex align-items-center">
+          Gradebook <mat-icon>keyboard_arrow_right</mat-icon> SEM Check-In Chats
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-column ml-5">
+      <div class="header mt-2"
+      [class.ml-5]="!isAdmin()">
+      <div class="col-3">
+        <b>Name:</b>&nbsp;Jane Smith
+      </div>
+  
+      <div class="col-3">
+        <b>Pipeline:</b>&nbsp;QA Automation Engineer
+      </div>
+  
+      <div class="col-2">
+        <b>Date Started:</b>&nbsp;2019/07/01
+      </div>
+  
+      <div class="col-2">
+        <b>Days Completed:</b>&nbsp;15
+      </div>
+    </div>
+    <h4 classs="ml-3">Summary</h4>
+    <div class="d-flex justify-content-center">
+      <df-card style="width: 400px">
+        <df-card-content class="d-block">
+          <div class="d-flex mb-3">
+            <h5 class="my-0">Productivity: </h5>14.3
+          </div>
+          <div class="d-flex  mb-3">
+            <h5 class="my-0">Quality: </h5>93.21%
+          </div>
+          <div class="d-block mb-3">
+            <h5 class="my-0">Hardest Problems: </h5>
+            RIQB-890
+          </div>
+          <div class="d-block mb-3">
+            <h5 class="my-0">Missing Calendar Items:</h5>
+            <i>Week 1 - Monday - </i> Get the list of assignments (jira) and go through it
+          </div>
+          <div class="d-block mb-3">
+            <h5 class="my-0">Compliance:</h5>
+            Focus: 80%
+            Intensity: 70%
+            Alignment: 90%
+          </div>
+        </df-card-content>
+      </df-card>
+    </div>
+  </div>
+</div>

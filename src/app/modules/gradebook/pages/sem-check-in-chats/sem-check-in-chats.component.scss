@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin: -20px -20px 20px;
+  background: #fff;
+  padding: 20px;
+  border-bottom: 1px solid #D1D1D1;
+
+  .col {
+    display: flex;
+    align-items: center;
+    min-width: 460px;
+    max-width: 460px;
+
+    mat-icon {
+      margin-left: 10px;
+    }
+
+    &:first-child {
+      min-width: 320px;
+      max-width: 320px;
+    }
+  }
+}
