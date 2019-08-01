@@ -8,11 +8,13 @@ import { GradebookRoutingModule } from 'src/app/modules/gradebook/gradebook-rout
 import { GradebookComponent } from 'src/app/modules/gradebook/pages/gradebook/gradebook.component';
 import { IcDashboardComponent } from 'src/app/modules/gradebook/pages/ic-dashboard/ic-dashboard.component';
 import { DashboardModule } from 'src/app/modules/dashboard/dashboard.module';
+import { SemCheckInChatsComponent } from 'src/app/modules/gradebook/pages/sem-check-in-chats/sem-check-in-chats.component';
 
 @NgModule({
   declarations: [
     GradebookComponent,
-    IcDashboardComponent
+    IcDashboardComponent,
+    SemCheckInChatsComponent
   ],
   imports: [
     CommonModule,
