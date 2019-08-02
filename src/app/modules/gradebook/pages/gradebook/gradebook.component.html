@@ -1,138 +1,143 @@
 <div class="ml-5 d-flex flex-column">
   <div class="container-fluid">
     <div class="row section__header">
-      <div class="col py-3">
+      <div class="col py-3 justify-content-between d-flex">
         <h1 class="m-0">
           Gradebook
         </h1>
+        <span class="d-flex align-items-center">
+          Last Updated: {{ lastRefreshed | date: 'MMMM d, y, h:mm:ss a' }}
+        </span>
       </div>
     </div>
   </div>
   <div class="d-flex justify-content-center">
-    <df-card>
-      <df-card-content>
-        <df-grid *ngIf="loaded"
-          sortMode="single"
-          tableStyleClass="resizable-grid"
-          [value]="gradebookData">
-          <df-grid-header-column-group>
-            <df-grid-row>
-              <df-grid-column header="Metadata"
-                              colspan="4">
-              </df-grid-column>
-              <df-grid-column header="Productivity"
-                              colspan="3">
-              </df-grid-column>
-              <df-grid-column header="Quality"
-                              colspan="3">
-              </df-grid-column>
-            </df-grid-row>
-            <df-grid-row>
-              <df-grid-column header="IC Name"
-                [sortable]="true"
-                field="icName"></df-grid-column>
-              <df-grid-column header="Pipeline Name"
-                [sortable]="true"
-                field="pipeline"></df-grid-column>
-              <df-grid-column header="SEM"
-                [sortable]="true"
-                field="manager"></df-grid-column>
-              <df-grid-column header="RemoteU Start"
-                [sortable]="true"
-                field="start"></df-grid-column>
-              <df-grid-column header="Approved"></df-grid-column>
-              <df-grid-column header="Approved + In Review"></df-grid-column>
-              <df-grid-column header="Target for Today"></df-grid-column>
-              <df-grid-column header="Approved"></df-grid-column>
-              <df-grid-column header="Approved + In Review"></df-grid-column>
-              <df-grid-column header="Target"></df-grid-column>
-            </df-grid-row>
-          </df-grid-header-column-group>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              <div
-                matTooltip="Go to {{ item.icName }}'s dashboard"
-                matTooltipPosition="right">
-                <a
-                  [routerLink]="['/gradebook/dashboard']"
-                  [queryParams]="{ icName: item.email }">{{ item.icName }}</a>
-              </div>
-            </ng-template>
+    <df-grid *ngIf="loaded"
+      sortMode="single"
+      class="ml-2"
+      tableStyleClass="resizable-grid"
+      [value]="gradebookData">
+      <df-grid-header-column-group>
+        <df-grid-row>
+          <df-grid-column header="Metadata"
+                          colspan="4">
           </df-grid-column>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              <span matTooltip="{{ item.pipeline }}"
-                matTooltipPosition="right">{{ item.pipeline }}</span>
-            </ng-template>
+          <df-grid-column header="Productivity"
+                          colspan="3">
           </df-grid-column>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              <span matTooltip="{{ item.manager }}"
-                matTooltipPosition="right">
-                {{ item.manager }}
-              </span>
-            </ng-template>
+          <df-grid-column header="Quality"
+                          colspan="3">
           </df-grid-column>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              {{ item.start | date : short }}
-            </ng-template>
-          </df-grid-column>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              <div class="{{ getScoreColor(item, false) }}">
-                {{ (item.scoreSummary?.approved | number : '1.2') }}
-              </div>
-            </ng-template>
-          </df-grid-column>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              <div class="{{ getCombinedScoreColor(item, true) }}">
-                {{ (getApprovedPlusInReviewScore(item) | number : '1.2') }}
-              </div>
-            </ng-template>
-          </df-grid-column>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              <div class="{{ getTargetScoreColor(item, true) }}">
-                {{ (item.scoreSummary?.targetForToday | number : '1.2') }}
-              </div>
-            </ng-template>
-          </df-grid-column>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              <div class="{{ getQualityColor(item) }}">
-                {{ (item.qualitySummary?.approved | number : '1.2') }}
-              </div>
-            </ng-template>
-          </df-grid-column>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              <div class="{{ getCombinedQualityColor(item) }}">
-                {{ (item.qualitySummary?.inReview | number : '1.2') }}
-              </div>
-            </ng-template>
-          </df-grid-column>
-          <df-grid-column>
-            <ng-template let-item="rowData"
-              dfGridTemplate="body">
-              <div class="{{ getQualityColor(item) }}">
-                {{ (item.qualitySummary?.targetForToday | number : '1.2') }}
-              </div>
-            </ng-template>
-          </df-grid-column>
-        </df-grid>
-      </df-card-content>
-    </df-card>
+        </df-grid-row>
+        <df-grid-row>
+          <df-grid-column header="IC Name"
+            [sortable]="true"
+            field="icName"></df-grid-column>
+          <df-grid-column header="Pipeline Name"
+            [sortable]="true"
+            field="pipeline"></df-grid-column>
+          <df-grid-column header="SEM"
+            [sortable]="true"
+            field="manager"></df-grid-column>
+          <df-grid-column header="RemoteU Start"
+            [sortable]="true"
+            field="start"></df-grid-column>
+          <df-grid-column header="Approved"></df-grid-column>
+          <df-grid-column header="Approved + In Review"></df-grid-column>
+          <df-grid-column header="Target for Today"></df-grid-column>
+          <df-grid-column header="Approved"></df-grid-column>
+          <df-grid-column header="Approved + In Review"></df-grid-column>
+          <df-grid-column header="Target"></df-grid-column>
+        </df-grid-row>
+      </df-grid-header-column-group>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <div *ngIf="isAdmin()"
+            matTooltip="Go to {{ item.icName }}'s dashboard"
+            matTooltipPosition="right">
+            <a
+              [routerLink]="['/gradebook/dashboard']"
+              [queryParams]="{ icName: item.email }">{{ item.icName }}</a>
+          </div>
+          <span *ngIf="!isAdmin()"
+            matTooltip="{{ item.icName }}"
+            matTooltipPosition="right">
+            {{ item.icName }}
+          </span>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <span matTooltip="{{ item.pipeline }}"
+            matTooltipPosition="right">{{ item.pipeline }}</span>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <span matTooltip="{{ item.manager }}"
+            matTooltipPosition="right">
+            {{ item.manager }}
+          </span>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          {{ item.start | date : short }}
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <div class="{{ getScoreColor(item, false) }}">
+            {{ (item.scoreSummary?.approved | number : '1.2') }}
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <div class="{{ getCombinedScoreColor(item, true) }}">
+            {{ (getApprovedPlusInReviewScore(item) | number : '1.2') }}
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <div class="{{ getTargetScoreColor(item, true) }}">
+            {{ (item.scoreSummary?.targetForToday | number : '1.2') }}
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <div class="{{ getQualityColor(item) }}">
+            {{ (item.qualitySummary?.approved | number : '1.2') }}
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <div class="{{ getCombinedQualityColor(item) }}">
+            {{ (item.qualitySummary?.inReview | number : '1.2') }}
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <div class="{{ getQualityColor(item) }}">
+            {{ (item.qualitySummary?.targetForToday | number : '1.2') }}
+          </div>
+        </ng-template>
+      </df-grid-column>
+    </df-grid>
   </div>
 </div>
 

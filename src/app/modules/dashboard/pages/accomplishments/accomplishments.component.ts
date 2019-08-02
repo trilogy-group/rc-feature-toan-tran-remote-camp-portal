@@ -115,7 +115,7 @@ export class AccomplishmentsComponent implements OnInit {
         return {
           xKey: `Day ${dailyObject.day.toString()}`,
           productivity: dailyObject.productivity.toFixed(2),
-          quality: dailyObject.quality ? (dailyObject.quality / 100).toFixed(2) : 1
+          quality: dailyObject.quality != null ? (dailyObject.quality / 100).toFixed(2) : 1
         };
       });
 
