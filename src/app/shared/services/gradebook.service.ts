@@ -6,12 +6,13 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class GradebookService {
   public static GET_GRADEBOOK = `${environment.apiUrl}/GradeBook`;
+  public static GET_IC_GRADEBOOK = `${environment.apiUrl}/IcGradeBook`;
 
     public constructor(
     private httpClient: HttpClient
   ) {}
 
-  public getGradebookData(): Observable<any> {
-    return this.httpClient.get(GradebookService.GET_GRADEBOOK);
+  public getGradebookData(isAdmin: boolean = true): Observable<any> {
+    return this.httpClient.get(isAdmin ? GradebookService.GET_GRADEBOOK : GradebookService.GET_IC_GRADEBOOK);
   }
 }

@@ -57,6 +57,6 @@ export class AuthenticationGuard implements CanActivate {
   }
 
   private isUserRoute(url: string): boolean {
-    return url !== 'gradebook';
+    return true;
   }
 }
