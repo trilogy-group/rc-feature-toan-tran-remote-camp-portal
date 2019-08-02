@@ -22,6 +22,7 @@ export class AccomplishmentsComponent implements OnInit {
   public readonly inReview = 'In Review';
   public readonly toDo = 'To Do';
   public readonly inProgress = 'In Progress';
+  public readonly weeks = ['', '', '', ''];
   public readonly productivityDisplayTypes = [
     { text: '', id: 0, icon: 'fa fa-line-chart' },
     { text: '', id: 1, icon: 'fa fa-th' },
@@ -54,10 +55,11 @@ export class AccomplishmentsComponent implements OnInit {
   public productivityTarget: number;
   public hardestProblems = [];
   public hardestProblemsByDay = [];
+  public qualityDistribution = [];
+  public scoreDistribution = [];
 
   public daysCompleted: number;
   public profile: any = { };
-  public weeks = [0, 1, 2, 3];
   public showWelcome: boolean;
 
   constructor(
@@ -83,20 +85,40 @@ export class AccomplishmentsComponent implements OnInit {
       this.hardestProblems = hardestProblems;
       this.profile = profile;
       this.calculateDaysCompleted();
-
       const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality != null ? week.quality * 100 : null);
       const weeklyProductivity = dailyProgressResponse.weekly.map(week => week.productivity ? week.productivity : 0);
+      const weeklyFtar = dailyProgressResponse.totalAverageFtar != null ?
+        dailyProgressResponse.totalAverageFtar * 100 :
+         null;
 
       this.accomplishmentsSummary.push({
         stat: this.FTAR,
         values: weeklyQuality,
-        average: this.getWeightedFtarAverage(weeklyQuality, weeklyProductivity)
+        average: weeklyFtar
       });
 
       this.accomplishmentsSummary.push({
         stat: this.score,
         values: weeklyProductivity,
         average: weeklyProductivity.reduce((a, b) => (a + b)) / (weeklyProductivity.length || 1)
+      });
+
+      this.qualityDistribution = dailyProgressResponse.moduleDistribution.map(distribution => {
+        const distributionObject = {
+          distribution: distribution.qualityDistribution.map(value => value * 100),
+          average:  distribution.moduleTotalAverageFtar != null ? distribution.moduleTotalAverageFtar * 100 : null,
+          module: distribution.module
+        };
+        return distributionObject;
+      });
+
+      this.scoreDistribution = dailyProgressResponse.moduleDistribution.map(distribution => {
+        const distributionObject = {
+          distribution: distribution.scoreDistribution,
+          average: distribution.scoreDistribution.reduce((a, b) => (a + b)) / (distribution.scoreDistribution.length || 1),
+          module: distribution.module
+        };
+        return distributionObject;
       });
 
       this.productivityTarget = dailyProgressResponse.scoreSummary.targetForToday;
@@ -144,6 +166,10 @@ export class AccomplishmentsComponent implements OnInit {
 
   public onDailyProgressDisplayChange(text: string): void {
     this.currentProductivityDisplay = text;
+  }
+
+  public getDistributionByRow(statistic: any): any {
+    return statistic === this.FTAR ? this.qualityDistribution : this.scoreDistribution;
   }
 
   public isAdmin(): boolean {
