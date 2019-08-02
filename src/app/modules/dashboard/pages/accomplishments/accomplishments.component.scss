@@ -26,9 +26,36 @@
   .accomplishments-summary {
     .df-grid__table {
       width: unset;
-      th {
+      th:first-child {
+        width: 38px;
+      }
+      th:nth-child(2) {
+        width: 120px !important;
+      }
+
+      th:nth-child(3),
+      th:nth-child(4),
+      th:nth-child(5),
+      th:nth-child(6) {
         width: 100px !important;
       }
+    }
+
+    .single-module {
+      tr {
+        .df-grid__row-expander {
+          display: none;
+        }
+      }
+    }
+
+    .expansion-table-header {
+      padding-left: 8.5px;
+      padding-right: 8.5px;
+    }
+
+    th {
+      font-weight: 400;
     }
 
     .df-grid__tablewrapper {
