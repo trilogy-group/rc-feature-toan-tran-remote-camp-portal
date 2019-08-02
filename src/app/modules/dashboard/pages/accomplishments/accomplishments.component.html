@@ -36,6 +36,12 @@
             </div>
             <div class="accomplishments-summary mb-3">
               <df-grid *ngIf="loaded"
+              [class.single-module]="!qualityDistribution || qualityDistribution.length === 0"
+                [value]="accomplishmentsSummary"
+                expandableRows="true">
+                <df-grid-column expander="true"
+                  [style]="{'width':'38px'}">
+                </df-grid-column>
                 [value]="accomplishmentsSummary">
                 <df-grid-column header="">
                   <ng-template let-item="rowData"
@@ -47,15 +53,35 @@
                   header="Week {{ i + 1 }}">
                   <ng-template let-item="rowData"
                     dfGridTemplate="body">
-                    {{ item.values[i] != null ? (item.values[i] | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.values[i] != null ? '%' : ''}}
+                    {{ item.values[i] != null ? (item.values[i] | number:'1.2') : '-' }}{{ item.stat === FTAR && item.values[i] != null ? '%' : ''}}
                   </ng-template>
                 </df-grid-column>
                 <df-grid-column header="Average">
                   <ng-template let-item="rowData"
                     dfGridTemplate="body">
-                    {{ item.average ? (item.average | number:'1.2') : '-' }}{{ item.stat == 'FTAR' && item.average != null ? '%' : ''}}
+                    {{ item.average ? (item.average | number:'1.2') : '-' }}{{ item.stat === FTAR && item.average != null ? '%' : ''}}
                   </ng-template>
                 </df-grid-column>
+                <ng-template let-data
+                  dfGridTemplate="rowexpansion">
+                  <div class="d-flex">
+                    <table>
+                      <tr *ngFor="let distributionByModule of getDistributionByRow(data.stat); let i = index">
+                        <th></th>
+                        <th class="expansion-table-header"><em>{{ distributionByModule.module }}</em></th>
+                        <th *ngFor="let week of weeks; let j = index"
+                          class="expansion-table-header">
+                          <em>{{
+                            distributionByModule.distribution[j] ?
+                            ((distributionByModule.distribution[j] | number:'1.2') + (data.stat === FTAR && distributionByModule.distribution[j] != null ? '%' : '')) :
+                            '-'
+                          }}</em>
+                        </th>
+                        <th class="expansion-table-header"><em>{{ distributionByModule.average ? ((distributionByModule.average | number:'1.2') + (data.stat === FTAR && data.average != null ? '%' : '')) : '' }}</em></th>
+                      </tr>
+                    </table>
+                  </div>
+                </ng-template>
               </df-grid>
             </div>
           </div>
