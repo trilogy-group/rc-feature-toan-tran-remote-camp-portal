@@ -17,6 +17,8 @@ import { CalendarService } from 'src/app/shared/services/calendar.service';
 import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interceptor';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import { GradebookService } from 'src/app/shared/services/gradebook.service';
+import { SemCheckInChatsService } from 'src/app/shared/services/sem-check-in-chats.service';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { GradebookService } from 'src/app/shared/services/gradebook.service';
     DfFileUploadService,
     CalendarService,
     AuthenticationTokenService,
-    GradebookService
+    GradebookService,
+    SemCheckInChatsService,
+    UtilsService
   ],
   bootstrap: [AppComponent]
 })

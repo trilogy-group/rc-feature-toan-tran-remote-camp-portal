@@ -3,9 +3,21 @@
   color: inherit;
 }
 
+.check-in-chat-bubble {
+  color: blue;
+  font-size: 16px;
+}
+
 .below-average {
   border-bottom: 4px solid #fa605d;
   color: #fa605d;
+}
+
+.ic-link {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .matches-average {
