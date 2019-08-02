@@ -87,8 +87,8 @@ export class AccomplishmentsComponent implements OnInit {
       this.calculateDaysCompleted();
       const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality != null ? week.quality * 100 : null);
       const weeklyProductivity = dailyProgressResponse.weekly.map(week => week.productivity ? week.productivity : 0);
-      const weeklyFtar = dailyProgressResponse.totalAverageFtar != null ?
-        dailyProgressResponse.totalAverageFtar * 100 :
+      const weeklyFtar = dailyProgressResponse.qualitySummary.approved != null ?
+        dailyProgressResponse.qualitySummary.approved * 100 :
          null;
 
       this.accomplishmentsSummary.push({
