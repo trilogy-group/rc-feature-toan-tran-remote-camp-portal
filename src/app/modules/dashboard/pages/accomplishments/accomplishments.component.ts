@@ -22,7 +22,6 @@ export class AccomplishmentsComponent implements OnInit {
   public readonly inReview = 'In Review';
   public readonly toDo = 'To Do';
   public readonly inProgress = 'In Progress';
-  public readonly weeks = ['', '', '', ''];
   public readonly productivityDisplayTypes = [
     { text: '', id: 0, icon: 'fa fa-line-chart' },
     { text: '', id: 1, icon: 'fa fa-th' },
@@ -60,6 +59,7 @@ export class AccomplishmentsComponent implements OnInit {
 
   public daysCompleted: number;
   public profile: any = { };
+  public weeks = [0, 1, 2, 3];
   public showWelcome: boolean;
 
   constructor(
@@ -85,12 +85,12 @@ export class AccomplishmentsComponent implements OnInit {
       this.hardestProblems = hardestProblems;
       this.profile = profile;
       this.calculateDaysCompleted();
+
       const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality != null ? week.quality * 100 : null);
       const weeklyProductivity = dailyProgressResponse.weekly.map(week => week.productivity ? week.productivity : 0);
       const weeklyFtar = dailyProgressResponse.qualitySummary.approved != null ?
-        dailyProgressResponse.qualitySummary.approved * 100 :
-         null;
-
+      dailyProgressResponse.qualitySummary.approved * 100 :
+       null;
       this.accomplishmentsSummary.push({
         stat: this.FTAR,
         values: weeklyQuality,
@@ -112,7 +112,7 @@ export class AccomplishmentsComponent implements OnInit {
         return distributionObject;
       });
 
-      this.scoreDistribution = dailyProgressResponse.moduleDistribution.map(distribution => {
+       this.scoreDistribution = dailyProgressResponse.moduleDistribution.map(distribution => {
         const distributionObject = {
           distribution: distribution.scoreDistribution,
           average: distribution.scoreDistribution.reduce((a, b) => (a + b)) / (distribution.scoreDistribution.length || 1),
