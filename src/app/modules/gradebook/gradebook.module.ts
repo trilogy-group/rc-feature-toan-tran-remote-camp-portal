@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatTooltipModule, MatIconModule } from '@angular/material';
+import { MatTooltipModule, MatIconModule, MatButtonModule } from '@angular/material';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { GradebookRoutingModule } from 'src/app/modules/gradebook/gradebook-routing.module';
@@ -23,7 +23,8 @@ import { SemCheckInChatsComponent } from 'src/app/modules/gradebook/pages/sem-ch
     GradebookRoutingModule,
     DashboardModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
   ]
 })
 export class GradebookModule {}

@@ -28,42 +28,99 @@
     </div>
     <div class="d-flex">
       <div class="container">
-        <div class="col">
-          <h4 class="ml-3 mb-2">Summary</h4>
-          <df-card style="max-width: 400px">
-            <df-card-content class="d-block">
-              <div class="d-flex mb-3">
-                <h5 class="my-0">Productivity: </h5>14.3
-              </div>
-              <div class="d-flex  mb-3">
-                <h5 class="my-0">Quality: </h5>93.21%
-              </div>
-              <div class="d-block mb-3">
-                <h5 class="my-0">Hardest Problems:</h5>
-                RIQB-890
-              </div>
-              <div class="d-block mb-3">
-                <h5 class="my-0">Missing Calendar Items:</h5>
-                <i>Week 1 - Monday - Get the list of assignments (jira) and go through it</i> 
-              </div>
-              <div class="d-block">
-                <h5 class="my-0">Compliance:</h5>
-                <span class="d-flex justify-content-between">
-                  <span>Focus: 80%</span>
-                  <span>Intensity: 70%</span>
-                  <span>Alignment: 90%</span>
-                </span>
-              </div>
-            </df-card-content>
-          </df-card>
-        </div>
-        <div class="col">
-          <h4 class="mb-2">Check-In Chats</h4>
-          <df-card>
-            <df-card-content>
-              weeks
-            </df-card-content>
-          </df-card>
+        <div class="row">
+          <div class="col">
+            <h3 class="ml-3 mb-2">Summary</h3>
+            <df-card style="max-width: 400px">
+              <df-card-content class="d-block">
+                <div class="d-flex mb-3">
+                  <h5 class="my-0">
+                    Productivity: 
+                    <df-number-increase
+                      *ngIf="loaded"
+                      [time]="500"
+                      [value]="productivityScore"></df-number-increase> Units
+                  </h5>
+                </div>
+                <div class="d-flex  mb-3">
+                  <h5 class="my-0">
+                    Quality: 
+                    <df-number-increase
+                      *ngIf="loaded"
+                      [time]="500"
+                      [value]="qualityScore"></df-number-increase>%
+                  </h5>
+                </div>
+                <div class="d-block mb-3">
+                  <h5 class="my-0">Hardest Problems:</h5>
+                  <div class="d-flex">
+                    <a *ngFor="let hardestProblem of hardestProblems"
+                      matTooltip="{{ hardestProblem.summary }}"
+                      matTooltipPosition="above"
+                      [href]="'https://crossover.atlassian.net/browse/' + hardestProblem.jiraKey"
+                      target="_blank"
+                      class="col-4">{{ hardestProblem.jiraKey }}</a>
+                  </div>
+                </div>
+                <div class="d-block mb-3">
+                  <h5 class="my-0">Missing Calendar Activities:</h5>
+                  <div class="d-block">
+                    <em *ngFor="let activity of missingCalendarActivities"
+                      class="d-block text-truncate"
+                      matTooltip="{{ activity.name }}"
+                      matTooltipPosition="above">
+                      Week {{ activity.week }} - {{ activity.day }} - {{ activity.name }}
+                    </em>
+                  </div>
+                </div>
+                <div class="d-block">
+                  <h5 class="my-0">Compliance:</h5>
+                  <span class="d-flex justify-content-between"
+                    *ngIf="loaded">
+                    <span>
+                      Focus:
+                      <df-number-increase
+                        *ngIf="loaded"
+                        [time]="500"
+                        [value]="compliance.focus * 100"></df-number-increase>%</span>
+                    <span>
+                      Intensity: 
+                      <df-number-increase
+                        *ngIf="loaded"
+                        [time]="500"
+                        [value]="compliance.intensity * 100"></df-number-increase>%</span>
+                    <span>
+                      Alignment:
+                      <df-number-increase
+                        *ngIf="loaded"
+                        [time]="500"
+                        [value]="compliance.alignment * 100"></df-number-increase>%</span>
+                  </span>
+                </div>
+              </df-card-content>
+            </df-card>
+          </div>
+          <div class="col">
+            <span>
+              <h3 class="mb-2">Check-In Chats</h3>
+            </span>
+            <div class="d-flex flex-column align-items-center">
+              <h4 class="d-flex">
+                <mat-icon [class.disabled]="currentWeek === 1"
+                  class="pointer"
+                  (click)="previousWeek()">keyboard_arrow_left</mat-icon>
+                  Week {{ currentWeek }}
+                <mat-icon [class.disabled]="currentWeek === 4"
+                  class="pointer"
+                  (click)="nextWeek()">keyboard_arrow_right</mat-icon>
+              </h4>
+              <button *ngFor="let cic of weekCheckInChats" 
+                mat-raised-button
+                [class.done]="cic.done"
+                class="mb-2 w-75">{{cic.day}}. - {{ cic.done ? '' : 'Not' }} Done
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

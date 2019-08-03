@@ -16,6 +16,16 @@ export class SemCheckInChatsComponent implements OnInit {
 
   public profile: any;
   public daysCompleted: number;
+  public productivityScore: number;
+  public qualityScore: number;
+  public hardestProblems: string[] = [];
+  public compliance: any;
+  public missingCalendarActivities: any[] = [];
+
+  public loaded = false;
+  public weekCheckInChats = [];
+  public weeks = [1, 2, 3, 4];
+  public currentWeek = 1;
 
   public constructor(
     private readonly semCheckInChatsService: SemCheckInChatsService,
@@ -28,11 +38,34 @@ export class SemCheckInChatsComponent implements OnInit {
 
   public ngOnInit(): void {
     forkJoin(
-      this.accomplishmentsService.getProfile(this.icName)
-    ).subscribe(([profile]) => {
+      this.accomplishmentsService.getProfile(this.icName),
+      this.accomplishmentsService.getAcomplishmentsDailyProgress(this.icName),
+      this.accomplishmentsService.getHardestProblems(this.icName),
+      this.accomplishmentsService.getCompliance(this.icName),
+      this.accomplishmentsService.getMissingCalendarActivities(this.icName),
+      this.semCheckInChatsService.getCheckInChats(this.currentWeek)
+    ).subscribe(([profile, dailyProgressResponse, hardestProblems, compliance, missingCalendarActivities, checkInChats]) => {
       this.profile = profile;
+      this.compliance = compliance;
+      this.productivityScore = dailyProgressResponse.scoreSummary.approved || 0;
+      this.qualityScore = (dailyProgressResponse.qualitySummary.approved || 0) * 100;
+      this.hardestProblems = hardestProblems;
+      this.missingCalendarActivities = missingCalendarActivities;
+      this.weekCheckInChats = checkInChats;
+
       this.calculateDaysCompleted();
+      this.loaded = true;
     });
+  }
+
+  public nextWeek(): void {
+    this.currentWeek++;
+    this.semCheckInChatsService.getCheckInChats(this.currentWeek).subscribe(checkInChats => this.weekCheckInChats);
+  }
+
+  public previousWeek(): void {
+    this.currentWeek--;
+    this.semCheckInChatsService.getCheckInChats(this.currentWeek).subscribe(checkInChats => this.weekCheckInChats);
   }
 
   private calculateDaysCompleted(): void {

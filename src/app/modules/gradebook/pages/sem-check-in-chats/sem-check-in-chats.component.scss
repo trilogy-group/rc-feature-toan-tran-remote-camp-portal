@@ -1,3 +1,5 @@
+@import '~@devfactory/ngx-df/core/theming/aurea-skin/theming';
+
 .header {
   display: flex;
   align-items: center;
@@ -22,4 +24,19 @@
       max-width: 320px;
     }
   }
+}
+
+.done {
+  background: $au-blue;
+  color: white;
+}
+
+.disabled {
+  color: $au-light-gray;
+  cursor: context-menu;
+  pointer-events: none;
+}
+
+.pointer {
+  cursor: pointer;
 }
