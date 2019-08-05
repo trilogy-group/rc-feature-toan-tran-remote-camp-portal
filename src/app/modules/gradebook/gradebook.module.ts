@@ -9,12 +9,16 @@ import { GradebookComponent } from 'src/app/modules/gradebook/pages/gradebook/gr
 import { IcDashboardComponent } from 'src/app/modules/gradebook/pages/ic-dashboard/ic-dashboard.component';
 import { DashboardModule } from 'src/app/modules/dashboard/dashboard.module';
 import { SemCheckInChatsComponent } from 'src/app/modules/gradebook/pages/sem-check-in-chats/sem-check-in-chats.component';
+import {
+  SemCheckInChatDetailComponent
+} from 'src/app/modules/gradebook/components/sem-check-in-chat-detail/sem-check-in-chat-detail.component';
 
 @NgModule({
   declarations: [
     GradebookComponent,
     IcDashboardComponent,
-    SemCheckInChatsComponent
+    SemCheckInChatsComponent,
+    SemCheckInChatDetailComponent
   ],
   imports: [
     CommonModule,

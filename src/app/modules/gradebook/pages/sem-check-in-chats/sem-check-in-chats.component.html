@@ -104,21 +104,22 @@
             <span>
               <h3 class="mb-2">Check-In Chats</h3>
             </span>
-            <div class="d-flex flex-column align-items-center">
-              <h4 class="d-flex">
-                <mat-icon [class.disabled]="currentWeek === 1"
-                  class="pointer"
-                  (click)="previousWeek()">keyboard_arrow_left</mat-icon>
-                  Week {{ currentWeek }}
-                <mat-icon [class.disabled]="currentWeek === 4"
-                  class="pointer"
-                  (click)="nextWeek()">keyboard_arrow_right</mat-icon>
-              </h4>
-              <button *ngFor="let cic of weekCheckInChats" 
-                mat-raised-button
-                [class.done]="cic.done"
-                class="mb-2 w-75">{{cic.day}}. - {{ cic.done ? '' : 'Not' }} Done
-              </button>
+            <div *ngIf="loaded"
+              class="d-flex check-in-chats">
+              <div *ngFor="let week of weeks; let i = index"
+                class="d-flex flex-column align-items-center mx-1">
+                <h4 class="d-flex">
+                  Week {{ i + 1 }}
+                </h4>
+                <button *ngFor="let cic of weekCheckInChats[i]" 
+                  mat-raised-button
+                  [class.done]="cic.done"
+                  [class.not-done]="cic.done != undefined && !cic.done"
+                  [class.unavailable]="cic.done == undefined"
+                  (click)="openDetail(week, cic.day)"
+                  class="mb-2 px-2">{{ getButtonText(cic) }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -126,3 +127,12 @@
     </div>
   </div>
 </div>
+
+<ng-template #checkInChatDetail
+             let-data="data"
+             let-close="close">
+  <app-sem-check-in-chat-detail
+    (cancel)="cancelCheckInChat(close)"
+    (save)="saveCheckInChat($event, close)"
+    [data]="data"></app-sem-check-in-chat-detail>
+</ng-template>

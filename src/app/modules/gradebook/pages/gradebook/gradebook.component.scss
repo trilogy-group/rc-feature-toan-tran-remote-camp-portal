@@ -27,6 +27,13 @@
 
 :host ::ng-deep {
   .df-grid {
+    tr:nth-child(1) {
+      th:nth-child(2),
+      th:nth-child(3) {
+        width: 290px;
+      }
+    }
+
     td {
       padding: 0 0;
       line-height: 30px !important;

@@ -27,16 +27,25 @@
 }
 
 .done {
-  background: $au-blue;
+  background: $au-green;
   color: white;
 }
 
-.disabled {
-  color: $au-light-gray;
+.not-done {
+  background: map-get($au-gray, 1);
+}
+
+.unavailable {
   cursor: context-menu;
   pointer-events: none;
 }
 
 .pointer {
   cursor: pointer;
+}
+
+.check-in-chats {
+  button {
+    width: 125px
+  }
 }
