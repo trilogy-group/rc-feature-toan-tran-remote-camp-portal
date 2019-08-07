@@ -1,0 +1,117 @@
+<div class="d-flex justify-content-center sign-up-container">
+  <df-card class="sign-up-form">
+    <df-card-content>
+      <form class="d-block"
+        [formGroup]="form">
+        <p class="mb-5">
+          <em>Please note, that before you start your work at Crossover, you’ll have to pass the Remote University - paid intensive program which will teach you how to be an Elite of our Company. Not everyone can pass the Remote University successfully, though we graduate more than 80% of the candidates. 
+              Before accepting the order you need to confirm that you accept the Remote University rules, and you want to participate in this program. If you have questions or concerns about the Remote University program, please reach out to your interviewer. 
+          </em>
+        </p>
+        <h5>Please read <a
+          href="https://docs.google.com/document/d/17uOUMykeDrnw28RtoOjY9wPl9ZYGvO4m2oY4FuXAF_A"
+          target="_blank"> RemoteU Playbook</a> before filling the form</h5>
+        <h5 class="mb-1 mt-3">Email Address (Same as XO login email)<span class="asterisk">*</span></h5>
+        <input type="text"
+          formControlName="email"
+          class="form-control">
+        <h5 class="mb-1 mt-3"> Full Name (same as your Crossover profile)<span class="asterisk">*</span></h5>
+        <input type="text"
+          formControlName="fullName"
+          class="form-control">
+        <h5 class="mb-1 mt-3">
+          Role for which you have applied<span class="asterisk">*</span>
+        </h5>
+        <df-select
+          placeholder="Please select a role to apply for"
+          (change)="getRoleSpecificPrerequisites($event)"
+          [filterable]="false">
+          <df-option *ngFor="let role of roles"
+            [value]="role.id">
+            {{ role.name }}
+          </df-option>
+        </df-select>
+        <h5 class="mb-1 mt-3">Common Mandatory Prerequisites</h5>
+        <div class="d-block">
+          <p>
+            Please check to confirm you have the following covered. Refer to <a 
+              href="https://docs.google.com/document/d/1Z1ZaQpf4aa291O_dkbrPhaY0s0CEKr2RNOPltfRTFsc/edit"
+              target="_blank">this</a> document for details.
+          </p>
+          <df-checkbox>
+            Able to work at least 8 hours a day M-F for 4 weeks
+          </df-checkbox>
+          <df-checkbox>
+            Able to work 6 hours between 8am and 5pm Monday-Friday in your local time
+          </df-checkbox>
+          <df-checkbox>
+            No planned vacation of more than 1 day during the RC 4 week period
+          </df-checkbox>
+          <df-checkbox>
+            Stable internet connection with at least 5Mbps download speed (handle video streaming)
+          </df-checkbox>
+          <df-checkbox>
+            Computer with a webcam
+          </df-checkbox>
+          <df-checkbox>
+            High quality microphone/headset that meets the specs specified in the above document
+          </df-checkbox>
+          <df-checkbox>
+            Computer that meets the specs specified in the above document 
+          </df-checkbox>
+          <df-checkbox>
+            Able to work in an environment with no distractions during working hours
+          </df-checkbox>
+          <df-checkbox>
+            If you have dependants to take care of, you should already have caretakers during working hours (Nanny for kids, Adult care for seniors, etc) to avoid distractions
+          </df-checkbox>
+          <df-checkbox>
+            Have a contingency plan in case any of the above breaks apart
+          </df-checkbox>
+        </div>
+        <h5 class="mb-1 mt-3">Role Specific Prerequisites</h5>
+        <p>
+          Please check to confirm you have the following skillset. If not, it is highly recommended that you spend time learning these skills before starting RC
+        </p>
+        <div class="d-block">
+          <df-checkbox *ngFor="let prerequisite of rolePrerequisites">
+            {{ prerequisite.name }}
+          </df-checkbox>
+        </div>
+        <p class="mt-4">
+          Please select a date when you can be available to start the RemoteU. Please note that you won't be able to postpone the date once started. Please note below: RemoteU is a 4-week program and you are required to work 40 hours by the end of Friday (a minimum of 8 hours every weekday). 
+        </p>
+        <df-select
+          placeholder="Please select a starting date"
+          [filterable]="false">
+          <df-option *ngFor="let monday of mondays"
+            [value]="monday">
+            {{ monday | date: short }}
+          </df-option>
+        </df-select>
+        <p class="mt-3">
+          Please download, sign and upload the 
+          <a href="https://docs.google.com/document/d/1ZdVCuOo532LP4ctHTvKkFC33DVvFG_Xca5LK_1xlM2g/edit"
+            target="_blank">
+            RemoteU Contract
+          </a><span class="asterisk">*</span>
+        </p>
+        <div class="col px-0">
+          <df-file-upload [fileUploader]="fileUploader"
+              (uploadFile)="onUploadFileEvent()"
+              (removeFile)="onRemoveFileEvent()">
+          </df-file-upload>
+        </div>
+        <df-checkbox>
+          I understand that my profile will be evaluated to join RemoteU and I will receive a notification if I am selected.<span class="asterisk">*</span>
+        </df-checkbox>
+        <button 
+          (click)="submit()"
+          type="submit"
+          class="btn btn-primary mt-3 pl-4 pr-4 mr-2">
+          SUBMIT
+        </button>
+      </form>
+    </df-card-content>
+  </df-card>
+</div>
