@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DfFileUploader, DfFileUploaderOptions, DfFileUploaderActionOptions } from '@devfactory/ngx-df/file-upload';
 import { Router } from '@angular/router';
 import { isThursday, startOfWeek, addWeeks, isFriday, isSaturday, isSunday } from 'date-fns';
@@ -12,6 +12,9 @@ import { RegistrationService } from 'src/app/shared/services/registration.servic
   styleUrls: ['./engineering-signup.component.scss']
 })
 export class EngineeringSignupComponent {
+  // tslint:disable-next-line:max-line-length
+  private readonly emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   public form: FormGroup;
   public roles: any[] = [];
   public rolePrerequisites: any[] = [];
@@ -35,8 +38,22 @@ export class EngineeringSignupComponent {
     this.fileUploader = new DfFileUploader(options);
 
     this.form = this.formBuilder.group({
-      email: '',
-      fullName: '',
+      email: ['', Validators.compose([Validators.required, Validators.pattern(this.emailRegex)])],
+      fullName: ['', Validators.compose([Validators.required, Validators.pattern(/[^\s]+/i)])],
+      role: [null, Validators.required],
+      requirement1: [null],
+      requirement2: [null],
+      requirement3: [null],
+      requirement4: [null],
+      requirement5: [null],
+      requirement6: [null],
+      requirement7: [null],
+      requirement8: [null],
+      requirement9: [null],
+      requirement10: [null],
+      requirement11: [null],
+      startDate: [null, Validators.required],
+
     });
     this.registrationService.getAvailableRoles()
       .subscribe(roles => {
@@ -48,10 +65,24 @@ export class EngineeringSignupComponent {
   }
 
   public getRoleSpecificPrerequisites(roleId: number): void {
+    this.form.controls.role.setValue(roleId);
     this.registrationService.getRolePrerequisites(roleId).subscribe(prerequisites => this.rolePrerequisites = prerequisites);
   }
 
+  public startDateChange(date: Date): void {
+    this.form.controls.startDate.setValue(date);
+  }
+
   public onUploadFileEvent(): void {
+  }
+
+  public isSubmitDisabled(): boolean {
+    let validForm = this.form.valid;
+    for (let i = 1; i <= 11; i++) {
+      validForm = validForm && this.form.get(`requirement${i}`).value;
+    }
+
+    return !validForm;
   }
 
   public  onRemoveFileEvent(): void {

@@ -38,34 +38,34 @@
               href="https://docs.google.com/document/d/1Z1ZaQpf4aa291O_dkbrPhaY0s0CEKr2RNOPltfRTFsc/edit"
               target="_blank">this</a> document for details.
           </p>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement1">
             Able to work at least 8 hours a day M-F for 4 weeks
           </df-checkbox>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement2">
             Able to work 6 hours between 8am and 5pm Monday-Friday in your local time
           </df-checkbox>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement3">
             No planned vacation of more than 1 day during the RC 4 week period
           </df-checkbox>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement4">
             Stable internet connection with at least 5Mbps download speed (handle video streaming)
           </df-checkbox>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement5">
             Computer with a webcam
           </df-checkbox>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement6">
             High quality microphone/headset that meets the specs specified in the above document
           </df-checkbox>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement7">
             Computer that meets the specs specified in the above document 
           </df-checkbox>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement8">
             Able to work in an environment with no distractions during working hours
           </df-checkbox>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement9">
             If you have dependants to take care of, you should already have caretakers during working hours (Nanny for kids, Adult care for seniors, etc) to avoid distractions
           </df-checkbox>
-          <df-checkbox>
+          <df-checkbox formControlName="requirement10">
             Have a contingency plan in case any of the above breaks apart
           </df-checkbox>
         </div>
@@ -83,6 +83,7 @@
         </p>
         <df-select
           placeholder="Please select a starting date"
+          (change)="startDateChange($event)"
           [filterable]="false">
           <df-option *ngFor="let monday of mondays"
             [value]="monday">
@@ -102,11 +103,12 @@
               (removeFile)="onRemoveFileEvent()">
           </df-file-upload>
         </div>
-        <df-checkbox>
+        <df-checkbox formControlName="requirement11">
           I understand that my profile will be evaluated to join RemoteU and I will receive a notification if I am selected.<span class="asterisk">*</span>
         </df-checkbox>
         <button 
           (click)="submit()"
+          [disabled]="isSubmitDisabled()"
           type="submit"
           class="btn btn-primary mt-3 pl-4 pr-4 mr-2">
           SUBMIT
