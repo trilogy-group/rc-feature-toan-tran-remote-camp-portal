@@ -53,6 +53,15 @@ export class GradebookComponent implements OnInit {
     return '';
   }
 
+  public getScoreAnchorColor(icRow: any, combined: boolean): string {
+    if (icRow.scoreSummary && icRow.scoreSummary.approved != null) {
+      return icRow.scoreSummary.approved >= icRow.scoreSummary.targetForToday ?
+      'above-average-anchor' : 'below-average-anchor';
+    }
+
+    return '';
+  }
+
   public isAdmin(): boolean {
     return this.authenticationTokenService.isUserAdmin();
   }
@@ -61,6 +70,15 @@ export class GradebookComponent implements OnInit {
     if (icRow.scoreSummary && icRow.scoreSummary.approved != null && icRow.scoreSummary.inReview != null) {
       return icRow.scoreSummary.approved + icRow.scoreSummary.inReview >= icRow.scoreSummary.targetForToday ?
       'above-average' : 'below-average';
+    }
+
+    return '';
+  }
+
+  public getCombinedScoreAnchorColor(icRow: any): string {
+    if (icRow.scoreSummary && icRow.scoreSummary.approved != null && icRow.scoreSummary.inReview != null) {
+      return icRow.scoreSummary.approved + icRow.scoreSummary.inReview >= icRow.scoreSummary.targetForToday ?
+      'above-average-anchor' : 'below-average-anchor';
     }
 
     return '';
@@ -90,10 +108,28 @@ export class GradebookComponent implements OnInit {
     return '';
   }
 
+  public getQualityAnchorColor(icRow: any): string {
+    if (icRow.qualitySummary && icRow.qualitySummary.approved != null) {
+      return icRow.qualitySummary.approved >= icRow.qualitySummary.targetForToday ?
+      'above-average-anchor' : 'below-average-anchor';
+    }
+
+    return '';
+  }
+
   public getCombinedQualityColor(icRow: any): string {
     if (icRow.qualitySummary && icRow.qualitySummary.approved != null && icRow.qualitySummary.inReview != null) {
       return icRow.qualitySummary.approved + icRow.qualitySummary.inReview >= icRow.qualitySummary.targetForToday ?
       'above-average' : 'below-average';
+    }
+
+    return '';
+  }
+
+  public getCombinedQualityAnchorColor(icRow: any): string {
+    if (icRow.qualitySummary && icRow.qualitySummary.approved != null && icRow.qualitySummary.inReview != null) {
+      return icRow.qualitySummary.approved + icRow.qualitySummary.inReview >= icRow.qualitySummary.targetForToday ?
+      'above-average-anchor' : 'below-average-anchor';
     }
 
     return '';
