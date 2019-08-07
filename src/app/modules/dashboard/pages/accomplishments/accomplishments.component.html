@@ -71,13 +71,10 @@
                         <th class="expansion-table-header"><em>{{ distributionByModule.module }}</em></th>
                         <th *ngFor="let week of weeks; let j = index"
                           class="expansion-table-header">
-                          <em>{{
-                            distributionByModule.distribution[j] ?
-                            ((distributionByModule.distribution[j] | number:'1.2') + (data.stat === FTAR && distributionByModule.distribution[j] != null ? '%' : '')) :
-                            '-'
-                          }}</em>
+                          <em>{{ distributionByModule.distribution[j] != null ?(distributionByModule.distribution[j] | number:'1.2'):'-'}}{{ data.stat === FTAR && distributionByModule.distribution[j] != null ? '%' : ''}}</em>
                         </th>
-                        <th class="expansion-table-header"><em>{{ distributionByModule.average ? ((distributionByModule.average | number:'1.2') + (data.stat === FTAR && data.average != null ? '%' : '')) : '' }}</em></th>
+                        <th class="expansion-table-header"><em>
+                            {{ distributionByModule.average != null ? (distributionByModule.average | number:'1.2') : '-' }}{{ distributionByModule.stat === FTAR && distributionByModule.average != null ? '%' : ''}} </em></th>
                       </tr>
                     </table>
                   </div>
