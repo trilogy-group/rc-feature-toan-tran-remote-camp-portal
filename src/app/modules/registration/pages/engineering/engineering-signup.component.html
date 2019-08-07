@@ -74,9 +74,9 @@
           Please check to confirm you have the following skillset. If not, it is highly recommended that you spend time learning these skills before starting RC
         </p>
         <div class="d-block">
-          <df-checkbox *ngFor="let prerequisite of rolePrerequisites">
+          <span *ngFor="let prerequisite of rolePrerequisites">
             {{ prerequisite.name }}
-          </df-checkbox>
+          </span>
         </div>
         <p class="mt-4">
           Please select a date when you can be available to start the RemoteU. Please note that you won't be able to postpone the date once started. Please note below: RemoteU is a 4-week program and you are required to work 40 hours by the end of Friday (a minimum of 8 hours every weekday). 
