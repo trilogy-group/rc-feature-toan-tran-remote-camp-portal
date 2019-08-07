@@ -106,7 +106,7 @@ export class AccomplishmentsComponent implements OnInit {
       this.qualityDistribution = dailyProgressResponse.moduleDistribution.map(distribution => {
         const distributionObject = {
           stat: this.FTAR,
-          distribution: distribution.qualityDistribution.map(value => value * 100),
+          distribution: distribution.qualityDistribution.map(value => value != null ? value * 100 : null),
           average:  distribution.moduleTotalAverageFtar != null ? distribution.moduleTotalAverageFtar * 100 : null,
           module: distribution.module
         };
