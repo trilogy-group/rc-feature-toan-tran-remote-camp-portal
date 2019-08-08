@@ -92,17 +92,23 @@
       <df-grid-column>
         <ng-template let-item="rowData"
           dfGridTemplate="body">
-          <div class="{{ getScoreColor(item, false) }}">
-            {{ (item.scoreSummary?.approved | number : '1.2') }}
+          <div *ngIf="isAdmin()" class="{{ getScoreColor(item, false) }}">
+              <a class="{{ getScoreAnchorColor(item, false) }}" href="https://crossover.atlassian.net/issues/?jql=project ='REM' AND assignee='{{item.icNameShort}}' and type='RC Task' and status='APPROVED'" target="_blank">{{ (item.scoreSummary?.approved | number : '1.2') }}</a>
           </div>
+          <div *ngIf="!isAdmin()" class="{{ getScoreColor(item, false) }}">
+            {{ (item.scoreSummary?.approved | number : '1.2') }}
+        </div>
         </ng-template>
       </df-grid-column>
       <df-grid-column>
         <ng-template let-item="rowData"
           dfGridTemplate="body">
-          <div class="{{ getCombinedScoreColor(item, true) }}">
-            {{ (getApprovedPlusInReviewScore(item) | number : '1.2') }}
+          <div *ngIf="isAdmin()" class="{{ getCombinedScoreColor(item, true) }}">
+              <a class="{{ getCombinedScoreAnchorColor(item, true) }}" href="https://crossover.atlassian.net/issues/?jql=project ='REM' AND assignee='{{item.icNameShort}}' and type='RC Task' and status='IN REVIEW'" target="_blank">{{ (getApprovedPlusInReviewScore(item) | number : '1.2') }}</a>
           </div>
+          <div *ngIf="!isAdmin()" class="{{ getCombinedScoreColor(item, true) }}">
+            {{ (getApprovedPlusInReviewScore(item) | number : '1.2') }}
+        </div>
         </ng-template>
       </df-grid-column>
       <df-grid-column>
@@ -116,17 +122,23 @@
       <df-grid-column>
         <ng-template let-item="rowData"
           dfGridTemplate="body">
-          <div class="{{ getQualityColor(item) }}">
-            {{ (item.qualitySummary?.approved | number : '1.2') }}
+          <div *ngIf="isAdmin()" class="{{ getQualityColor(item) }}">
+              <a class="{{ getQualityAnchorColor(item) }}" href="https://crossover.atlassian.net/issues/?jql=project ='REM' AND assignee='{{item.icNameShort}}' and type='RC Task' and FTAR=NO" target="_blank">            {{ (item.qualitySummary?.approved | number : '1.2') }}</a>
           </div>
+          <div *ngIf="!isAdmin()" class="{{ getQualityColor(item) }}">
+             {{ (item.qualitySummary?.approved | number : '1.2') }}
+        </div>
         </ng-template>
       </df-grid-column>
       <df-grid-column>
         <ng-template let-item="rowData"
           dfGridTemplate="body">
-          <div class="{{ getCombinedQualityColor(item) }}">
-            {{ (item.qualitySummary?.inReview | number : '1.2') }}
+          <div  *ngIf="isAdmin()" class="{{ getCombinedQualityColor(item) }}">
+              <a  class="{{ getCombinedQualityAnchorColor(item) }}" href="https://crossover.atlassian.net/issues/?jql=project = 'REM' AND assignee='{{item.icNameShort}}' and type='RC Task' and status='IN REVIEW' and FTAR is empty" target="_blank">{{ (item.qualitySummary?.inReview | number : '1.2') }}</a>
           </div>
+          <div  *ngIf="!isAdmin()" class="{{ getCombinedQualityColor(item) }}">
+            {{ (item.qualitySummary?.inReview | number : '1.2') }}
+        </div>
         </ng-template>
       </df-grid-column>
       <df-grid-column>

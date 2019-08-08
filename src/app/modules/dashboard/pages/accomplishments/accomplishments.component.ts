@@ -105,7 +105,8 @@ export class AccomplishmentsComponent implements OnInit {
 
       this.qualityDistribution = dailyProgressResponse.moduleDistribution.map(distribution => {
         const distributionObject = {
-          distribution: distribution.qualityDistribution.map(value => value * 100),
+          stat: this.FTAR,
+          distribution: distribution.qualityDistribution.map(value => value != null ? value * 100 : null),
           average:  distribution.moduleTotalAverageFtar != null ? distribution.moduleTotalAverageFtar * 100 : null,
           module: distribution.module
         };
@@ -114,6 +115,7 @@ export class AccomplishmentsComponent implements OnInit {
 
        this.scoreDistribution = dailyProgressResponse.moduleDistribution.map(distribution => {
         const distributionObject = {
+          stat: this.score,
           distribution: distribution.scoreDistribution,
           average: distribution.scoreDistribution.reduce((a, b) => (a + b)) / (distribution.scoreDistribution.length || 1),
           module: distribution.module
