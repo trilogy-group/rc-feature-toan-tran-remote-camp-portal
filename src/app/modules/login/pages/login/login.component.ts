@@ -83,9 +83,6 @@ export class LoginComponent implements OnInit {
 
   public navigateToHomePage(): any {
     localStorage.setItem('showWelcomeMessage', 'true');
-    if (this.authenticationTokenService.isUserAdmin()) {
-      return this.router.navigate(['/gradebook']);
-    }
     return this.router.navigate(['']);
   }
 
