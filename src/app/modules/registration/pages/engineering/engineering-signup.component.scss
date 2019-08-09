@@ -20,4 +20,20 @@ df-select {
   .df-checkbox__label {
     text-align: left;
   }
+
+  .df-file-upload__table {
+    th:nth-child(3), td:nth-child(3) {
+      display: none;
+    }
+
+    td {
+      .df-button.success {
+        display: none;
+      }
+    }
+  }
+
+  .df-file-upload__global-actions {
+    display: none;
+  }
 }

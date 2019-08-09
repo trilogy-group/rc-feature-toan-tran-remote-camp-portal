@@ -20,7 +20,8 @@ export class EngineeringSignupComponent {
   public rolePrerequisites: any[] = [];
   public loaded = false;
 
-  public fileUploader: DfFileUploader;
+  public contractFileUploader: DfFileUploader;
+  public videoFileUploader: DfFileUploader;
   public mondays: Date[] = [];
 
   constructor(
@@ -28,14 +29,26 @@ export class EngineeringSignupComponent {
     private readonly registrationService: RegistrationService,
     private router: Router,
   ) {
-    const options: DfFileUploaderOptions = {
+    const contractOptions: DfFileUploaderOptions = {
       fileTable: true,
       actions: true,
       dropZone: true,
       queueMaxLength: 1,
       actionOptions: new DfFileUploaderActionOptions(true),
+      dropZoneLabel: 'Upload signed contract here',
+      emptyQueueLabel: ' ',
     };
-    this.fileUploader = new DfFileUploader(options);
+    const videoOptions: DfFileUploaderOptions = {
+      fileTable: true,
+      actions: true,
+      dropZone: true,
+      queueMaxLength: 1,
+      actionOptions: new DfFileUploaderActionOptions(true),
+      dropZoneLabel: 'Record a 30 second video with webcam and audio on and upload it here',
+      emptyQueueLabel: ' '
+    };
+    this.contractFileUploader = new DfFileUploader(contractOptions);
+    this.videoFileUploader = new DfFileUploader(videoOptions);
 
     this.form = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(this.emailRegex)])],
@@ -73,7 +86,18 @@ export class EngineeringSignupComponent {
     this.form.controls.startDate.setValue(date);
   }
 
-  public onUploadFileEvent(): void {
+  public onContractUploadFileEvent(): void {
+  }
+
+  public  onContractRemoveFileEvent(): void {
+    this.contractFileUploader.removeAll();
+  }
+
+  public onVideoUploadFileEvent(): void {
+  }
+
+  public  onVideoRemoveFileEvent(): void {
+    this.videoFileUploader.removeAll();
   }
 
   public isSubmitDisabled(): boolean {
@@ -83,10 +107,6 @@ export class EngineeringSignupComponent {
     }
 
     return !validForm;
-  }
-
-  public  onRemoveFileEvent(): void {
-    this.fileUploader.removeAll();
   }
 
   public submit(): void {

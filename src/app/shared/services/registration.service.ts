@@ -20,6 +20,22 @@ export class RegistrationService {
     {
       id: 2,
       name: 'Cloud (AWS)'
+    },
+    {
+      id: 3,
+      name: 'Open CPP'
+    },
+    {
+      id: 4,
+      name: 'Git / GitHub'
+    },
+    {
+      id: 5,
+      name: 'C++/VC++'
+    },
+    {
+      id: 6,
+      name: 'Mutation Testing'
     }
   ];
 
