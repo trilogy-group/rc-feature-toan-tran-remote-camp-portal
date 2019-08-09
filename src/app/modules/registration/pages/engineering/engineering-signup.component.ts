@@ -119,8 +119,8 @@ export class EngineeringSignupComponent {
       date = addWeeks(date, 1);
     }
     for (let i = 0; i < 12; i++) {
-      date = addWeeks(date, 1);
       this.mondays.push(startOfWeek(addWeeks(date, 1), { weekStartsOn: 1 }));
+      date = addWeeks(date, 1);
     }
   }
 }
