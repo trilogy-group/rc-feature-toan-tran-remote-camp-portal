@@ -13,26 +13,12 @@ import {
 } from '@angular/material';
 
 import { DashboardRoutingModule } from 'src/app/modules/dashboard/dashboard-routing.module';
-import { AutomateToEliminateComponent } from 'src/app/modules/dashboard/pages/automate-to-eliminate/automate-to-eliminate.component';
-import { VpDashboardComponent } from 'src/app/modules/dashboard/pages/dashboard-vp/dashboard.component';
-import { DashboardComponent } from 'src/app/modules/dashboard/pages/dashboard/dashboard.component';
-import { ExtendBootcampComponent } from 'src/app/modules/dashboard/pages/extend-bootcamp/extend-bootcamp.component';
-import { InnovationsComponent } from 'src/app/modules/dashboard/pages/innovations/innovations.component';
-import { TrackIcComponent } from 'src/app/modules/dashboard/pages/track-ic/track-ic.component';
-import { TransferRequestComponent } from 'src/app/modules/dashboard/pages/transfer-request/transfer-request.component';
 import { AccomplishmentsComponent } from 'src/app/modules/dashboard/pages/accomplishments/accomplishments.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HardestProblemsTrailingComponent } from 'src/app/modules/dashboard/components/hardest-problems-trailing.component';
 
 @NgModule({
   declarations: [
-    DashboardComponent,
-    TransferRequestComponent,
-    AutomateToEliminateComponent,
-    InnovationsComponent,
-    VpDashboardComponent,
-    ExtendBootcampComponent,
-    TrackIcComponent,
     AccomplishmentsComponent,
     HardestProblemsTrailingComponent
   ],
@@ -43,17 +29,7 @@ import { HardestProblemsTrailingComponent } from 'src/app/modules/dashboard/comp
     MatButtonModule,
     MatIconModule,
     MatInputModule,
-    MatTableModule,
     MatTooltipModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatExpansionModule,
-    MatRadioModule,
-    MatButtonToggleModule,
-    MatSelectModule,
     DashboardRoutingModule
   ],
   exports: [
