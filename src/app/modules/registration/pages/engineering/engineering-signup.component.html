@@ -30,7 +30,7 @@
         </h5>
         <df-select
           placeholder="Please select a role to apply for"
-          (change)="getRoleSpecificPrerequisites($event)"
+          (change)="getRoleSpecificPrerequisites($event)"          
           [filterable]="false">
           <df-option *ngFor="let role of roles"
             [value]="role.id">
@@ -59,23 +59,20 @@
             Stable internet connection with at least 5Mbps download speed (handle video streaming)
           </df-checkbox>
           <df-checkbox formControlName="requirement5">
-            Computer with a webcam
-          </df-checkbox>
-          <df-checkbox formControlName="requirement6">
-            High quality microphone/headset that meets the specs specified in the above document
-          </df-checkbox>
-          <df-checkbox formControlName="requirement7">
             Computer that meets the specs specified in the above document 
           </df-checkbox>
-          <df-checkbox formControlName="requirement8">
+          <df-checkbox formControlName="requirement6">
             Able to work in an environment with no distractions during working hours
           </df-checkbox>
-          <df-checkbox formControlName="requirement9">
+          <df-checkbox formControlName="requirement7">
             If you have dependants to take care of, you should already have caretakers during working hours (Nanny for kids, Adult care for seniors, etc) to avoid distractions
           </df-checkbox>
-          <df-checkbox formControlName="requirement10">
+          <df-checkbox formControlName="requirement8">
             Have a contingency plan in case any of the above breaks apart
           </df-checkbox>
+          <df-checkbox formControlName="requirement9">
+            Computer with a webcam and high quality microphone/headset that meets the specs specified in the above document
+          </df-checkbox>          
           <div class="col px-0">
             <df-file-upload [fileUploader]="videoFileUploader"
                 (uploadFile)="onVideoUploadFileEvent()"
@@ -118,7 +115,7 @@
               (removeFile)="onContractRemoveFileEvent()">
           </df-file-upload>
         </div>
-        <df-checkbox formControlName="requirement11">
+        <df-checkbox formControlName="requirement10">
           I understand that my profile will be evaluated to join RemoteU and I will receive a notification if I am selected.<span class="asterisk">*</span>
         </df-checkbox>
         <button 

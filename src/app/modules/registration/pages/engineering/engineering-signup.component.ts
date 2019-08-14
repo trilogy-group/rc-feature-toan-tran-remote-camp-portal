@@ -35,7 +35,7 @@ export class EngineeringSignupComponent {
       dropZone: true,
       queueMaxLength: 1,
       actionOptions: new DfFileUploaderActionOptions(true),
-      dropZoneLabel: 'Upload signed contract here',
+      dropZoneLabel: 'Upload signed contract here *',
       emptyQueueLabel: ' ',
     };
     const videoOptions: DfFileUploaderOptions = {
@@ -44,33 +44,31 @@ export class EngineeringSignupComponent {
       dropZone: true,
       queueMaxLength: 1,
       actionOptions: new DfFileUploaderActionOptions(true),
-      dropZoneLabel: 'Record a 30 second video with webcam and audio on and upload it here',
+      dropZoneLabel: 'Record a 30-second video with webcam and audio to talk about why you want to join RemoteU, and upload it here *',
       emptyQueueLabel: ' '
     };
     this.contractFileUploader = new DfFileUploader(contractOptions);
     this.videoFileUploader = new DfFileUploader(videoOptions);
 
     this.form = this.formBuilder.group({
-      email: ['', Validators.compose([Validators.required, Validators.pattern(this.emailRegex)])],
-      fullName: ['', Validators.compose([Validators.required, Validators.pattern(/[^\s]+/i)])],
+      email: [null, Validators.compose([Validators.required, Validators.pattern(this.emailRegex)])],
+      fullName: [null, Validators.compose([Validators.required, Validators.pattern(/[^\s]+/i)])],
       role: [null, Validators.required],
-      requirement1: [null],
-      requirement2: [null],
-      requirement3: [null],
-      requirement4: [null],
-      requirement5: [null],
-      requirement6: [null],
-      requirement7: [null],
-      requirement8: [null],
-      requirement9: [null],
-      requirement10: [null],
-      requirement11: [null],
+      requirement1: [false, Validators.required],
+      requirement2: [false, Validators.required],
+      requirement3: [false, Validators.required],
+      requirement4: [false, Validators.required],
+      requirement5: [false, Validators.required],
+      requirement6: [false, Validators.required],
+      requirement7: [false, Validators.required],
+      requirement8: [false, Validators.required],
+      requirement9: [false, Validators.required],
+      requirement10: [false, Validators.required],
       startDate: [null, Validators.required],
-
     });
     this.registrationService.getAvailableRoles()
       .subscribe(roles => {
-        this.roles = roles;
+        this.roles = roles.sort((x,y) => x.name.localeCompare(y.name));
         this.loaded = true;
       });
 
@@ -79,7 +77,9 @@ export class EngineeringSignupComponent {
 
   public getRoleSpecificPrerequisites(roleId: number): void {
     this.form.controls.role.setValue(roleId);
-    this.registrationService.getRolePrerequisites(roleId).subscribe(prerequisites => this.rolePrerequisites = prerequisites);
+
+    var role = this.roles.find(x => x.id === roleId);
+    this.rolePrerequisites = role.prerequisites;
   }
 
   public startDateChange(date: Date): void {
@@ -102,7 +102,7 @@ export class EngineeringSignupComponent {
 
   public isSubmitDisabled(): boolean {
     let validForm = this.form.valid;
-    for (let i = 1; i <= 11; i++) {
+    for (let i = 1; i <= 9; i++) {
       validForm = validForm && this.form.get(`requirement${i}`).value;
     }
 
@@ -110,7 +110,13 @@ export class EngineeringSignupComponent {
   }
 
   public submit(): void {
-    this.registrationService.submit(this.form.value).subscribe(() => this.router.navigate(['/login']));
+    
+    this.registrationService.submit(
+        this.form.value, 
+        this.videoFileUploader.filesQueue[0], 
+        this.contractFileUploader.filesQueue[0]
+      )
+      .subscribe(() => this.router.navigate(['/login']));
   }
 
   private getNext12Mondays(): void {
