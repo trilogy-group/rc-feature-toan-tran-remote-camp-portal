@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest, HttpHeaderResponse } from '@angular/common/http';
-import { DfFileUploadService, DfFileUploaderUtils, DfFile } from '@devfactory/ngx-df';
-import { of, Observable } from 'rxjs';
+import { DfFileUploadService, DfFileUploaderUtils, DfFile, removeTimezoneOffset } from '@devfactory/ngx-df';
+import { of, Observable, throwError } from 'rxjs';
 import { filter, map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
@@ -32,23 +32,20 @@ export class RegistrationService {
       contract.setInProgress();
     }
 
-    formData.append('signUpData', JSON.stringify(signupData));
+    var cloneSignUpData = JSON.parse(JSON.stringify(signupData));
+    cloneSignUpData.startDate = removeTimezoneOffset(cloneSignUpData.startDate);
+
+    formData.append('signUpData', JSON.stringify(cloneSignUpData));
 
     return this.httpClient.post(RegistrationService.Registration, formData, {
       headers: headers,
       reportProgress: true
     })
       .pipe(
-        filter(response => {
-          return response instanceof HttpHeaderResponse;
-        }),
-        map((response: HttpHeaderResponse) => {
-          return response.headers.get('Location');
-        }),
         catchError(error => {
           DfFileUploaderUtils.OnHttpErrorHandler(error, video);
           DfFileUploaderUtils.OnHttpErrorHandler(error, contract);
-          return of('');
+          return throwError(error);
         })
       );
   }

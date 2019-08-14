@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DfFileUploader, DfFileUploaderOptions, DfFileUploaderActionOptions } from '@devfactory/ngx-df/file-upload';
 import { Router } from '@angular/router';
@@ -27,6 +28,7 @@ export class EngineeringSignupComponent {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly registrationService: RegistrationService,
+    private readonly toasterService: DfToasterService,
     private router: Router,
   ) {
     const contractOptions: DfFileUploaderOptions = {
@@ -89,14 +91,14 @@ export class EngineeringSignupComponent {
   public onContractUploadFileEvent(): void {
   }
 
-  public  onContractRemoveFileEvent(): void {
+  public onContractRemoveFileEvent(): void {
     this.contractFileUploader.removeAll();
   }
 
   public onVideoUploadFileEvent(): void {
   }
 
-  public  onVideoRemoveFileEvent(): void {
+  public onVideoRemoveFileEvent(): void {
     this.videoFileUploader.removeAll();
   }
 
@@ -105,6 +107,9 @@ export class EngineeringSignupComponent {
     for (let i = 1; i <= 9; i++) {
       validForm = validForm && this.form.get(`requirement${i}`).value;
     }
+
+    validForm = validForm && this.contractFileUploader.filesQueue.length > 0;
+    validForm = validForm && this.videoFileUploader.filesQueue.length > 0;
 
     return !validForm;
   }
@@ -116,7 +121,10 @@ export class EngineeringSignupComponent {
         this.videoFileUploader.filesQueue[0], 
         this.contractFileUploader.filesQueue[0]
       )
-      .subscribe(() => this.router.navigate(['/login']));
+      .subscribe(() => {
+        this.router.navigate(['/login']);
+        this.toasterService.popSuccess(`You are registered successfully!`);
+      }, this.handleError.bind(this));
   }
 
   private getNext12Mondays(): void {
@@ -128,5 +136,16 @@ export class EngineeringSignupComponent {
       this.mondays.push(startOfWeek(addWeeks(date, 1), { weekStartsOn: 1 }));
       date = addWeeks(date, 1);
     }
+  }
+
+  private handleError(error): void {
+    let errorMessage = 'Something went wrong';
+    if (error && error.error) {
+      errorMessage = error.error;
+    } else if (error && error.message) {
+      errorMessage = error.message;
+    }
+
+    this.toasterService.popError(errorMessage);
   }
 }
