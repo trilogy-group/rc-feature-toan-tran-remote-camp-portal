@@ -104,7 +104,7 @@ export class EngineeringSignupComponent {
 
   public isSubmitDisabled(): boolean {
     let validForm = this.form.valid;
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 1; i <= 10; i++) {
       validForm = validForm && this.form.get(`requirement${i}`).value;
     }
 
