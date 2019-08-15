@@ -16,17 +16,12 @@ export class RegistrationService {
     return this.httpClient.get(RegistrationService.IcPipeline);
   }
 
-  public submit(signupData: any, video: DfFile, contract: DfFile): Observable<any> {
+  public submit(signupData: any, contract: DfFile): Observable<any> {
     var headers = new HttpHeaders({
       'Accept': 'application/json, text/plain, */*'
     });
 
     const formData = new FormData();
-    if (video && video.file) {
-      formData.append('video', video.file);
-      video.setInProgress();
-    }
-
     if (contract && contract.file) {
       formData.append('contract', contract.file);
       contract.setInProgress();
@@ -43,7 +38,6 @@ export class RegistrationService {
     })
       .pipe(
         catchError(error => {
-          DfFileUploaderUtils.OnHttpErrorHandler(error, video);
           DfFileUploaderUtils.OnHttpErrorHandler(error, contract);
           return throwError(error);
         })

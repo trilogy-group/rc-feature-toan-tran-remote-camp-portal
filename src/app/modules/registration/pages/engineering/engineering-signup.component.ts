@@ -22,7 +22,6 @@ export class EngineeringSignupComponent {
   public loaded = false;
 
   public contractFileUploader: DfFileUploader;
-  public videoFileUploader: DfFileUploader;
   public mondays: Date[] = [];
 
   constructor(
@@ -37,24 +36,14 @@ export class EngineeringSignupComponent {
       dropZone: true,
       queueMaxLength: 1,
       actionOptions: new DfFileUploaderActionOptions(true),
-      dropZoneLabel: 'Upload signed contract here *',
+      dropZoneLabel: 'Upload signed contract here',
       emptyQueueLabel: ' ',
     };
-    const videoOptions: DfFileUploaderOptions = {
-      fileTable: true,
-      actions: true,
-      dropZone: true,
-      queueMaxLength: 1,
-      actionOptions: new DfFileUploaderActionOptions(true),
-      dropZoneLabel: 'Record a 30-second video with webcam and audio to talk about why you want to join RemoteU, and upload it here *',
-      emptyQueueLabel: ' '
-    };
+
     this.contractFileUploader = new DfFileUploader(contractOptions);
-    this.videoFileUploader = new DfFileUploader(videoOptions);
 
     this.form = this.formBuilder.group({
       email: [null, Validators.compose([Validators.required, Validators.pattern(this.emailRegex)])],
-      fullName: [null, Validators.compose([Validators.required, Validators.pattern(/[^\s]+/i)])],
       role: [null, Validators.required],
       requirement1: [false, Validators.required],
       requirement2: [false, Validators.required],
@@ -64,9 +53,10 @@ export class EngineeringSignupComponent {
       requirement6: [false, Validators.required],
       requirement7: [false, Validators.required],
       requirement8: [false, Validators.required],
-      requirement9: [false, Validators.required],
+      requirement9: [false, Validators.required],      
       requirement10: [false, Validators.required],
       startDate: [null, Validators.required],
+      videoUrl: [null, Validators.required]
     });
     this.registrationService.getAvailableRoles()
       .subscribe(roles => {
@@ -98,10 +88,6 @@ export class EngineeringSignupComponent {
   public onVideoUploadFileEvent(): void {
   }
 
-  public onVideoRemoveFileEvent(): void {
-    this.videoFileUploader.removeAll();
-  }
-
   public isSubmitDisabled(): boolean {
     let validForm = this.form.valid;
     for (let i = 1; i <= 10; i++) {
@@ -109,16 +95,13 @@ export class EngineeringSignupComponent {
     }
 
     validForm = validForm && this.contractFileUploader.filesQueue.length > 0;
-    validForm = validForm && this.videoFileUploader.filesQueue.length > 0;
 
     return !validForm;
   }
 
   public submit(): void {
-    
     this.registrationService.submit(
         this.form.value, 
-        this.videoFileUploader.filesQueue[0], 
         this.contractFileUploader.filesQueue[0]
       )
       .subscribe(() => {
