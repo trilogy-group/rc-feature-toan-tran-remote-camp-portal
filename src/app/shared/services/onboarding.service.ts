@@ -21,7 +21,7 @@ export class OnboardingService {
     accessesConfirmed: false,
     ticketsAssigned: false,
     assignmentFolder: true,
-    jiraCardCreated: true
+    welcomeEmailSent: true
   };
 
   public constructor(private httpClient: HttpClient) { }

@@ -65,10 +65,10 @@
             <em *ngIf="!onboardStatus?.assignmentFolder">Will Be Set By {{ getDefaultETA() | date: short }}</em>
           </div>
           <div class="d-block my-2">
-            <h5 class="text-center mb-0">Jira Card Created<mat-icon *ngIf="onboardStatus?.jiraCardCreated"
+            <h5 class="text-center mb-0">Welcome Email Sent<mat-icon *ngIf="onboardStatus?.welcomeEmailSent"
               class="ml-2 success">check_circle</mat-icon>
             </h5>
-            <em *ngIf="!onboardStatus?.jiraCardCreated">Will Be Set By {{ getDefaultETA() | date: short }}</em>
+            <em *ngIf="!onboardStatus?.welcomeEmailSent">Will Be Sent By {{ getDefaultETA() | date: short }}</em>
           </div>
           <div class="d-flex flex-column text-center align-items-center mt-3">
             <p class="onboard-info">Please follow all the instructions that you have received to {{ onboardStatus?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>

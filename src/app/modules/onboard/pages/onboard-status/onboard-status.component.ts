@@ -22,7 +22,7 @@ export class OnboardStatusComponent implements OnInit {
     return this.onboardStatus &&
       this.onboardStatus.ticketsAssigned &&
       this.onboardStatus.assignmentFolder &&
-      this.onboardStatus.jiraCardCreated ? this.allSet : this.notAllSet;
+      this.onboardStatus.welcomeEmailSent ? this.allSet : this.notAllSet;
   }
 
   public ngOnInit(): void {
