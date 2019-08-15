@@ -45,6 +45,10 @@ export class AuthenticationTokenService {
         return user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
     }
 
+    public hasICStarted(): boolean {
+        return false;
+    }
+
     public isUserAdmin(): boolean {
         const role = this.getUserRole();
         return role && role.toLowerCase() === Roles.admin;

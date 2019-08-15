@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
+  private readonly icPreStartHome = '/onboard';
+  private readonly icHome = '/dashboard';
 
   public constructor(
     private _router: Router,
@@ -23,7 +25,8 @@ export class AuthenticationGuard implements CanActivate {
     }
 
     if (isLoggedIn && !route.firstChild) {
-      isUserAdmin ? this._router.navigate(['/gradebook']) : this._router.navigate(['/dashboard']);
+      const icHome = this._authenticationTokenService.hasICStarted() ? this.icHome : this.icPreStartHome;
+      isUserAdmin ? this._router.navigate(['/gradebook']) : this._router.navigate([icHome]);
     }
 
     if (isLoggedIn && route.firstChild) {

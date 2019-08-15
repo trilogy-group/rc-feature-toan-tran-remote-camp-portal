@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="d-flex justify-content-center">
+    <df-card class="status-card">
+      <df-card-content *ngIf="loaded"
+        class="d-block">
+        <h3 class="mb-4 d-flex justify-content-center">{{ getHeaderText() }},&nbsp;<strong>{{ onboardStatus?.name }}</strong>!</h3>
+        <div class="row mb-3">
+          <div class="col-6 d-block mb-1">
+            <h4>Pipeline:</h4>
+            <h5><strong>{{ onboardStatus?.pipeline }}</strong></h5>
+          </div>
+          <div class="col-6 d-block mb-1 text-right">
+            <h4>Expected Start Date:</h4>
+            <h5><strong>{{ onboardStatus?.startDate | date: short }}</strong></h5>
+          </div>
+          <div class="col-6 d-block mb-1">
+            <h4>Email Used RemoteU:</h4>
+            <h5><strong>{{ onboardStatus?.alternativeEmail }}</strong></h5>
+          </div>
+          <div class="col-6 d-block mb-1 text-right">
+            <h4>RemoteU Email:</h4>
+            <h5><strong>{{ onboardStatus?.email }}</strong></h5>
+          </div>
+        </div>
+        <div *ngIf="!accessesConfirmed()">
+          <div class="d-flex flex-column justify-content-between">
+            <div class="d-flex flex-column align-items-center">
+              <h5 class="d-flex align-items-center">Onboarded to RemoteU System <mat-icon class="ml-2 success">check_circle</mat-icon></h5>
+              <h5 class="d-flex align-items-center">Access to IT Systems <mat-icon *ngIf="onboardStatus?.accesses?.itSystems"
+                class="ml-2 success">check_circle</mat-icon></h5>
+              <h5 class="d-flex align-items-center">Access to RemoteU Materials <mat-icon *ngIf="onboardStatus?.accesses?.remoteUMaterials"
+                class="ml-2 success">check_circle</mat-icon></h5>
+              <h5 class="d-flex align-items-center">Access to Code Repository <mat-icon *ngIf="onboardStatus?.accesses?.codeRepository"
+                class="ml-2 success">check_circle</mat-icon></h5>
+              
+              <div class="d-flex flex-column align-items-center mt-3">
+                <p class="onboard-info text-center">Please follow all the instructions that you have received to {{ onboardStatus?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>
+                <button *ngIf="showConfirmAccessesButton()"
+                  (click)="confirmAccesses(close)"
+                  class="btn btn-outline-primary">
+                  Confirm Accesses
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="accessesConfirmed()"
+          class="d-flex flex-column align-items-center">
+          <div class="d-block my-2">
+            <h5 class="text-center mb-0">Access to Jira <mat-icon *ngIf="onboardStatus?.accesses?.jira"
+              class="ml-2 success">check_circle</mat-icon>
+            </h5>
+            <em *ngIf="!onboardStatus?.accesses?.jira">Will Be Set By {{ getJiraETA() | date: short }}</em>
+          </div>
+          <div class="d-block my-2">
+            <h5 class="text-center mb-0">Assigned Tickets <mat-icon *ngIf="onboardStatus?.ticketsAssigned"
+              class="ml-2 success">check_circle</mat-icon>
+            </h5>
+            <em *ngIf="!onboardStatus?.ticketsAssigned">Will Be Set By {{ getDefaultETA() | date: short }}</em>
+          </div>
+          <div class="d-block my-2">
+            <h5 class="text-center mb-0">Assignment Folder <mat-icon *ngIf="onboardStatus?.assignmentFolder"
+              class="ml-2 success">check_circle</mat-icon>
+            </h5>
+            <em *ngIf="!onboardStatus?.assignmentFolder">Will Be Set By {{ getDefaultETA() | date: short }}</em>
+          </div>
+          <div class="d-block my-2">
+            <h5 class="text-center mb-0">Jira Card Created<mat-icon *ngIf="onboardStatus?.jiraCardCreated"
+              class="ml-2 success">check_circle</mat-icon>
+            </h5>
+            <em *ngIf="!onboardStatus?.jiraCardCreated">Will Be Set By {{ getDefaultETA() | date: short }}</em>
+          </div>
+          <div class="d-flex flex-column text-center align-items-center mt-3">
+            <p class="onboard-info">Please follow all the instructions that you have received to {{ onboardStatus?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>
+          </div>
+        </div>
+      </df-card-content>
+    </df-card>
+  </div>
+</div>

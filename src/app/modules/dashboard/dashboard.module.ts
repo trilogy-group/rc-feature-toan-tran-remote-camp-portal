@@ -3,12 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import {
-  MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatDatepickerModule, MatExpansionModule,
+  MatButtonModule,
   MatIconModule,
-  MatInputModule, MatNativeDateModule,
-  MatPaginatorModule, MatRadioModule, MatSelectModule,
-  MatSortModule,
-  MatTableModule,
+  MatInputModule,
   MatTooltipModule,
 } from '@angular/material';
 

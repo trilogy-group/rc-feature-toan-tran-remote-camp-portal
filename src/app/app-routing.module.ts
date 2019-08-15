@@ -25,6 +25,10 @@ const routes: Routes = [
       {
         path: 'gradebook',
         loadChildren: './modules/gradebook/gradebook.module#GradebookModule',
+      },
+      {
+        path: 'onboard',
+        loadChildren: './modules/onboard/onboard.module#OnboardModule',
       }
     ]
   },

@@ -27,4 +27,8 @@ export class MainLayoutComponent {
   public isAdmin(): boolean {
     return this._authenticationTokenService.isUserAdmin();
   }
+
+  public icHasStarted(): boolean {
+    return this._authenticationTokenService.hasICStarted();
+  }
 }
