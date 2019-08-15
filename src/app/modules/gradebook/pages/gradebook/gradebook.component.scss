@@ -3,6 +3,11 @@
   color: inherit;
 }
 
+.check-in-chat-bubble {
+  color: blue;
+  font-size: 16px;
+}
+
 .above-average-anchor {
   color: inherit;
 }
@@ -20,6 +25,13 @@
   color: #fa605d;
 }
 
+.ic-link {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .matches-average {
   border-bottom: 4px solid #ffab2d;
   color: inherit;
@@ -27,6 +39,13 @@
 
 :host ::ng-deep {
   .df-grid {
+    tr:nth-child(1) {
+      th:nth-child(2),
+      th:nth-child(3) {
+        width: 290px;
+      }
+    }
+
     td {
       padding: 0 0;
       line-height: 30px !important;

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { GradebookComponent } from 'src/app/modules/gradebook/pages/gradebook/gradebook.component';
 import { IcDashboardComponent } from 'src/app/modules/gradebook/pages/ic-dashboard/ic-dashboard.component';
+import { SemCheckInChatsComponent } from 'src/app/modules/gradebook/pages/sem-check-in-chats/sem-check-in-chats.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: IcDashboardComponent
+  },
+  {
+    path: 'sem-check-in-chats',
+    component: SemCheckInChatsComponent
   }
 ];
 

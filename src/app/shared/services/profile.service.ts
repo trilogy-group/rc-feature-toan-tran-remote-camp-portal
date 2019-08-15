@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpRequest, HttpHeaderResponse } from '@angular/common/http';
 import { DfFileUploadService, DfFileUploaderUtils, DfFile } from '@devfactory/ngx-df';
-import { tap, filter, map, catchError } from 'rxjs/operators';
+import { filter, map, catchError } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 

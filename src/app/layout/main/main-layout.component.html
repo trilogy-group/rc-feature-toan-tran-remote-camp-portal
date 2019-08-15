@@ -27,7 +27,7 @@
       </button>
 
       <mat-menu #userMenu="matMenu">
-        <mat-divider></mat-divider>
+        <mat-divider *ngIf="!isAdmin()"></mat-divider>
         <a *ngIf="!isAdmin()" 
           mat-menu-item
           [routerLink]="['/profile/settings']">

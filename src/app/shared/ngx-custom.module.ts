@@ -17,6 +17,8 @@ import { DfLoadingSpinnerModule, DfLoadingSpinnerTypes } from '@devfactory/ngx-d
 import { DfCheckboxModule } from '@devfactory/ngx-df/checkbox';
 import { DfAccordionModule } from '@devfactory/ngx-df/accordion';
 import { DfFileUploadModule } from '@devfactory/ngx-df/file-upload';
+import { DfNumberIncreaseModule } from '@devfactory/ngx-df/number-increase';
+import { DfRadioInputModule } from '@devfactory/ngx-df/radio-input';
 import { DfSelectModule } from '@devfactory/ngx-df/select';
 
 @NgModule({
@@ -50,6 +52,8 @@ import { DfSelectModule } from '@devfactory/ngx-df/select';
     DfCheckboxModule.forRoot(),
     DfAccordionModule.forRoot(),
     DfFileUploadModule.forRoot(),
+    DfNumberIncreaseModule.forRoot(),
+    DfRadioInputModule.forRoot(),
     DfSelectModule.forRoot(),
   ],
   providers: [],
@@ -71,6 +75,8 @@ import { DfSelectModule } from '@devfactory/ngx-df/select';
     DfCheckboxModule,
     DfAccordionModule,
     DfFileUploadModule,
+    DfNumberIncreaseModule,
+    DfRadioInputModule,
     DfSelectModule,
   ],
 })
@@ -96,6 +102,8 @@ export class NgxDfRootModule {}
     DfCheckboxModule,
     DfAccordionModule,
     DfFileUploadModule,
+    DfNumberIncreaseModule,
+    DfRadioInputModule,
     DfSelectModule,
   ],
   exports: [
@@ -117,6 +125,8 @@ export class NgxDfRootModule {}
     DfCheckboxModule,
     DfAccordionModule,
     DfFileUploadModule,
+    DfNumberIncreaseModule,
+    DfRadioInputModule,
     DfSelectModule,
   ],
 })
