@@ -18,7 +18,6 @@ import { DfCheckboxModule } from '@devfactory/ngx-df/checkbox';
 import { DfAccordionModule } from '@devfactory/ngx-df/accordion';
 import { DfFileUploadModule } from '@devfactory/ngx-df/file-upload';
 import { DfNumberIncreaseModule } from '@devfactory/ngx-df/number-increase';
-import { DfSelectModule } from '@devfactory/ngx-df/select';
 import { DfRadioInputModule } from '@devfactory/ngx-df/radio-input';
 import { DfSelectModule } from '@devfactory/ngx-df/select';
 
@@ -54,7 +53,6 @@ import { DfSelectModule } from '@devfactory/ngx-df/select';
     DfAccordionModule.forRoot(),
     DfFileUploadModule.forRoot(),
     DfNumberIncreaseModule.forRoot(),
-    DfSelectModule.forRoot(),
     DfRadioInputModule.forRoot(),
     DfSelectModule.forRoot(),
   ],
@@ -78,7 +76,6 @@ import { DfSelectModule } from '@devfactory/ngx-df/select';
     DfAccordionModule,
     DfFileUploadModule,
     DfNumberIncreaseModule,
-    DfSelectModule,
     DfRadioInputModule,
     DfSelectModule,
   ],
@@ -106,7 +103,6 @@ export class NgxDfRootModule {}
     DfAccordionModule,
     DfFileUploadModule,
     DfNumberIncreaseModule,
-    DfSelectModule,
     DfRadioInputModule,
     DfSelectModule,
   ],
@@ -130,7 +126,6 @@ export class NgxDfRootModule {}
     DfAccordionModule,
     DfFileUploadModule,
     DfNumberIncreaseModule,
-    DfSelectModule,
     DfRadioInputModule,
     DfSelectModule,
   ],

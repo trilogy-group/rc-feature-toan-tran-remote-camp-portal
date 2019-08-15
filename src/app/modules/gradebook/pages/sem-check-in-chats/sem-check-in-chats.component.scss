@@ -60,4 +60,15 @@
   button {
     width: 125px
   }
+
+  .show-save-button {
+    button {
+      display: inline;
+    }
+   }
+   .hide-save-buutton {
+    button {
+      display: none;
+    }
+   }
 }
