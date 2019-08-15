@@ -19,8 +19,7 @@ export class ProfileService {
 
   public saveProfile(profile: any, fileToUpload: DfFile): Observable<any> {
     DfFileUploadService.prototype.postFile = (url, file, reqHeaders) => {
-      const headers = reqHeaders;
-      headers.set('accept', 'text/plain');
+      const headers = reqHeaders.set('Accept', 'application/json, text/plain, */*');
 
       const formData = new FormData();
       if (file && file.file) {
