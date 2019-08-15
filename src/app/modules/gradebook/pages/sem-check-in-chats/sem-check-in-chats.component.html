@@ -113,10 +113,12 @@
                 </h4>
                 <button *ngFor="let cic of weekCheckInChats[i]" 
                   mat-raised-button
-                  [class.done]="cic.done"
-                  [class.not-done]="cic.done != undefined && !cic.done"
+                  [class.done]="cic.done && (cic.isToday != undefined && !cic.isToday)"
+                  [class.done-isToday]="cic.done && (cic.isToday != undefined && cic.isToday)"
+                  [class.not-done]="cic.done != undefined && !cic.done && !cic.isToday"
                   [class.unavailable]="cic.done == undefined"
-                  (click)="openDetail(week, cic.day)"
+                  [class.isToday]="(cic.isToday != undefined && cic.isToday) && (cic.done != undefined && !cic.done)"
+                  (click)="openDetail(week, cic.day,cic.id,cic.isReadOnly)"
                   class="mb-2 px-2">{{ getButtonText(cic) }}
                 </button>
               </div>

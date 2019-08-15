@@ -27,11 +27,23 @@
 }
 
 .done {
+  cursor: context-menu;
   background: $au-green;
   color: white;
 }
 
+.done-isToday {
+  cursor: context-menu;
+  background: $au-green;
+  color: white;
+}
+
+.isToday {
+  cursor: context-menu;
+}
+
 .not-done {
+  cursor: context-menu;
   background: map-get($au-gray, 1);
 }
 

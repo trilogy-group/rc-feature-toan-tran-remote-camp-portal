@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class SemCheckInChatDetailComponent implements OnInit {
   public form: FormGroup;
-
+  private isReadOnly: boolean;
   @Input()
   public data: any;
 
@@ -30,6 +30,7 @@ export class SemCheckInChatDetailComponent implements OnInit {
   public ngOnInit(): void {
     this.form.controls.coachedOn.setValue(this.data.coachedOn ? this.data.coachedOn : 'productivity');
     this.form.controls.coachingComments.setValue(this.data.coachingComments ? this.data.coachingComments : '');
+    this.isReadOnly = this.data.isReadOnly;
   }
 
   public saveCheckInChat(): void {
@@ -42,5 +43,9 @@ export class SemCheckInChatDetailComponent implements OnInit {
 
   public cancelCheckInChat(): void {
     this.cancel.emit();
+  }
+
+  public isDisabled(): boolean {
+    return this.isReadOnly;
   }
 }

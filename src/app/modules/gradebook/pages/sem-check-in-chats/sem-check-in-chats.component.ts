@@ -16,6 +16,8 @@ import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.
 })
 export class SemCheckInChatsComponent implements OnInit {
   private icName: string;
+  private xoId: number;
+  private dayId: number;
 
   @ViewChild('checkInChatDetail')
   private checkInChatDetail: TemplateRef<null>;
@@ -42,6 +44,7 @@ export class SemCheckInChatsComponent implements OnInit {
     private readonly loadingSpinner: DfLoadingSpinnerService,
   ) {
     this.icName = this.route.snapshot.queryParams['icName'];
+    this.xoId = this.route.snapshot.queryParams['xoId'];
   }
 
   public ngOnInit(): void {
@@ -50,8 +53,8 @@ export class SemCheckInChatsComponent implements OnInit {
       this.accomplishmentsService.getAcomplishmentsDailyProgress(this.icName),
       this.accomplishmentsService.getHardestProblems(this.icName),
       this.accomplishmentsService.getCompliance(this.icName),
-      this.accomplishmentsService.getMissingCalendarActivities(this.icName),
-      this.semCheckInChatsService.getCheckInChats()
+      this.accomplishmentsService.getMissingCalendarActivities(this.xoId),
+      this.semCheckInChatsService.getCheckInChats(this.xoId)
     ).subscribe(([profile, dailyProgressResponse, hardestProblems, compliance, missingCalendarActivities, checkInChats]) => {
       this.profile = profile;
       this.compliance = compliance;
@@ -66,14 +69,17 @@ export class SemCheckInChatsComponent implements OnInit {
     });
   }
 
-  public openDetail(week: number, day: string): void {
-    this.semCheckInChatsService.getCheckInChatDetail(week, day)
+  public openDetail(week: number, day: string, id: number, isReadOnly: boolean): void {
+    this.dayId = id;
+    this.semCheckInChatsService.getCheckInChatDetail(week, day, id, this.xoId)
     .pipe(finalize(() => this.loadingSpinner.hide()))
     .subscribe(checkInChatDetail => {
+      console.log(checkInChatDetail);
       this.modalService.open(this.checkInChatDetail, {
         backdrop: true,
-        data: { week, day, ...checkInChatDetail }
+        data: { week, day, isReadOnly, ...checkInChatDetail }
       });
+      this.toasterService.popSuccess('Check-in Chat Populated');
     });
   }
 
@@ -85,6 +91,8 @@ export class SemCheckInChatsComponent implements OnInit {
   }
 
   public saveCheckInChat(checkInChat: any, close: Function): void {
+    checkInChat.RcXoId = this.xoId;
+    checkInChat.DayId = this.dayId;
     this.semCheckInChatsService.saveCheckInChats(checkInChat)
       .pipe(finalize(() => {
         close();

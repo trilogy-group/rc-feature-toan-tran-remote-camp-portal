@@ -12,7 +12,7 @@
     <div class="form-group">
       <div class="d-flex mb-2">
         <span class="mr-2">Coached IC On:</span>
-        <df-radio-group formControlName="coachedOn">
+        <df-radio-group formControlName="coachedOn" [disabled]="isDisabled()">
           <df-radio-input value="productivity">Productivity</df-radio-input>
           <df-radio-input value="quality">Quality</df-radio-input>
         </df-radio-group>
@@ -23,14 +23,15 @@
         class="form-control"
         placeholder="Enter your comments"
         formControlName="coachingComments"
-        name="coachingComments"></textarea>
+        name="coachingComments"
+        placeholder="Add your comment here." [readonly]="isDisabled()"></textarea>
     </div>
     <div class="d-flex justify-content-end">
       <div class="d-block">
         <button 
           (click)="saveCheckInChat()"
           id="submitImpersonation"
-          class="btn btn-primary pl-4 pr-4 mr-2">
+          class="btn btn-primary pl-4 pr-4 mr-2"  [disabled]="isDisabled()">
           Save
         </button>
         <button 
