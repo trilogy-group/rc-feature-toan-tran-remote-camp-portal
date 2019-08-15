@@ -17,7 +17,7 @@ export class RegistrationService {
   }
 
   public submit(signupData: any, contract: DfFile): Observable<any> {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       'Accept': 'application/json, text/plain, */*'
     });
 
@@ -27,7 +27,7 @@ export class RegistrationService {
       contract.setInProgress();
     }
 
-    var cloneSignUpData = JSON.parse(JSON.stringify(signupData));
+    const cloneSignUpData = JSON.parse(JSON.stringify(signupData));
     cloneSignUpData.startDate = removeTimezoneOffset(cloneSignUpData.startDate);
 
     formData.append('signUpData', JSON.stringify(cloneSignUpData));

@@ -11,14 +11,13 @@ export class AllHttpInterceptor implements HttpInterceptor {
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    let headers = {};
+    const headers = {};
 
     if (request.headers.has('Accept')) {
       if (!!request.headers.get('Accept')) {
         headers['Accept'] = request.headers.get('Accept');
       }
-    }
-    else {
+    } else {
       headers['Accept'] = 'application/json';
       headers['Content-Type'] = 'application/json';
     }

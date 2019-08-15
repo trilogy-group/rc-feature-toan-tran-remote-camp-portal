@@ -15,6 +15,8 @@ import { RegistrationService } from 'src/app/shared/services/registration.servic
 export class EngineeringSignupComponent {
   // tslint:disable-next-line:max-line-length
   private readonly emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  private readonly fieldRequiredMessage = 'This field is required';
+  private readonly invalidEmailFormatMessage = 'Please enter a valid email';
 
   public form: FormGroup;
   public roles: any[] = [];
@@ -23,6 +25,8 @@ export class EngineeringSignupComponent {
 
   public contractFileUploader: DfFileUploader;
   public mondays: Date[] = [];
+
+  public showErrors: boolean;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -43,7 +47,7 @@ export class EngineeringSignupComponent {
     this.contractFileUploader = new DfFileUploader(contractOptions);
 
     this.form = this.formBuilder.group({
-      email: [null, Validators.compose([Validators.required, Validators.pattern(this.emailRegex)])],
+      email: ['', Validators.compose([Validators.required, Validators.pattern(this.emailRegex)])],
       role: [null, Validators.required],
       requirement1: [false, Validators.required],
       requirement2: [false, Validators.required],
@@ -53,14 +57,14 @@ export class EngineeringSignupComponent {
       requirement6: [false, Validators.required],
       requirement7: [false, Validators.required],
       requirement8: [false, Validators.required],
-      requirement9: [false, Validators.required],      
+      requirement9: [false, Validators.required],
       requirement10: [false, Validators.required],
       startDate: [null, Validators.required],
       videoUrl: [null, Validators.required]
     });
     this.registrationService.getAvailableRoles()
       .subscribe(roles => {
-        this.roles = roles.sort((x,y) => x.name.localeCompare(y.name));
+        this.roles = roles.sort((x, y) => x.name.localeCompare(y.name));
         this.loaded = true;
       });
 
@@ -70,7 +74,7 @@ export class EngineeringSignupComponent {
   public getRoleSpecificPrerequisites(roleId: number): void {
     this.form.controls.role.setValue(roleId);
 
-    var role = this.roles.find(x => x.id === roleId);
+    const role = this.roles.find(x => x.id === roleId);
     this.rolePrerequisites = role.prerequisites;
   }
 
@@ -88,6 +92,20 @@ export class EngineeringSignupComponent {
   public onVideoUploadFileEvent(): void {
   }
 
+  public mandatoryPrerequisitesChecked(): boolean {
+    let mandatoryPrerequisitesChecked = true;
+    for (let i = 1; i <= 9; i++) {
+      mandatoryPrerequisitesChecked = mandatoryPrerequisitesChecked && this.form.get(`requirement${i}`).value;
+    }
+    return mandatoryPrerequisitesChecked;
+  }
+
+  public getEmailErrorMessage(): string {
+    if (!this.form.controls.email.valid) {
+      return this.form.controls.email.value.trim() === '' ? this.fieldRequiredMessage : this.invalidEmailFormatMessage;
+    }
+  }
+
   public isSubmitDisabled(): boolean {
     let validForm = this.form.valid;
     for (let i = 1; i <= 10; i++) {
@@ -95,13 +113,21 @@ export class EngineeringSignupComponent {
     }
 
     validForm = validForm && this.contractFileUploader.filesQueue.length > 0;
+    if (validForm) {
+      this.showErrors = !validForm;
+    }
 
     return !validForm;
   }
 
   public submit(): void {
+    if (this.isSubmitDisabled()) {
+      this.showErrors = true;
+      return;
+    }
+
     this.registrationService.submit(
-        this.form.value, 
+        this.form.value,
         this.contractFileUploader.filesQueue[0]
       )
       .subscribe(() => {

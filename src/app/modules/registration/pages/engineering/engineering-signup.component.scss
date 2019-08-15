@@ -4,8 +4,12 @@
   max-width: 640px;
 }
 
-.asterisk {
+.danger {
   color: $au-red;
+}
+
+.missing-field {
+  font-size: 12px;
 }
 
 .sign-up-container {

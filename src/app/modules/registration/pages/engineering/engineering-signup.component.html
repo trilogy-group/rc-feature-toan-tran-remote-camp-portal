@@ -15,13 +15,18 @@
         <h5>Please read <a
           href="https://docs.google.com/document/d/17uOUMykeDrnw28RtoOjY9wPl9ZYGvO4m2oY4FuXAF_A"
           target="_blank"> RemoteU Playbook</a> before filling the form</h5>
-        <h5 class="mb-1 mt-3">Email (same as your Crossover login email)<span class="asterisk">*</span></h5>
+        <h5 class="mb-1 mt-3">Email (same as your Crossover login email)<span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.email.valid"
+            class="ml-1 danger missing-field">{{ getEmailErrorMessage() }}</span>
+        </h5>
         <input type="text"
           formControlName="email"
           placeholder="Your email"
           class="form-control">
         <h5 class="mb-1 mt-3">
-          Role for which you have applied<span class="asterisk">*</span>
+          Role for which you have applied<span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.role.valid"
+            class="ml-1 danger missing-field">This field is required</span>
         </h5>
         <df-select
           placeholder="Please select a role to apply for"
@@ -33,7 +38,9 @@
           </df-option>
         </df-select>
         <h5 class="mb-1 mt-3">
-          Common Mandatory Prerequisites<span class="asterisk">*</span>
+          Common Mandatory Prerequisites<span class="danger">*</span>
+          <span *ngIf="showErrors && !mandatoryPrerequisitesChecked()"
+            class="ml-1 danger missing-field">If you comply with all the below please check all boxes</span>
         </h5>
         <div class="d-block">
           <p>
@@ -72,7 +79,7 @@
         
         <h5 class="mb-1 mt-3">Role Specific Prerequisites</h5>
         <p>
-          Please check to confirm you have the following skillset. If not, it is highly recommended that you spend time learning these skills before starting RemoteU
+          Please check whether you have the following skillset. If not, it is highly recommended that you spend time learning these skills before starting RemoteU
         </p>
         <div class="d-block">
           <span *ngFor="let prerequisite of rolePrerequisites"
@@ -81,7 +88,12 @@
           </span>
         </div>
 
-        <h5 class="mb-1 mt-3"> 30-second video with webcam and audio about why you want to join RemoteU<span class="asterisk">*</span></h5>
+        <h5 class="mb-1 mt-3">
+          30-second video with webcam and audio about why you want to join RemoteU
+          <span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.videoUrl.valid"
+            class="ml-1 danger missing-field">This field is required</span>
+        </h5>
         <p>
           Record the video, upload it on your Google Drive, get a shareable link that is accessible by everyone, and paste it here
         </p>
@@ -90,7 +102,11 @@
           placeholder="Video Url"
           class="form-control">        
 
-        <h5 class="mb-1 mt-3"> Starting Date<span class="asterisk">*</span></h5>
+        <h5 class="mb-1 mt-3">
+          Starting Date<span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.startDate.valid"
+            class="ml-1 danger missing-field">This field is required</span>
+        </h5>
         <p>
           Please select a date when you can be available to start the RemoteU. Please note that you won't be able to postpone the date once started. Please note below: RemoteU is a 4-week program and you are required to work 40 hours by the end of Friday (a minimum of 8 hours every weekday).
         </p>
@@ -104,7 +120,11 @@
           </df-option>
         </df-select>
 
-        <h5 class="mb-1 mt-3"> Signed Contract<span class="asterisk">*</span></h5>
+        <h5 class="mb-1 mt-3">
+          Signed Contract<span class="danger">*</span>
+          <span *ngIf="showErrors && !contractFileUploader?.filesQueue?.length"
+            class="ml-1 danger missing-field">This field is required</span>
+        </h5>
         <p>
           Please download, sign and upload the 
           <a href="https://docs.google.com/document/d/1ZdVCuOo532LP4ctHTvKkFC33DVvFG_Xca5LK_1xlM2g/edit"
@@ -119,11 +139,14 @@
           </df-file-upload>
         </div>
         <df-checkbox formControlName="requirement10">
-          I understand that my profile will be evaluated to join RemoteU and I will receive a notification if I am selected.<span class="asterisk">*</span>
+          I understand that my profile will be evaluated to join RemoteU and I will receive a notification if I am selected.<span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.requirement10.value"
+            class="ml-1 danger missing-field">This field is required</span>
         </df-checkbox>
+        <div *ngIf="showErrors && isSubmitDisabled()"
+          class="danger"><em>Please make sure to enter all missing fields above marked in red</em></div>
         <button 
           (click)="submit()"
-          [disabled]="isSubmitDisabled()"
           type="submit"
           class="btn btn-primary mt-3 pl-4 pr-4 mr-2">
           SUBMIT
