@@ -46,7 +46,7 @@ export class AuthenticationTokenService {
     }
 
     public hasICStarted(): boolean {
-        return true;
+        return false;
     }
 
     public isUserAdmin(): boolean {
