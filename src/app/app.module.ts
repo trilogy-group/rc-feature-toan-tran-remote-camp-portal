@@ -3,7 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { DfSidebarModule, DfHttpLoaderInterceptorModule, DfFileUploadService } from '@devfactory/ngx-df';
+import { DfSidebarModule, DfHttpLoaderInterceptorModule, DfFileUploadService, DF_ERROR_STATE_MATCHER } from '@devfactory/ngx-df';
+import { LayoutModule } from '@angular/cdk/layout';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { MainLayoutComponent } from 'src/app/layout/main/main-layout.component';
@@ -17,6 +19,9 @@ import { CalendarService } from 'src/app/shared/services/calendar.service';
 import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interceptor';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import { GradebookService } from 'src/app/shared/services/gradebook.service';
+import { SemCheckInChatsService } from 'src/app/shared/services/sem-check-in-chats.service';
+import { UtilsService } from 'src/app/shared/services/utils.service';
+import { RegistrationService } from 'src/app/shared/services/registration.service';
 
 @NgModule({
   declarations: [
@@ -34,6 +39,8 @@ import { GradebookService } from 'src/app/shared/services/gradebook.service';
     DfSidebarModule,
     AppRoutingModule,
     SharedModule,
+    LayoutModule,
+    OverlayModule,
     HttpClientModule,
     HttpClientModule,
     DfHttpLoaderInterceptorModule.forRoot(),
@@ -44,6 +51,7 @@ import { GradebookService } from 'src/app/shared/services/gradebook.service';
       useClass: AllHttpInterceptor,
       multi: true,
     },
+    { provide: DF_ERROR_STATE_MATCHER, useValue: DF_ERROR_STATE_MATCHER },
     AuthenticationGuard,
     AuthenticationService,
     AccomplishmentsService,
@@ -52,7 +60,10 @@ import { GradebookService } from 'src/app/shared/services/gradebook.service';
     DfFileUploadService,
     CalendarService,
     AuthenticationTokenService,
-    GradebookService
+    GradebookService,
+    SemCheckInChatsService,
+    UtilsService,
+    RegistrationService
   ],
   bootstrap: [AppComponent]
 })

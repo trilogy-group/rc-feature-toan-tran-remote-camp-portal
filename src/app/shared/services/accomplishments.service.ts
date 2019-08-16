@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 import { environment } from 'src/environments/environment';
 
 @Injectable()
@@ -10,6 +10,8 @@ export class AccomplishmentsService {
   private GET_HARDEST_PROBLEMS = `${environment.apiUrl}/ProfileHardestProblems`;
   private GET_PROFILE_ACCOMPLISHMENTS = `${environment.apiUrl}/ProfileAccomplishments`;
   private GET_HARDEST_PROBLEMS_BY_DAY = `${environment.apiUrl}/ProfileHardestProblemsByDay`;
+  private GET_MISSED_CALENDAR_ITEMS = `${environment.apiUrl}/ProfileUserMissedCalendarItem`;
+  private GET_PROFILE_COMPLIANCE = `${environment.apiUrl}/ProfileUserCompliance`;
 
   public constructor(
     private httpClient: HttpClient
@@ -35,8 +37,23 @@ export class AccomplishmentsService {
     return this.httpClient.get(`${this.GET_HARDEST_PROBLEMS_BY_DAY}${params}`);
   }
 
+  public getMissingCalendarActivities(xoId: number): Observable<any> {
+    const paramXoId = this.getXoIdParameter(xoId);
+    return this.httpClient.get(`${this.GET_MISSED_CALENDAR_ITEMS}${paramXoId}`);
+  }
+
+  public getCompliance(icName): Observable<any> {
+    const params = this.getIcNameParameter(icName);
+    return this.httpClient.get(`${this.GET_PROFILE_COMPLIANCE}${params}`);
+  }
+
   private getIcNameParameter(icName?: string) {
     // tslint:disable-next-line:triple-equals
     return icName == undefined ? '' : `/${icName}`;
+  }
+
+  private getXoIdParameter(xoId: number) {
+    // tslint:disable-next-line:triple-equals
+    return xoId == undefined ? 0 : `/${xoId}`;
   }
 }

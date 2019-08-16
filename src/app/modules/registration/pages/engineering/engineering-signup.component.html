@@ -1,0 +1,157 @@
+<div class="d-flex justify-content-center sign-up-container">
+  <df-card class="sign-up-form">
+    <df-card-content>
+      <form class="d-block"
+        [formGroup]="form">
+        <p class="mb-0">
+          <em>Please note, that before you start your work at Crossover, you’ll have to pass the Remote University - paid intensive program which will teach you how to be an Elite of our Company. Not everyone can pass the Remote University successfully, though we graduate more than 80% of the candidates. 
+              Before accepting the order you need to confirm that you accept the Remote University rules, and you want to participate in this program. If you have questions or concerns about the Remote University program, please reach out to your interviewer. 
+          </em>
+        </p>
+        <p class="mb-5">
+          <em>During the first week of RemoteU, there will be a proctored retake of Cognitive Aptitude Test. This test is important as failing in this test will result in the termination of the contract. Therefore we highly suggest you come prepared for this test by doing preparation with similar exams available.
+          </em>
+        </p>
+        <h5>Please read <a
+          href="https://docs.google.com/document/d/17uOUMykeDrnw28RtoOjY9wPl9ZYGvO4m2oY4FuXAF_A"
+          target="_blank"> RemoteU Playbook</a> before filling the form</h5>
+        <h5 class="mb-1 mt-3">Email (same as your Crossover login email)<span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.email.valid"
+            class="ml-1 danger missing-field">{{ getEmailErrorMessage() }}</span>
+        </h5>
+        <input type="text"
+          formControlName="email"
+          placeholder="Your email"
+          class="form-control">
+        <h5 class="mb-1 mt-3">
+          Role for which you have applied<span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.role.valid"
+            class="ml-1 danger missing-field">This field is required</span>
+        </h5>
+        <df-select
+          placeholder="Please select a role to apply for"
+          (change)="getRoleSpecificPrerequisites($event)"          
+          [filterable]="false">
+          <df-option *ngFor="let role of roles"
+            [value]="role.id">
+            {{ role.name }}
+          </df-option>
+        </df-select>
+        <h5 class="mb-1 mt-3">
+          Common Mandatory Prerequisites<span class="danger">*</span>
+          <span *ngIf="showErrors && !mandatoryPrerequisitesChecked()"
+            class="ml-1 danger missing-field">If you comply with all the below please check all boxes</span>
+        </h5>
+        <div class="d-block">
+          <p>
+            Please check to confirm you have the following covered. Refer to <a 
+              href="https://docs.google.com/document/d/1Z1ZaQpf4aa291O_dkbrPhaY0s0CEKr2RNOPltfRTFsc/edit"
+              target="_blank">this</a> document for details.
+          </p>
+          <df-checkbox formControlName="requirement1">
+            Able to work at least 8 hours a day M-F for 4 weeks
+          </df-checkbox>
+          <df-checkbox formControlName="requirement2">
+            Able to work 6 hours between 8am and 5pm Monday-Friday in your local time
+          </df-checkbox>
+          <df-checkbox formControlName="requirement3">
+            No planned vacation of more than 1 day during the RemoteU 4 week period
+          </df-checkbox>
+          <df-checkbox formControlName="requirement4">
+            Stable internet connection with at least 5Mbps download speed (handle video streaming)
+          </df-checkbox>
+          <df-checkbox formControlName="requirement5">
+            Computer that meets the specs specified in the above document 
+          </df-checkbox>
+          <df-checkbox formControlName="requirement6">
+            Able to work in an environment with no distractions during working hours
+          </df-checkbox>
+          <df-checkbox formControlName="requirement7">
+            If you have dependants to take care of, you should already have caretakers during working hours (Nanny for kids, Adult care for seniors, etc) to avoid distractions
+          </df-checkbox>
+          <df-checkbox formControlName="requirement8">
+            Have a contingency plan in case any of the above breaks apart
+          </df-checkbox>
+          <df-checkbox formControlName="requirement9">
+            Computer with a webcam and high quality microphone/headset that meets the specs specified in the above document
+          </df-checkbox>
+        </div>
+        
+        <h5 class="mb-1 mt-3">Role Specific Prerequisites</h5>
+        <p>
+          Please check whether you have the following skillset. If not, it is highly recommended that you spend time learning these skills before starting RemoteU
+        </p>
+        <div class="d-block">
+          <span *ngFor="let prerequisite of rolePrerequisites"
+            class="mx-2 col-3 text-center">
+            {{ prerequisite.name }}
+          </span>
+        </div>
+
+        <h5 class="mb-1 mt-3">
+          30-second video with webcam and audio about why you want to join RemoteU
+          <span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.videoUrl.valid"
+            class="ml-1 danger missing-field">This field is required</span>
+        </h5>
+        <p>
+          Record the video, upload it on your Google Drive, get a shareable link that is accessible by everyone, and paste it here
+        </p>
+        <input type="text"
+          formControlName="videoUrl"
+          placeholder="Video Url"
+          class="form-control">        
+
+        <h5 class="mb-1 mt-3">
+          Starting Date<span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.startDate.valid"
+            class="ml-1 danger missing-field">This field is required</span>
+        </h5>
+        <p>
+          Please select a date when you can be available to start the RemoteU. Please note that you won't be able to postpone the date once started. Please note below: RemoteU is a 4-week program and you are required to work 40 hours by the end of Friday (a minimum of 8 hours every weekday).
+        </p>
+        <df-select
+          placeholder="Please select a starting date"
+          (change)="startDateChange($event)"
+          [filterable]="false">
+          <df-option *ngFor="let monday of mondays"
+            [value]="monday">
+            Monday, {{ monday | date: short }}
+          </df-option>
+        </df-select>
+
+        <h5 class="mb-1 mt-3">
+          Signed Contract<span class="danger">*</span>
+          <span *ngIf="showErrors && !contractFileUploader?.filesQueue?.length"
+            class="ml-1 danger missing-field">This field is required</span>
+        </h5>
+        <p>
+          Please download, sign and upload the 
+          <a href="https://docs.google.com/document/d/1ZdVCuOo532LP4ctHTvKkFC33DVvFG_Xca5LK_1xlM2g/edit"
+            target="_blank">
+            RemoteU Contract
+          </a>
+        </p>
+        <div class="col px-0">
+          <df-file-upload [fileUploader]="contractFileUploader"
+              (uploadFile)="onContractUploadFileEvent()"
+              (removeFile)="onContractRemoveFileEvent()">
+          </df-file-upload>
+        </div>
+        <df-checkbox formControlName="requirement10">
+          I understand that my profile will be evaluated to join RemoteU and I will receive a notification if I am selected.<span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.requirement10.value"
+            class="ml-1 danger missing-field">This field is required</span>
+        </df-checkbox>
+        <div *ngIf="showErrors && isSubmitDisabled()"
+          class="danger"><em>Please make sure to enter all missing fields above marked in red</em></div>
+        <button 
+          (click)="submit()"
+          type="submit"
+          class="btn btn-primary mt-3 pl-4 pr-4 mr-2">
+          SUBMIT
+        </button>
+      </form>
+    </df-card-content>
+  </df-card>
+</div>

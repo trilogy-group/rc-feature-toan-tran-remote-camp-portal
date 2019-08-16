@@ -1,0 +1,74 @@
+@import '~@devfactory/ngx-df/core/theming/aurea-skin/theming';
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin: -20px -20px 20px;
+  background: #fff;
+  padding: 20px;
+  border-bottom: 1px solid #D1D1D1;
+
+  .col {
+    display: flex;
+    align-items: center;
+    min-width: 460px;
+    max-width: 460px;
+
+    mat-icon {
+      margin-left: 10px;
+    }
+
+    &:first-child {
+      min-width: 320px;
+      max-width: 320px;
+    }
+  }
+}
+
+.done {
+  cursor: context-menu;
+  background: $au-green;
+  color: white;
+}
+
+.done-isToday {
+  cursor: context-menu;
+  background: $au-green;
+  color: white;
+}
+
+.isToday {
+  cursor: context-menu;
+}
+
+.not-done {
+  cursor: context-menu;
+  background: map-get($au-gray, 1);
+}
+
+.unavailable {
+  cursor: context-menu;
+  pointer-events: none;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.check-in-chats {
+  button {
+    width: 125px
+  }
+
+  .show-save-button {
+    button {
+      display: inline;
+    }
+   }
+   .hide-save-buutton {
+    button {
+      display: none;
+    }
+   }
+}
