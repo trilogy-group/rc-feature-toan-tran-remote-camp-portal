@@ -74,7 +74,6 @@ export class SemCheckInChatsComponent implements OnInit {
     this.semCheckInChatsService.getCheckInChatDetail(week, day, id, this.xoId)
     .pipe(finalize(() => this.loadingSpinner.hide()))
     .subscribe(checkInChatDetail => {
-      console.log(checkInChatDetail);
       this.modalService.open(this.checkInChatDetail, {
         backdrop: true,
         data: { week, day, isReadOnly, ...checkInChatDetail }
@@ -98,7 +97,14 @@ export class SemCheckInChatsComponent implements OnInit {
         close();
         this.loadingSpinner.hide();
       }))
-      .subscribe(() => this.toasterService.popSuccess('Check-in Chat Saved'));
+      .subscribe(() => {
+        this.toasterService.popSuccess('Check-in Chat Saved');
+        this.semCheckInChatsService.getCheckInChats(this.xoId)
+        .pipe(finalize(() => this.loadingSpinner.hide()))
+        .subscribe(checkInChatDetail => {
+            this.weekCheckInChats = checkInChatDetail;
+        });
+      });
   }
 
   public cancelCheckInChat(close: Function): void {
