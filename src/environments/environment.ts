@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   envName: 'undefined',
   gitHash: 'GIT_HASH_PLACEHOLDER',
-  apiUrl: 'https://localhost:5001/api'
+  apiUrl: 'https://dev-remoteu.trilogy.com/api'
 };
 
 /*
