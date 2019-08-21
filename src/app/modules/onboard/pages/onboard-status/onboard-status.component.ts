@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { OnboardingService } from 'src/app/shared/services/onboarding.service';
 import { subDays } from 'date-fns';
+
+import { OnboardingService } from 'src/app/shared/services/onboarding.service';
+import { DfToasterService } from '@devfactory/ngx-df';
 
 @Component({
   selector: 'app-onboard-status',
@@ -11,53 +13,72 @@ export class OnboardStatusComponent implements OnInit {
   private readonly allSet = 'You\'re All Set';
   private readonly notAllSet = 'You\'re Almost There';
   public constructor(
-    private readonly onboardingService: OnboardingService
+    private readonly onboardingService: OnboardingService,
+    private readonly toasterService: DfToasterService,
   ) {}
 
-  public onboardStatus: any;
+  public preStartInfo: any;
 
-  public loaded = false;
+  public loadedItAccessSystems = false;
+
+  public loadedRemoteUMaterials = false;
+
+  public loadedCodeRepositoryAccess = false;
 
   public getHeaderText(): string {
-    return this.onboardStatus &&
-      this.onboardStatus.ticketsAssigned &&
-      this.onboardStatus.assignmentFolder &&
-      this.onboardStatus.welcomeEmailSent ? this.allSet : this.notAllSet;
+    return this.preStartInfo &&
+      this.preStartInfo.ticketsAssigned &&
+      this.preStartInfo.assignmentFolder &&
+      this.preStartInfo.welcomeEmailSent ? this.allSet : this.notAllSet;
   }
 
   public ngOnInit(): void {
-    this.onboardingService.getOnboardStatus().subscribe(onboardStatus => {
-      this.onboardStatus = onboardStatus;
-      this.loaded = true;
+    this.onboardingService.getPreStartInfo().subscribe(preStartInfo => {
+      this.preStartInfo = preStartInfo;
+      this.onboardingService.getItSystemAccess(this.preStartInfo.ad, this.preStartInfo.email)
+        .subscribe(
+          statusResponse => this.loadedItAccessSystems = statusResponse && statusResponse.status === 'Yes',
+          () => this.toasterService.popError('Unable to get it system access status')
+        );
+
+      this.onboardingService.getRemoteUMaterialsAccess(this.preStartInfo.ad, this.preStartInfo.email)
+        .subscribe(
+          statusResponse => this.loadedRemoteUMaterials = statusResponse && statusResponse.status === 'Yes',
+          () => this.toasterService.popError('Unable to get remote material access status')
+        );
+
+      this.onboardingService.getCodeRepositoryAccess(this.preStartInfo.ad, this.preStartInfo.email)
+        .subscribe(
+          statusResponse => this.loadedItAccessSystems = statusResponse && statusResponse.status === 'Yes',
+          () => this.toasterService.popError('Unable to get code repository access status')
+        );
     });
   }
 
   public getDefaultETA(): Date {
-    return subDays(this.onboardStatus.startDate, 2);
+    return subDays(this.preStartInfo.startDate, 2);
   }
 
   public getJiraETA(): Date {
-    return subDays(this.onboardStatus.startDate, 3);
+    return subDays(this.preStartInfo.startDate, 3);
 
   }
 
   public accessesConfirmed(): boolean {
-    return this.onboardStatus && this.onboardStatus.accessesConfirmed;
+    return this.preStartInfo && this.preStartInfo.accessesConfirmed;
   }
 
   public showConfirmAccessesButton(): boolean {
-    return this.onboardStatus &&
-      this.onboardStatus.accesses &&
-      this.onboardStatus.accesses.itSystems &&
-      this.onboardStatus.accesses.remoteUMaterials &&
-      this.onboardStatus.accesses.codeRepository;
+    return this.preStartInfo &&
+      this.preStartInfo.accesses &&
+      this.preStartInfo.accesses.itSystems &&
+      this.preStartInfo.accesses.remoteUMaterials &&
+      this.preStartInfo.accesses.codeRepository;
   }
 
   public confirmAccesses(): void {
-    this.loaded = false;
     this.onboardingService.confirmAccesses().subscribe(() => {
-      this.onboardStatus.accessesConfirmed = true;
-      this.loaded = true;
+      this.preStartInfo.accessesConfirmed = true;
     });
   }
 }

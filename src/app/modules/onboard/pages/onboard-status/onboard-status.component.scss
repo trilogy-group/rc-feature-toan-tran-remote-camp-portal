@@ -1,7 +1,13 @@
 @import '~@devfactory/ngx-df/core/theming/aurea-skin/theming';
+@import "~@devfactory/ngx-df/core/loaders/loader";
 
 .success {
   color: $au-green;
+  font-size: 24px;
+}
+
+.warning {
+  color: $au-amber;
   font-size: 24px;
 }
 
@@ -20,4 +26,13 @@
 
 .onboard-info {
   width: 300px;
+}
+
+:host {
+  ::ng-deep {
+    .df-loader {
+      width: 30px;
+      height: 30px;
+    }
+  }
 }
