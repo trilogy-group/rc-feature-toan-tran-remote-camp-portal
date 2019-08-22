@@ -14,13 +14,13 @@ pipeline {
     CONTAINER_PORT = 80
     HEALTH_CHECK_ENDPOINT = "/"
     DTR_URL = "registry2.swarm.devfactory.com"
-    DTR_USERNAME = "drosson"
-    DTR_PASSWORD = credentials("DTR_PW_DROSSON")
+    DTR_USERNAME = "anetrebskiy"
+    DTR_PASSWORD = credentials("DTR_PW_NETREBSKIY")
     DOCKER_LINUX_HOST = "dl6.aureacentral.com"
     COMPANY = "teamrooms"
     TEAM = "remotecamp"
-    EMAIL = "david.rosson@aurea.com"
-    SKYPE = "david.rosson"
+    EMAIL = "alex.netrebskiy@aurea.com"
+    SKYPE = "aleks_lite"
     PRODUCT = "remotecamp"
     SERVICE = "remoteu-portal"
     ENDPOINT = "remoteu-portal.internal-webproxy.aureacentral.com"

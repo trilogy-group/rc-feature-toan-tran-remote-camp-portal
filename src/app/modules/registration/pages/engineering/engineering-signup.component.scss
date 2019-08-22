@@ -1,0 +1,43 @@
+@import '~@devfactory/ngx-df/core/theming/aurea-skin/theming';
+
+.sign-up-form {
+  max-width: 640px;
+}
+
+.danger {
+  color: $au-red;
+}
+
+.missing-field {
+  font-size: 12px;
+}
+
+.sign-up-container {
+  background-color: #f7efe7;
+}
+
+df-select {
+  width: 250px;
+}
+
+:host ::ng-deep {
+  .df-checkbox__label {
+    text-align: left;
+  }
+
+  .df-file-upload__table {
+    th:nth-child(3), td:nth-child(3) {
+      display: none;
+    }
+
+    td {
+      .df-button.success {
+        display: none;
+      }
+    }
+  }
+
+  .df-file-upload__global-actions {
+    display: none;
+  }
+}

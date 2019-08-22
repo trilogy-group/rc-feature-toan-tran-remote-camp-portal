@@ -1,0 +1,140 @@
+<div class="ml-5 d-block">
+  <div class="container-fluid">
+    <div class="row section__header">
+      <div class="col py-3">
+        <h1 class="m-0 d-flex align-items-center">
+          Gradebook <mat-icon>keyboard_arrow_right</mat-icon> SEM Check-In Chats
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-column">
+    <div class="header mt-2 ml-2">
+      <div class="col-3">
+        <strong>Name:</strong>&nbsp;{{ profile?.name }}
+      </div>
+  
+      <div class="col-3">
+        <strong>Pipeline:</strong>&nbsp;{{ profile?.pipeline }}
+      </div>
+  
+      <div class="col-3">
+        <strong>Date Started:</strong>&nbsp;{{ profile?.startDate | date: 'yyyy/MM/dd' }}
+      </div>
+  
+      <div class="col-3">
+        <strong>Days Completed:</strong>&nbsp;{{ daysCompleted }}
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <h3 class="ml-3 mb-2">Summary</h3>
+            <df-card style="max-width: 400px">
+              <df-card-content class="d-block">
+                <div class="d-flex mb-3">
+                  <h5 class="my-0">
+                    Productivity: 
+                    <df-number-increase
+                      *ngIf="loaded"
+                      [time]="500"
+                      [value]="productivityScore"></df-number-increase> Units
+                  </h5>
+                </div>
+                <div class="d-flex  mb-3">
+                  <h5 class="my-0">
+                    Quality: 
+                    <df-number-increase
+                      *ngIf="loaded"
+                      [time]="500"
+                      [value]="qualityScore"></df-number-increase>%
+                  </h5>
+                </div>
+                <div class="d-block mb-3">
+                  <h5 class="my-0">Hardest Problems:</h5>
+                  <div class="d-flex">
+                    <a *ngFor="let hardestProblem of hardestProblems"
+                      matTooltip="{{ hardestProblem.summary }}"
+                      matTooltipPosition="above"
+                      [href]="'https://crossover.atlassian.net/browse/' + hardestProblem.jiraKey"
+                      target="_blank"
+                      class="col-4">{{ hardestProblem.jiraKey }}</a>
+                  </div>
+                </div>
+                <div class="d-block mb-3">
+                  <h5 class="my-0">Missing Calendar Activities:</h5>
+                  <div class="d-block">
+                    <em *ngFor="let activity of missingCalendarActivities"
+                      class="d-block text-truncate"
+                      matTooltip="{{ activity.name }}"
+                      matTooltipPosition="above">
+                      Week {{ activity.week }} - {{ activity.day }} - {{ activity.name }}
+                    </em>
+                  </div>
+                </div>
+                <div class="d-block">
+                  <h5 class="my-0">Compliance:</h5>
+                  <span class="d-flex justify-content-between"
+                    *ngIf="loaded">
+                    <span>
+                      Focus:
+                      <df-number-increase
+                        *ngIf="loaded"
+                        [time]="500"
+                        [value]="compliance.focus"></df-number-increase>%</span>
+                    <span>
+                      Intensity: 
+                      <df-number-increase
+                        *ngIf="loaded"
+                        [time]="500"
+                        [value]="compliance.intensity"></df-number-increase>%</span>
+                    <span>
+                      Alignment:
+                      <df-number-increase
+                        *ngIf="loaded"
+                        [time]="500"
+                        [value]="compliance.alignment"></df-number-increase>%</span>
+                  </span>
+                </div>
+              </df-card-content>
+            </df-card>
+          </div>
+          <div class="col">
+            <span>
+              <h3 class="mb-2">Check-In Chats</h3>
+            </span>
+            <div *ngIf="loaded"
+              class="d-flex check-in-chats">
+              <div *ngFor="let week of weeks; let i = index"
+                class="d-flex flex-column align-items-center mx-1">
+                <h4 class="d-flex">
+                  Week {{ i + 1 }}
+                </h4>
+                <button *ngFor="let cic of weekCheckInChats[i]" 
+                  mat-raised-button
+                  [class.done]="cic.done && (cic.isToday != undefined && !cic.isToday)"
+                  [class.done-isToday]="cic.done && (cic.isToday != undefined && cic.isToday)"
+                  [class.not-done]="cic.done != undefined && !cic.done && !cic.isToday"
+                  [class.unavailable]="cic.done == undefined"
+                  [class.isToday]="(cic.isToday != undefined && cic.isToday) && (cic.done != undefined && !cic.done)"
+                  (click)="openDetail(week, cic.day,cic.id,cic.isReadOnly)"
+                  class="mb-2 px-2">{{ getButtonText(cic) }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #checkInChatDetail
+             let-data="data"
+             let-close="close">
+  <app-sem-check-in-chat-detail
+    (cancel)="cancelCheckInChat(close)"
+    (save)="saveCheckInChat($event, close)"
+    [data]="data"></app-sem-check-in-chat-detail>
+</ng-template>

@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
 import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 
 @Component({
   selector: 'app-accomplishments',
@@ -66,7 +67,8 @@ export class AccomplishmentsComponent implements OnInit {
     private readonly accomplishmentsService: AccomplishmentsService,
     private readonly toasterService: DfToasterService,
     private readonly loadingSpinner: DfLoadingSpinnerService,
-    private readonly authenticationTokenService: AuthenticationTokenService
+    private readonly authenticationTokenService: AuthenticationTokenService,
+    private readonly utilsService: UtilsService
   ) {}
 
   public ngOnInit(): void {
@@ -179,30 +181,6 @@ export class AccomplishmentsComponent implements OnInit {
   }
 
   private calculateDaysCompleted(): void {
-    const now = new Date();
-    const daysBetween = differenceInDays(new Date(), parse(this.profile.startDate));
-    if (isSaturday(now)) {
-      this.daysCompleted = daysBetween - 2 * Math.floor(daysBetween / 7);
-    } else if (isSunday(now)) {
-      this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7) + 1;
-    } else {
-      this.daysCompleted = daysBetween - 2 * Math.floor((daysBetween + 2) / 7);
-    }
-  }
-
-  private getWeightedFtarAverage(weeklyQuality: number[], weeklyProductivity: number[]): number {
-    let ftarAvg = 0;
-
-    const totalProductivity = weeklyProductivity.reduce((a, b) => (a + b), 0);
-    weeklyProductivity.forEach((weekProductivity, index) => {
-      let weekQuality = weeklyQuality[index];
-      if (weekQuality == null) {
-        weekQuality = 100;
-        weeklyQuality[index] = weekQuality;
-      }
-      ftarAvg += weekProductivity * weekQuality / totalProductivity;
-    });
-
-    return ftarAvg;
+    this.daysCompleted = this.utilsService.calculateDaysCompleted(this.profile.startDate);
   }
 }

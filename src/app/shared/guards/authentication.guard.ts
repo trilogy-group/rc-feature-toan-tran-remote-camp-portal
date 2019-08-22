@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
 import { Observable } from 'rxjs';
 
 import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
-import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -18,6 +17,13 @@ export class AuthenticationGuard implements CanActivate {
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const isUserAdmin = this._authenticationTokenService.isUserAdmin();
     const isLoggedIn = this._authenticationTokenService.isLoggedIn();
+
+    if (route.firstChild ) {
+      const url = route.firstChild.url ? route.firstChild.url[0].path : '';
+      if (url === 'registration') {
+        return true;
+      }
+    }
 
     if (!isLoggedIn) {
       this._router.navigate(['/login']);

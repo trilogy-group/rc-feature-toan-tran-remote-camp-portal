@@ -1,0 +1,51 @@
+.df-modal {
+  &__close-btn {
+    position: absolute;
+    top: 1px;
+    right: 6px;
+    width: 34px;
+    padding: 0;
+    height: 40px;
+    font-size: 1em;
+    display: inline-block;
+    font-weight: 400;
+    border: none;
+    background: none;
+    opacity: .9;
+  }
+
+  &__close-icon {
+    height: 10px;
+    width: 10px;
+    top: 2px;
+    position: relative;
+    display: inline-block;
+    transition: all .5s ease;
+    &:before {
+      content: "";
+      height: 100%;
+      width: 2px;
+      background: #1e282c;
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      border-radius: 5px;
+      -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    right: 4px;
+    }
+    &:after {
+      content: "";
+      height: 100%;
+      width: 2px;
+      background: #1e282c;
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      border-radius: 5px;
+      -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    left: 4px;
+    }
+  }
+}

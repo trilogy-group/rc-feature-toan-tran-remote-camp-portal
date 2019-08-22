@@ -54,11 +54,21 @@
         <ng-template let-item="rowData"
           dfGridTemplate="body">
           <div *ngIf="isAdmin()"
-            matTooltip="Go to {{ item.icName }}'s dashboard"
-            matTooltipPosition="right">
+            class="d-flex">
             <a
+              class="ic-link"
+              matTooltip="Go to {{ item.icName }}'s dashboard"
+              matTooltipPosition="right"
               [routerLink]="['/gradebook/dashboard']"
               [queryParams]="{ icName: item.email }">{{ item.icName }}</a>
+            <mat-icon 
+              matTooltip="Go to SEM CiC"
+              matTooltipPosition="right"
+              class="ml-1 check-in-chat-bubble">
+              <a
+                [queryParams]="{ icName: item.email,xoId: item.rcXoId }"
+                [routerLink]="['/gradebook/sem-check-in-chats']">chat</a>
+            </mat-icon>
           </div>
           <span *ngIf="!isAdmin()"
             matTooltip="{{ item.icName }}"
