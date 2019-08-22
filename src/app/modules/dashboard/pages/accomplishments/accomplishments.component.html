@@ -19,10 +19,18 @@
 
     <div class="col-2">
       <div class="d-flex flex-column justify-content-between">
-        <a [href]="profile?.tmsUrl"
-          target="_blank">TMS</a>
-        <a [href]="profile?.deckUrl"
-          target="_blank">Deck</a>
+        <div class="d-flex">
+          <a [href]="profile?.tmsUrl"
+            target="_blank">TMS</a>
+          <mat-icon [matTooltip]="tmsTooltip"
+            class="ml-1 info-tooltip">help_outline</mat-icon>
+        </div>
+        <div class="d-flex">
+          <a [href]="profile?.deckUrl"
+            target="_blank">Deck</a>
+          <mat-icon [matTooltip]="deckTooltip"
+            class="ml-1 info-tooltip">help_outline</mat-icon>
+        </div>
       </div>
     </div>
   </div>
@@ -136,8 +144,10 @@
       <df-card>
         <df-card-content>
           <div class="d-flex flex-column problem-resolution px-3">
-            <div class="my-0">
+            <div class="my-0 d-flex justify-content-between">
               <h4>Problem Resolution Progress</h4>
+              <mat-icon [matTooltip]="problemResolutionProgressTooltip"
+                class="info-tooltip">help_outline</mat-icon>
             </div>
             <div class="overflow-y-auto overflow-x-hidden">
               <app-hardest-problems-trailing *ngIf="loaded"
@@ -150,8 +160,10 @@
     </div>
     <div class="col-6 px-5">
       <div class="d-flex flex-column px-4">
-        <div class="my-0">
+        <div class="my-0 d-flex justify-content-between">
           <h4>Overall Hardest Problems</h4>
+          <mat-icon [matTooltip]="overallHardestProblemsTooltip"
+            class="info-tooltip">help_outline</mat-icon>
         </div>
         <div class="row"
           [class.hardest-problems-container]="hardestProblems && hardestProblems.length !== 0"
@@ -196,7 +208,11 @@
           <df-card class="productivity-card">
             <df-card-content>
               <div class="d-flex flex-column">
-                <h4>Productivity Target: {{ productivityTarget }} Units</h4>
+                <div class="d-flex justify-content-between">
+                  <h4>Productivity Target: {{ productivityTarget }} Units</h4>
+                  <mat-icon [matTooltip]="productivityTargetTooltip"
+                    class="info-tooltip">help_outline</mat-icon>
+                </div>
                 <div class="chart-container">
                   <df-bar *ngIf="loaded"
                     [data]="productivityChart"
@@ -213,7 +229,11 @@
           <df-card class="quality-target-card">
             <df-card-content>
               <div class="d-flex flex-column">
-                <h4>Quality Target: {{ qualityTarget }}%</h4>
+                <div class="d-flex justify-content-between">
+                  <h4>Quality Target: {{ qualityTarget }}%</h4>
+                  <mat-icon [matTooltip]="qualityTargetTooltip"
+                    class="info-tooltip">help_outline</mat-icon>
+                </div>
                 <div class="pie-chart-container quality-pie mt-5">
                   <df-pie *ngIf="loaded"
                     [data]="qualityChart"

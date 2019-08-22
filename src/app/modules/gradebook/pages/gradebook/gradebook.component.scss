@@ -37,6 +37,10 @@
   color: inherit;
 }
 
+.info-tooltip {
+  font-size: 14px;
+}
+
 :host ::ng-deep {
   .df-grid {
     tr:nth-child(1) {

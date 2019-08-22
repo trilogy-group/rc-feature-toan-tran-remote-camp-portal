@@ -42,12 +42,66 @@
           <df-grid-column header="RemoteU Start"
             [sortable]="true"
             field="start"></df-grid-column>
-          <df-grid-column header="Approved"></df-grid-column>
-          <df-grid-column header="Approved + In Review"></df-grid-column>
-          <df-grid-column header="Target for Today"></df-grid-column>
-          <df-grid-column header="Approved"></df-grid-column>
-          <df-grid-column header="Approved + In Review"></df-grid-column>
-          <df-grid-column header="Target"></df-grid-column>
+          <df-grid-column>
+            <ng-template
+              dfGridTemplate="header">
+              <div class="d-flex justify-content-between w-100">
+                Approved
+                <mat-icon [matTooltip]="productivityApprovedTooltip"
+                  class="ml-1 info-tooltip">help_outline</mat-icon>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
+            <ng-template
+              dfGridTemplate="header">
+              <div class="d-flex justify-content-between w-100">
+                  Approved + In Review
+                <mat-icon [matTooltip]="productivityApprovedReviewTooltip"
+                  class="ml-1 info-tooltip">help_outline</mat-icon>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
+            <ng-template
+              dfGridTemplate="header">
+              <div class="d-flex justify-content-between w-100">
+                Target for Today
+                <mat-icon [matTooltip]="productivityTargetTooltip"
+                  class="ml-1 info-tooltip">help_outline</mat-icon>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
+            <ng-template
+              dfGridTemplate="header">
+              <div class="d-flex justify-content-between w-100">
+                Approved
+                <mat-icon [matTooltip]="qualityApprovedTooltip"
+                  class="ml-1 info-tooltip">help_outline</mat-icon>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
+            <ng-template
+              dfGridTemplate="header">
+              <div class="d-flex justify-content-between w-100">
+                  Approved + In Review
+                <mat-icon [matTooltip]="qualityApprovedReviewTooltip"
+                  class="ml-1 info-tooltip">help_outline</mat-icon>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
+            <ng-template
+              dfGridTemplate="header">
+              <div class="d-flex justify-content-between w-100">
+                Target
+                <mat-icon [matTooltip]="qualityTargetTooltip"
+                  class="ml-1 info-tooltip">help_outline</mat-icon>
+              </div>
+            </ng-template>
+          </df-grid-column>
         </df-grid-row>
       </df-grid-header-column-group>
       <df-grid-column>
