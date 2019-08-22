@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { subDays } from 'date-fns';
 
 import { OnboardingService } from 'src/app/shared/services/onboarding.service';
+import { ProfileService } from 'src/app/shared/services/profile.service';
+
 import { DfToasterService } from '@devfactory/ngx-df';
 
 @Component({
@@ -14,6 +16,7 @@ export class OnboardStatusComponent implements OnInit {
   private readonly notAllSet = 'You\'re Almost There';
   public constructor(
     private readonly onboardingService: OnboardingService,
+    private readonly profileService: ProfileService,
     private readonly toasterService: DfToasterService,
   ) {}
 
@@ -33,25 +36,32 @@ export class OnboardStatusComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.onboardingService.getPreStartInfo().subscribe(preStartInfo => {
-      this.preStartInfo = preStartInfo;
-      this.onboardingService.getItSystemAccess(this.preStartInfo.ad, this.preStartInfo.email)
-        .subscribe(
-          statusResponse => this.loadedItAccessSystems = statusResponse && statusResponse.status === 'Yes',
-          () => this.toasterService.popError('Unable to get it system access status')
-        );
+    this.profileService.getProfile().subscribe(profile => {
+      this.onboardingService.getPreStartInfo().subscribe(preStartInfo => {
+        this.preStartInfo = preStartInfo;
+        this.preStartInfo.name = profile.icName;
+        this.preStartInfo.pipeline = profile.pipeline;
+        this.preStartInfo.startDate = profile.startDate;
+        this.preStartInfo.alternativeEmail = profile.xoLoginEmail;
+        this.preStartInfo.email = profile.companyEmail;
+        this.preStartInfo.ad = profile.adAccount;
 
-      this.onboardingService.getRemoteUMaterialsAccess(this.preStartInfo.ad, this.preStartInfo.email)
-        .subscribe(
-          statusResponse => this.loadedRemoteUMaterials = statusResponse && statusResponse.status === 'Yes',
-          () => this.toasterService.popError('Unable to get remote material access status')
-        );
-
-      this.onboardingService.getCodeRepositoryAccess(this.preStartInfo.ad, this.preStartInfo.email)
-        .subscribe(
-          statusResponse => this.loadedItAccessSystems = statusResponse && statusResponse.status === 'Yes',
-          () => this.toasterService.popError('Unable to get code repository access status')
-        );
+        this.onboardingService.getItSystemAccess(this.preStartInfo.ad)
+          .subscribe(
+            statusResponse => this.loadedItAccessSystems = statusResponse && statusResponse.status === 'Yes',
+            () => this.toasterService.popError('Unable to get it system access status')
+          );
+        this.onboardingService.getRemoteUMaterialsAccess(this.preStartInfo.ad, this.preStartInfo.email)
+          .subscribe(
+            statusResponse => this.loadedRemoteUMaterials = statusResponse && statusResponse.status === 'Yes',
+            () => this.toasterService.popError('Unable to get remote material access status')
+          );
+        this.onboardingService.getCodeRepositoryAccess(this.preStartInfo.ad, this.preStartInfo.email)
+          .subscribe(
+            statusResponse => this.loadedItAccessSystems = statusResponse && statusResponse.status === 'Yes',
+            () => this.toasterService.popError('Unable to get code repository access status')
+          );
+      });
     });
   }
 

@@ -45,8 +45,22 @@ export class AuthenticationTokenService {
         return user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
     }
 
+    public getStudentStartDate(): Date {
+        if (!this.isLoggedIn()) {
+            return null;
+        }
+        const sessionToken = localStorage.getItem(this.TOKEN_KEY);
+        const user = this.parseJwt(sessionToken);
+        const startDateUnixTime = user['application/claims/StartDate'];
+        if (startDateUnixTime) {
+            return new Date(parseFloat(startDateUnixTime));
+        }
+        return null;
+    }
+
     public hasICStarted(): boolean {
-        return false;
+        const startDate = this.getStudentStartDate();
+        return startDate && this.convertLocalDateToUtcDate(new Date()) >= startDate;
     }
 
     public isUserAdmin(): boolean {
@@ -61,5 +75,13 @@ export class AuthenticationTokenService {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
         return JSON.parse(jsonPayload);
+    }
+
+    private convertLocalDateToUtcDate(date): Date {
+        const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+        const offset = date.getTimezoneOffset() / 60;
+        const hours = date.getHours();
+        newDate.setHours(hours + offset);
+        return newDate;
     }
 }

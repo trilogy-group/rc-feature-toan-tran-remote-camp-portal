@@ -1,22 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { addDays } from 'date-fns';
 import { DfHttpSkipInterceptorEnum } from '@devfactory/ngx-df/interceptor';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class OnboardingService {
-  private static readonly itSystemsAccess = 'https://cl2w37ym50.execute-api.us-east-1.amazonaws.com/development/check-ad';
-  private static readonly remoteUMaterialsAccess = '';
-  private static readonly codeRepositoryAccess = 'https://5n8scr6il7.execute-api.us-east-1.amazonaws.com/development/git-verify';
+  private static readonly itSystemsAccess = environment.itSystemAccessStatusUrl;
+  private static readonly remoteUMaterialsAccess = environment.remoteUMaterialsAccessStatusUrl;
+  private static readonly codeRepositoryAccess = environment.codeRepositoryAccessStatusUrl;
 
   private preStartInfo = {
-    name: 'Jane Smith',
-    pipeline: 'QA Manual Tester',
-    startDate: addDays(new Date(), 2),
-    alternativeEmail: 'janesmith@email.com',
-    email: 'a.ahmad@aurea.com',
-    ad: 'a.ahmad',
     accesses: {
     },
     accessesConfirmed: false,
@@ -31,25 +25,23 @@ export class OnboardingService {
     return of(this.preStartInfo);
   }
 
-  public getItSystemAccess(AD: string, email: string): Observable<any> {
-    const body = { AD, email };
+  public getItSystemAccess(ad: string): Observable<any> {
     const options = this.getSkipLoaderHeaders();
-
-    return this.httpClient.post(OnboardingService.itSystemsAccess, body, options);
+    return this.httpClient.get(`${OnboardingService.itSystemsAccess}?name=${ad}`, options);
   }
 
   public getRemoteUMaterialsAccess(AD: string, email: string): Observable<any> {
     const body = { AD, email };
     const options = this.getSkipLoaderHeaders();
 
-    return this.httpClient.post(OnboardingService.remoteUMaterialsAccess, body, options);
+    return this.httpClient.get(`${OnboardingService.remoteUMaterialsAccess}?name=${email}`, options);
   }
 
   public getCodeRepositoryAccess(AD: string, email: string): Observable<any> {
     const body = { AD, email };
     const options = this.getSkipLoaderHeaders();
 
-    return this.httpClient.post(OnboardingService.codeRepositoryAccess, body, options);
+    return this.httpClient.get(`${OnboardingService.codeRepositoryAccess}?name=${email}`, options);
   }
 
   public confirmAccesses(): Observable<any> {
