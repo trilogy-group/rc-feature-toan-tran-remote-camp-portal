@@ -62,7 +62,7 @@ import { RegistrationService } from 'src/app/shared/services/registration.servic
     CalendarService,
     AuthenticationTokenService,
     GradebookService,
-    OnboardingService
+    OnboardingService,
     SemCheckInChatsService,
     UtilsService,
     RegistrationService

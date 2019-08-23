@@ -3,8 +3,10 @@
     <df-card class="status-card">
       <df-card-content
         class="d-block">
-        <h3 class="mb-4 d-flex justify-content-center">{{ getHeaderText() }},&nbsp;<strong>{{ preStartInfo?.name }}</strong>!</h3>
-        <div class="row mb-3">
+        <h3 class="mb-4 d-flex justify-content-center">
+          <span class="header">{{ getHeaderText() }},&nbsp;<strong>{{ preStartInfo?.name }}</strong>!</span>
+        </h3>
+        <div class="row mb-3 mt-3">
           <div class="col-6 d-block mb-1">
             <h4>Pipeline:</h4>
             <h5><strong>{{ preStartInfo?.pipeline }}</strong></h5>
