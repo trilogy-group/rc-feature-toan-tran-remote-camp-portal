@@ -10,6 +10,16 @@ import { AuthenticationTokenService } from 'src/app/shared/services/authenticati
   styleUrls: ['./gradebook.component.scss']
 })
 export class GradebookComponent implements OnInit {
+  public readonly productivityApprovedTooltip = 'Shows cumulative scores earned from approved assignments';
+  public readonly productivityApprovedReviewTooltip = `Shows cumulative scores earned from approved assignments
+  and submitted assignments which are not yet reviewed`;
+  public readonly productivityTargetTooltip = 'Shows target score  that should have been achieved by the current day';
+
+  public readonly qualityApprovedTooltip = 'Shows quality achieved for approved assignments';
+  public readonly qualityApprovedReviewTooltip = `Shows quality achieved for approved assignments and submitted
+  assignments that are not yet reviewed. Assignments that are not reviewed yet is assumed to have FTAR=YES`;
+  public readonly qualityTargetTooltip = 'Shows target quality  that should have been achieved by the current day';
+
   public gradebookData: any[];
   public lastRefreshed: Date;
   public loaded = false;

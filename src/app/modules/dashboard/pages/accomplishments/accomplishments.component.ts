@@ -28,6 +28,28 @@ export class AccomplishmentsComponent implements OnInit {
     { text: '', id: 1, icon: 'fa fa-th' },
   ];
 
+  public readonly tmsTooltip = `Time Motion Study (TMS) contains the average duration that
+  is spent for each sub-task for producing a high-quality deliverable unit.
+  The spreadsheet is organized in weeks and helps ICs to improve their TMS by analyzing and acting on the long time taking tasks.`;
+
+  public readonly deckTooltip = `RemoteU final delivery presentation (Deck) contains the presentation of
+  the improvements, innovations made,  takeaways gathered and scores achieved during the time spent in RemoteU`;
+
+  public readonly problemResolutionProgressTooltip = `This table displays the quality failures per each day.
+  QB failures that happened during the last 5 days are considered as unresolved are marked with a red exclamation
+  mark for all the occurrencesstarting from the start date of RemoteU.
+  Resolved QB failures are displayed with a green tick sign`;
+
+  public readonly overallHardestProblemsTooltip = 'It displays the main QB failures of IC during RemoteU';
+
+  public readonly productivityTargetTooltip = `This chart displays on top as a text, scores that should have been earned until the
+  last completed day of the IC in the RemoteU. In the chart view, user can see a distribution of all tickets which are Approved,
+  Submitted (In Review) or being worked on (In Progress)`;
+
+  public readonly qualityTargetTooltip = `This chart displays on top as a text, Quality that should have been achieved until
+  the last completed day of the IC in the RemoteU. In the pie chart view, user can see a distribution of all tickets with FTAR
+  (First Time Acceptance Rate) = YES and with FTAR=NO`;
+
   public readonly qualityColors = [
     DF_COLORS.GREEN,
     DF_COLORS.RED,
