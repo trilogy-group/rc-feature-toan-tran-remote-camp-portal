@@ -30,18 +30,14 @@ export class OnboardingService {
     return this.httpClient.get(`${OnboardingService.itSystemsAccess}?name=${ad}`, options);
   }
 
-  public getRemoteUMaterialsAccess(AD: string, email: string): Observable<any> {
-    const body = { AD, email };
+  public getRemoteUMaterialsAccess(email: string): Observable<any> {
     const options = this.getSkipLoaderHeaders();
-
-    return this.httpClient.get(`${OnboardingService.remoteUMaterialsAccess}?name=${email}`, options);
+    return this.httpClient.get(`${OnboardingService.remoteUMaterialsAccess}?email=${email}`, options);
   }
 
-  public getCodeRepositoryAccess(AD: string, email: string): Observable<any> {
-    const body = { AD, email };
+  public getCodeRepositoryAccess(email: string): Observable<any> {
     const options = this.getSkipLoaderHeaders();
-
-    return this.httpClient.get(`${OnboardingService.codeRepositoryAccess}?name=${email}`, options);
+    return this.httpClient.get(`${OnboardingService.codeRepositoryAccess}?email=${email}`, options);
   }
 
   public confirmAccesses(): Observable<any> {

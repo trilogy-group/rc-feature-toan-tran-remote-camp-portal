@@ -58,7 +58,9 @@
                   <i class="ml-2 df-loader"></i>
                 </div>
               </h5>
-              <h5 class="d-flex align-items-center">Access to Code Repository
+              <h5 
+                *ngIf="showCodeRepositoryAccess"
+                class="d-flex align-items-center">Access to Code Repository
                 <div *ngIf="loadedCodeRepositoryAccess">
                   <mat-icon *ngIf="!preStartInfo?.accesses?.codeRepository"
                     class="ml-2 warning">

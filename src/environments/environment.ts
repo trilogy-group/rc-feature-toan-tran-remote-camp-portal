@@ -7,9 +7,10 @@ export const environment = {
   envName: 'undefined',
   gitHash: 'GIT_HASH_PLACEHOLDER',
   apiUrl: 'http://localhost:5000/api',
-  itSystemAccessStatusUrl: 'https://kofstjoimg.execute-api.us-east-1.amazonaws.com/default/sls-ad-check-lambda-development-AutoVerifyAD',
-  codeRepositoryAccessStatusUrl: 'https://5n8scr6il7.execute-api.us-east-1.amazonaws.com/development/git-verify',
-  remoteUMaterialsAccessStatusUrl: ''
+  itSystemAccessStatusUrl:
+    'https://cl2w37ym50.execute-api.us-east-1.amazonaws.com/development/sls-ad-check-lambda-development-AutoVerifyAD',
+  codeRepositoryAccessStatusUrl: 'https://kpruiaficl.execute-api.us-east-1.amazonaws.com/development/git-verify',
+  remoteUMaterialsAccessStatusUrl: 'https://al4vo4fece.execute-api.us-east-1.amazonaws.com/development/check-member'
 };
 
 /*
