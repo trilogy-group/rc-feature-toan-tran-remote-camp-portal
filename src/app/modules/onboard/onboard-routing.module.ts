@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { AccomplishmentsComponent } from 'src/app/modules/dashboard/pages/accomplishments/accomplishments.component';
+import { OnboardStatusComponent } from './pages/onboard-status/onboard-status.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: AccomplishmentsComponent,
+    component: OnboardStatusComponent,
     pathMatch: 'full'
   },
 ];
@@ -15,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class DashboardRoutingModule {}
+export class OnboardRoutingModule {}

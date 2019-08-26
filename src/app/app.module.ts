@@ -19,6 +19,7 @@ import { CalendarService } from 'src/app/shared/services/calendar.service';
 import { AllHttpInterceptor } from 'src/app/shared/interceptors/all-http.interceptor';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import { GradebookService } from 'src/app/shared/services/gradebook.service';
+import { OnboardingService } from 'src/app/shared/services/onboarding.service';
 import { SemCheckInChatsService } from 'src/app/shared/services/sem-check-in-chats.service';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 import { RegistrationService } from 'src/app/shared/services/registration.service';
@@ -61,6 +62,7 @@ import { RegistrationService } from 'src/app/shared/services/registration.servic
     CalendarService,
     AuthenticationTokenService,
     GradebookService,
+    OnboardingService,
     SemCheckInChatsService,
     UtilsService,
     RegistrationService
