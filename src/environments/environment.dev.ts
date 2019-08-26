@@ -6,5 +6,5 @@ export const environment = {
   itSystemAccessStatusUrl:
     'https://cl2w37ym50.execute-api.us-east-1.amazonaws.com/development/sls-ad-check-lambda-development-AutoVerifyAD',
   codeRepositoryAccessStatusUrl: 'https://kpruiaficl.execute-api.us-east-1.amazonaws.com/development/git-verify',
-  remoteUMaterialsAccessStatusUrl: 'https://al4vo4fece.execute-api.us-east-1.amazonaws.com/development/check-member'
+  remoteUMaterialsAccessStatusUrl: 'https://yxx1b8jxu3.execute-api.us-east-1.amazonaws.com/development/check-member'
 };
