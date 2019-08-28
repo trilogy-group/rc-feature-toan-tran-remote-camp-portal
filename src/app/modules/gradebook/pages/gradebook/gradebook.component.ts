@@ -128,8 +128,8 @@ export class GradebookComponent implements OnInit {
   }
 
   public getCombinedQualityColor(icRow: any): string {
-    if (icRow.qualitySummary && icRow.qualitySummary.approved != null && icRow.qualitySummary.inReview != null) {
-      return icRow.qualitySummary.approved + icRow.qualitySummary.inReview >= icRow.qualitySummary.targetForToday ?
+    if (icRow.qualitySummary && icRow.qualitySummary.approvedAndInReview != null) {
+      return icRow.qualitySummary.approvedAndInReview >= icRow.qualitySummary.targetForToday ?
       'above-average' : 'below-average';
     }
 
@@ -137,8 +137,8 @@ export class GradebookComponent implements OnInit {
   }
 
   public getCombinedQualityAnchorColor(icRow: any): string {
-    if (icRow.qualitySummary && icRow.qualitySummary.approved != null && icRow.qualitySummary.inReview != null) {
-      return icRow.qualitySummary.approved + icRow.qualitySummary.inReview >= icRow.qualitySummary.targetForToday ?
+    if (icRow.qualitySummary && icRow.qualitySummary.approvedAndInReview != null) {
+      return icRow.qualitySummary.approvedAndInReview >= icRow.qualitySummary.targetForToday ?
       'above-average-anchor' : 'below-average-anchor';
     }
 
@@ -150,11 +150,11 @@ export class GradebookComponent implements OnInit {
       return 'above-average';
     }
 
-    if (icRow.qualitySummary.approved + icRow.qualitySummary.inReview < icRow.qualitySummary.targetForToday) {
+    if (icRow.qualitySummary.approvedAndInReview < icRow.qualitySummary.targetForToday) {
       return 'below-average';
     }
 
-    if (icRow.qualitySummary.approved + icRow.qualitySummary.inReview >= icRow.qualitySummary.targetForToday) {
+    if (icRow.qualitySummary.approvedAndInReview >= icRow.qualitySummary.targetForToday) {
       return 'matches-average';
     }
     return '';
