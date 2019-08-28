@@ -198,10 +198,10 @@
         <ng-template let-item="rowData"
           dfGridTemplate="body">
           <div  *ngIf="isAdmin()" class="{{ getCombinedQualityColor(item) }}">
-              <a  class="{{ getCombinedQualityAnchorColor(item) }}" href="https://crossover.atlassian.net/issues/?jql=project = 'REM' AND assignee='{{item.icNameShort}}' and type='RC Task' and status='IN REVIEW' and FTAR is empty" target="_blank">{{ (item.qualitySummary?.inReview | number : '1.2') }}</a>
+              <a  class="{{ getCombinedQualityAnchorColor(item) }}" href="https://crossover.atlassian.net/issues/?jql=project = 'REM' AND assignee='{{item.icNameShort}}' and type='RC Task' and status='IN REVIEW' and FTAR is empty" target="_blank">{{ (item.qualitySummary?.approvedAndInReview | number:'1.2') }}</a>
           </div>
           <div  *ngIf="!isAdmin()" class="{{ getCombinedQualityColor(item) }}">
-            {{ (item.qualitySummary?.inReview | number : '1.2') }}
+            {{ (item.qualitySummary?.approvedAndInReview | number:'1.1') }}
         </div>
         </ng-template>
       </df-grid-column>
