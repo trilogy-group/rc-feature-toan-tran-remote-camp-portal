@@ -37,9 +37,9 @@ export class AccomplishmentsService {
     return this.httpClient.get(`${this.GET_HARDEST_PROBLEMS_BY_DAY}${params}`);
   }
 
-  public getMissingCalendarActivities(xoId: number): Observable<any> {
-    const paramXoId = this.getXoIdParameter(xoId);
-    return this.httpClient.get(`${this.GET_MISSED_CALENDAR_ITEMS}${paramXoId}`);
+  public getMissingCalendarActivities(icName: string): Observable<any> {
+    const params = this.getIcNameParameter(icName);
+    return this.httpClient.get(`${this.GET_MISSED_CALENDAR_ITEMS}${params}`);
   }
 
   public getCompliance(icName): Observable<any> {
