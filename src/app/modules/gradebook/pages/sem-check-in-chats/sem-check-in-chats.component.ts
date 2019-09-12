@@ -16,7 +16,6 @@ import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.
 })
 export class SemCheckInChatsComponent implements OnInit {
   private icName: string;
-  private xoId: number;
   private dayId: number;
 
   @ViewChild('checkInChatDetail')
@@ -44,7 +43,6 @@ export class SemCheckInChatsComponent implements OnInit {
     private readonly loadingSpinner: DfLoadingSpinnerService,
   ) {
     this.icName = this.route.snapshot.queryParams['icName'];
-    this.xoId = this.route.snapshot.queryParams['xoId'];
   }
 
   public ngOnInit(): void {
@@ -53,8 +51,8 @@ export class SemCheckInChatsComponent implements OnInit {
       this.accomplishmentsService.getAcomplishmentsDailyProgress(this.icName),
       this.accomplishmentsService.getHardestProblems(this.icName),
       this.accomplishmentsService.getCompliance(this.icName),
-      this.accomplishmentsService.getMissingCalendarActivities(this.xoId),
-      this.semCheckInChatsService.getCheckInChats(this.xoId)
+      this.accomplishmentsService.getMissingCalendarActivities(this.icName),
+      this.semCheckInChatsService.getCheckInChats(this.icName)
     ).subscribe(([profile, dailyProgressResponse, hardestProblems, compliance, missingCalendarActivities, checkInChats]) => {
       this.profile = profile;
       this.compliance = compliance;
@@ -71,7 +69,7 @@ export class SemCheckInChatsComponent implements OnInit {
 
   public openDetail(week: number, day: string, id: number, isReadOnly: boolean): void {
     this.dayId = id;
-    this.semCheckInChatsService.getCheckInChatDetail(week, day, id, this.xoId)
+    this.semCheckInChatsService.getCheckInChatDetail(week, day, id, this.icName)
     .pipe(finalize(() => this.loadingSpinner.hide()))
     .subscribe(checkInChatDetail => {
       this.modalService.open(this.checkInChatDetail, {
@@ -90,7 +88,7 @@ export class SemCheckInChatsComponent implements OnInit {
   }
 
   public saveCheckInChat(checkInChat: any, close: Function): void {
-    checkInChat.RcXoId = this.xoId;
+    checkInChat.Email = this.icName;
     checkInChat.DayId = this.dayId;
     this.semCheckInChatsService.saveCheckInChats(checkInChat)
       .pipe(finalize(() => {
@@ -99,7 +97,7 @@ export class SemCheckInChatsComponent implements OnInit {
       }))
       .subscribe(() => {
         this.toasterService.popSuccess('Check-in Chat Saved');
-        this.semCheckInChatsService.getCheckInChats(this.xoId)
+        this.semCheckInChatsService.getCheckInChats(this.icName)
         .pipe(finalize(() => this.loadingSpinner.hide()))
         .subscribe(checkInChatDetail => {
             this.weekCheckInChats = checkInChatDetail;
