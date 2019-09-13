@@ -1,0 +1,23 @@
+<div class="ml-5 d-block">
+  <div class="row section__header">
+    <div class="col py-3 justify-content-between d-flex">
+      <h1 class="ml-3 mb-0 d-flex align-items-center">
+        My Plan
+      </h1>
+      <button mat-raised-button
+        class="mr-2"
+        (click)="savePlan()">Save Plan
+      </button>
+    </div>
+  </div>
+  
+  <div *ngFor="let weeklyPlan of plan; let i = index"
+    class="row my-3 mr-3">
+    <app-weekly-plan class="w-100"
+      (closeOtherAccordionsEvent)="closeOtherAccordions($event)"
+      [plan]="weeklyPlan"
+      [startDate]="startDate"
+      [week]="i + 1">
+    </app-weekly-plan>
+  </div>
+</div>
