@@ -26,6 +26,11 @@
   }
 }
 
+.missing-activities {
+  height: 97px;
+  overflow: auto;
+}
+
 .done {
   cursor: context-menu;
   background: $au-green;

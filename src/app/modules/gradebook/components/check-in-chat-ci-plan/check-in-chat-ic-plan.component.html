@@ -1,0 +1,11 @@
+<div *ngFor="let weeklyPlan of plan; let i = index"
+  class="row my-3 mr-3">
+  <app-weekly-plan class="w-100"
+    (closeOtherAccordionsEvent)="closeOtherAccordions($event)"
+    (toggleApproveWeekEvent)="toggleApproveWeek($event)"
+    [plan]="weeklyPlan"
+    [isAdmin]="true"
+    [startDate]="startDate"
+    [week]="i + 1">
+  </app-weekly-plan>
+</div>

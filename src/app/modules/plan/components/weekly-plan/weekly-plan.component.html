@@ -1,0 +1,53 @@
+<div *ngIf="!!plan.week.length"
+  class="d-flex flex-column">
+  <df-accordion #planAccordion>
+    <df-accordion-panel (open)="onWeekPanelOpen()">
+      <df-accordion-header>
+        <df-accordion-header-title>
+          <div class="my-0 d-flex">
+            <h4 class="ml-3 mr-5">
+              <strong>Week {{ week }}</strong>
+            </h4>
+            <button *ngIf="showApproveButton()"
+              (click)="toggleApproveWeek($event)"
+              type="button"
+              class="btn btn-outline-primary mr-1">
+              {{ getApproveButtonText() }}
+            </button>
+            <em *ngIf="isCurrentWeek()"
+              class="ml-2 align-self-center">Current Week</em>
+          </div>
+        </df-accordion-header-title>
+      </df-accordion-header>
+      <df-accordion-content>
+        <div class="d-flex">
+          <div *ngFor="let dayPlan of plan.week"
+            class="col">
+            <h5 class="mt-2">
+              <strong>{{ dayPlan.day }}</strong>
+            </h5>
+            <div class="d-flex">
+              <span class="d-flex align-items-center">Score Target:</span>
+              <input type="text"
+                type="number"
+                [value]="dayPlan.scoreTarget"
+                [readonly]="isDisabled()"
+                (change)="updateDayPlanScoreTarget(dayPlan, $event)"
+                class="ml-1 form-control score-input">
+            </div>
+            To be completed by EOD:
+            <textarea
+              rows="5"
+              type="area"
+              class="form-control"
+              [value]="dayPlan.summary"
+              placeholder=""
+              (change)="updateDayPlanSummary(dayPlan, $event)"
+              [readonly]="isTextAreaDisabled()">
+            </textarea>
+          </div>
+        </div>
+      </df-accordion-content>
+    </df-accordion-panel>
+  </df-accordion>
+</div>

@@ -99,6 +99,19 @@
             [class.d-none]="!sideBar.isOpen">Gradebook</span>
         </a>
       </df-sidebar-item>
+      <df-sidebar-item *ngIf="!isAdmin()"
+        [hasIcon]="false"
+        matTooltip="My Plan"
+        matTooltipPosition="right"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/plan']">
+          <mat-icon class="ml-1">post_add</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">My Plan</span>
+        </a>
+      </df-sidebar-item>
     </df-sidebar>
 
     <main class="col p-0">

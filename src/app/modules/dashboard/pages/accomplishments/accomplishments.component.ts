@@ -1,6 +1,5 @@
 import { OnInit, Component, Input } from '@angular/core';
 import { forkJoin } from 'rxjs';
-import { differenceInDays, parse, isSaturday, isSunday } from 'date-fns';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfLoadingSpinnerService } from '@devfactory/ngx-df';
 import { finalize } from 'rxjs/operators';
@@ -161,9 +160,10 @@ export class AccomplishmentsComponent implements OnInit {
 
       this.dailyProgressChart = this.dailyProgress.map(dailyObject => {
         return {
-          xKey: `Day ${dailyObject.day.toString()}`,
-          productivity: dailyObject.productivity.toFixed(2),
-          quality: dailyObject.quality != null ? (dailyObject.quality / 100).toFixed(2) : 1
+          'xKey': `Day ${dailyObject.day.toString()}`,
+          'Productivity': dailyObject.productivity.toFixed(2),
+          'Quality': dailyObject.quality != null ? (dailyObject.quality / 100).toFixed(2) : 1,
+          'Planned Productivity': dailyObject.plannedProductivity ? dailyObject.plannedProductivity.toFixed(2) : undefined
         };
       });
 

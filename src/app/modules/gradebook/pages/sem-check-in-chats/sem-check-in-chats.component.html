@@ -64,7 +64,7 @@
                 </div>
                 <div class="d-block mb-3">
                   <h5 class="my-0">Missing Calendar Activities:</h5>
-                  <div class="d-block">
+                  <div class="d-block missing-activities">
                     <em *ngFor="let activity of missingCalendarActivities"
                       class="d-block text-truncate"
                       matTooltip="{{ activity.name }}"
@@ -122,6 +122,27 @@
                   class="mb-2 px-2">{{ getButtonText(cic) }}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col">
+            <div class="d-flex">
+              <h3 class="mb-2">IC Plan </h3>
+              <button 
+                (click)="savePlan()"
+                type="button"
+                class="btn btn-primary ml-3">
+                Save
+              </button>
+            </div>
+            <div *ngIf="loaded"
+              class="px-5">
+              <app-check-in-chat-ic-plan
+                (toggleApproveWeekEvent)="toggleApproveWeek($event)"
+                [startDate]="profile.startDate"
+                [plan]="plan">
+              </app-check-in-chat-ic-plan>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 def feature_branches_to_deploy = [
   "feature/RT-123",
   "RUP-88",
+  "feature/RUP-132"
 ]
 
 String NG_BUILD_CONFIG

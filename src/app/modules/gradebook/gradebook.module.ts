@@ -12,13 +12,16 @@ import { SemCheckInChatsComponent } from 'src/app/modules/gradebook/pages/sem-ch
 import {
   SemCheckInChatDetailComponent
 } from 'src/app/modules/gradebook/components/sem-check-in-chat-detail/sem-check-in-chat-detail.component';
+import { CheckInChatIcPlanComponent } from 'src/app/modules/gradebook/components/check-in-chat-ci-plan/check-in-chat-ic-plan.component';
+import { PlanModule } from 'src/app/modules/plan/plan.module';
 
 @NgModule({
   declarations: [
     GradebookComponent,
     IcDashboardComponent,
     SemCheckInChatsComponent,
-    SemCheckInChatDetailComponent
+    SemCheckInChatDetailComponent,
+    CheckInChatIcPlanComponent
   ],
   imports: [
     CommonModule,
@@ -29,6 +32,7 @@ import {
     MatTooltipModule,
     MatIconModule,
     MatButtonModule,
+    PlanModule
   ]
 })
 export class GradebookModule {}
