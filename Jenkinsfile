@@ -95,7 +95,7 @@ pipeline {
           }
           steps {
             script {
-              NG_BUILD_CONFIG="" // TODO Add 'qa' configuration
+              NG_BUILD_CONFIG="--configuration=qa"
               STAGE = "qa"
               HOST_HEALTH_CHECK_PORT = 9202
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
