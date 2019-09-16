@@ -123,6 +123,12 @@
                 {{ item.quality != null ? ((item.quality | number:'1.2') + '%') : '-' }}
               </ng-template>
             </df-grid-column>
+            <df-grid-column header="Planned Productivity">
+              <ng-template let-item="rowData"
+                dfGridTemplate="body">
+                {{ item.plannedProductivity != null ? (item.plannedProductivity | number:'1.2') : '-' }}
+              </ng-template>
+            </df-grid-column>
           </df-grid>
           <div class="line-chart-container"
             *ngIf="currentProductivityDisplay == productivityDisplayTypes[0].id">

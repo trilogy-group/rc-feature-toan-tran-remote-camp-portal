@@ -89,6 +89,10 @@
       width: 300px;
       margin-right: auto;
       margin-left: auto;
+      
+      th:nth-child(1) {
+        width: 40px;
+      }
     }
   }
 }

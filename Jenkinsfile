@@ -1,9 +1,39 @@
+def feature_branches_to_deploy = [
+  "feature/RT-123",
+  "RUP-88",
+  "feature/RUP-132"
+]
+
 String NG_BUILD_CONFIG
 String STAGE
 String HOST_HEALTH_CHECK_PORT
 String GIT_HASH
 String DEPLOY_DATE
 String OLD_DEPLOYMENTS
+String IsDeployFeatureBranch
+String Yes
+String No
+
+IsDeployFeatureBranch = "No"
+Yes = "Yes"
+No = "No"
+encoded_branch_name = "${BRANCH_NAME}"
+encoded_branch_name = encoded_branch_name.toLowerCase().replace("/", "-")
+echo "Lower case branch: ${encoded_branch_name}"
+
+for (int i = 0; i < feature_branches_to_deploy.size(); i++) {
+				echo "Project: ${feature_branches_to_deploy[i]}"
+				str = "${feature_branches_to_deploy[i]}"
+				branch = "${BRANCH_NAME}"
+	
+				if (str == branch) {
+				print 'Branch Found: ' + str
+				IsDeployFeatureBranch = Yes
+				} else {
+				print 'different branch: ' + str
+				}
+			}
+
 
 pipeline {
 
@@ -65,7 +95,7 @@ pipeline {
           }
           steps {
             script {
-              NG_BUILD_CONFIG="" // TODO Add 'qa' configuration
+              NG_BUILD_CONFIG="--configuration=qa"
               STAGE = "qa"
               HOST_HEALTH_CHECK_PORT = 9202
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
@@ -103,7 +133,7 @@ pipeline {
           }
           steps {
             script {
-              NG_BUILD_CONFIG=""
+              NG_BUILD_CONFIG="--configuration=regression"
               STAGE = "regression"
               HOST_HEALTH_CHECK_PORT = 9204
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
@@ -113,7 +143,9 @@ pipeline {
           }
         }
       }
-    }
+    } //END STAGE1
+
+
 
     stage ("2) Generate 'GIT_HASH' value from the SCM checkout") {
       steps {
@@ -128,34 +160,46 @@ pipeline {
       }
     }
 
+
+
+
+
     stage ("3) Build Docker image") {
       steps {
         echo "Building the Docker image..."
-        sh "docker build -f Dockerfile --build-arg GIT_HASH=${GIT_HASH} --build-arg NG_BUILD_CONFIG=${NG_BUILD_CONFIG} -t ${ARTIFACT_ID}-${BRANCH_NAME}:latest ."
+        sh "docker build -f Dockerfile --build-arg GIT_HASH=${GIT_HASH} --build-arg NG_BUILD_CONFIG=${NG_BUILD_CONFIG} -t ${ARTIFACT_ID}-${encoded_branch_name}:latest ."
       }
     }
+
+
+
+
 
     stage ("4) Run container") {
       steps {
         echo "Killing any existing Docker container running on the build agent..."
         sh """
           set -e
-          if [[ \$(docker ps -a | grep ${ARTIFACT_ID}-${BRANCH_NAME}) ]]; then
-            docker kill ${ARTIFACT_ID}-${BRANCH_NAME} 2> /dev/null || true
-            docker rm ${ARTIFACT_ID}-${BRANCH_NAME} 2> /dev/null || true
+          if [[ \$(docker ps -a | grep ${ARTIFACT_ID}-${encoded_branch_name}) ]]; then
+            docker kill ${ARTIFACT_ID}-${encoded_branch_name} 2> /dev/null || true
+            docker rm ${ARTIFACT_ID}-${encoded_branch_name} 2> /dev/null || true
           fi
         """
 
-        echo "Starting the '${ARTIFACT_ID}' Docker container for '${BRANCH_NAME}' branch..."
+        echo "Starting the '${ARTIFACT_ID}' Docker container for '${encoded_branch_name}' branch..."
         sh """
           set -e
           docker run -d --rm \
-                     --name ${ARTIFACT_ID}-${BRANCH_NAME} \
+                     --name ${ARTIFACT_ID}-${encoded_branch_name} \
                      -p ${HOST_HEALTH_CHECK_PORT}:${CONTAINER_PORT} \
-                     ${ARTIFACT_ID}-${BRANCH_NAME}:latest
+                     ${ARTIFACT_ID}-${encoded_branch_name}:latest
         """
       }
     }
+
+
+
+
 
     stage ("5) Health-check the container") {
       steps {
@@ -163,14 +207,154 @@ pipeline {
         sh """
           set -e
           for x in {1..30} ; do
-            [[ \$(curl -s -X GET 127.0.0.1:${HOST_HEALTH_CHECK_PORT}${HEALTH_CHECK_ENDPOINT}) ]] && echo "Received response from '${ARTIFACT_ID}-${BRANCH_NAME}'" && break
+            [[ \$(curl -s -X GET 127.0.0.1:${HOST_HEALTH_CHECK_PORT}${HEALTH_CHECK_ENDPOINT}) ]] && echo "Received response from '${ARTIFACT_ID}-${encoded_branch_name}'" && break
             sleep 3
           done
           curl -I -X GET 127.0.0.1:${HOST_HEALTH_CHECK_PORT}${HEALTH_CHECK_ENDPOINT} --fail
         """
-        echo "Ran a successful Docker container health-check on '${ARTIFACT_ID}-${BRANCH_NAME}'"
+        echo "Ran a successful Docker container health-check on '${ARTIFACT_ID}-${encoded_branch_name}'"
       }
     }
+	
+	
+	
+	
+	stage ("Proceed when the feature branch is marked to be deployed") {
+      when {
+        expression {
+          IsDeployFeatureBranch == "Yes"
+        }
+      }
+
+      stages {
+
+        stage ("6) Tag Docker image") {
+          steps {
+            echo "Applying 'GIT_HASH' and 'latest' tags to the Docker image..."
+            sh "docker tag ${ARTIFACT_ID}-${encoded_branch_name}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${encoded_branch_name}:${GIT_HASH}"
+            sh "docker tag ${ARTIFACT_ID}-${encoded_branch_name}:latest ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${encoded_branch_name}:latest"
+          }
+        }
+
+        stage ("7) Push Docker image to DTR") {
+          stages {
+            stage ("7.1) Login to the remote registry") {
+              steps {
+                echo "Logging in to the remote registry..."
+                sh "docker login https://${DTR_URL} -u${DTR_USERNAME} -p${DTR_PASSWORD}"
+              }
+            }
+
+            stage ("7.2) Push tagged Docker images to DTR") {
+              steps {
+                echo "Pushing the Docker image to the remote registry..."
+                sh "docker push ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${encoded_branch_name}:${GIT_HASH}"
+                sh "docker push ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${encoded_branch_name}:latest"
+              }
+            }
+          }
+        }
+
+        stage ("8) Deploy to DL6 - Non-Prod") {
+          stages {
+            stage ("8.1) Find old deployments on DL6") {
+              steps {
+                echo "Finding old deployments on DL6..."
+                script {
+                  OLD_DEPLOYMENTS = sh (script: """
+                    set -e
+                    docker -H ${DOCKER_LINUX_HOST} ps -q -f "label=SERVICE_NAME=regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}"
+                  """, returnStdout: true).trim()
+                }
+                sh """#!/bin/bash
+                  set -e
+                  echo "Found the following old deployment(s):"
+                  for hash in ${OLD_DEPLOYMENTS}
+                  do
+                    CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                    echo \\'\${CONTAINER_NAME:1}\\'
+                  done
+                """
+              }
+            }
+
+            stage ("8.2) Generate 'DEPLOY_DATE' value from the current date/time") {
+              steps {
+                echo "Generating the 'DEPLOY_DATE' value from the current date/time"
+                script {
+                  DEPLOY_DATE = sh (script: """
+                    set -e
+                    date +'%Y-%m-%d_%H-%M-%S'
+                  """, returnStdout: true).trim()
+                }
+                echo "DEPLOY_DATE: ${DEPLOY_DATE}"
+              }
+            }
+
+            stage ("8.3) Deploy new container to DL6") {
+              steps {
+                echo "Deploying new container to DL6..."
+                sh """
+                  set -e
+                  docker -H ${DOCKER_LINUX_HOST} run -d --rm \
+                  --name regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}-${GIT_HASH}-${BUILD_NUMBER} \
+                  -l "SERVICE_NAME=regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}" \
+                  -l "SERVICE_TAGS=\
+trilogy.expose-v2,\
+trilogy.redirecthttp,\
+trilogy.cert=internal_default,\
+trilogy.https,\
+trilogy.internal,\
+trilogy.endpoint=regression-${encoded_branch_name}-${ENDPOINT},\
+deploy.date=${DEPLOY_DATE},\
+git.hash=${GIT_HASH},\
+jenkins.build=${BUILD_NUMBER},\
+jenkins.job=${JOB_NAME}" \
+                  -l "com.trilogy.company=${COMPANY}" \
+                  -l "com.trilogy.team=${TEAM}" \
+                  -l "com.trilogy.maintainer.email=${EMAIL}" \
+                  -l "com.trilogy.maintainer.skype=${SKYPE}" \
+                  -l "com.trilogy.stage=regression" \
+                  -l "com.trilogy.product=${PRODUCT}" \
+                  -l "com.trilogy.service=${SERVICE}" \
+                  -m "2048m" \
+                  --cpu-quota 100000 \
+                  -p ${HOST_PORT} \
+                  ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${encoded_branch_name}:${GIT_HASH}
+                """
+                echo "Deployed container 'regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}-${GIT_HASH}-${BUILD_NUMBER}'"
+                echo "DL6-hosted '${STAGE}' container available at http://regression-${encoded_branch_name}-${ENDPOINT}"
+              }
+            }
+
+            stage ("8.4) Clean up old deployments on DL6") {
+              steps {
+                echo "Cleaning up old deployments on DL6..."
+                sh """#!/bin/bash
+                  set -e
+                  for hash in ${OLD_DEPLOYMENTS}
+                  do
+                    CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                    echo Killing container \\'\${CONTAINER_NAME:1}\\'
+                    docker -H ${DOCKER_LINUX_HOST} kill \$hash 2> /dev/null || true
+                    echo Removing container \\'\${CONTAINER_NAME:1}\\'
+                    docker -H ${DOCKER_LINUX_HOST} rm \$hash 2> /dev/null || true
+                    echo
+                  done
+                """
+              }
+            }
+          }
+        }
+		
+      }
+    }
+	
+	
+	
+	
+	
+	
 
     stage ("Proceed when branch is 'develop', 'release', or 'master'") {
       when {
@@ -407,7 +591,7 @@ jenkins.job=${JOB_NAME}" \
         }
       }
     }
-  }
+  } 
 
   post {
     always {
@@ -421,4 +605,4 @@ jenkins.job=${JOB_NAME}" \
       """
     }
   }
-}
+} 

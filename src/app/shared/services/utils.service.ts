@@ -16,4 +16,9 @@ export class UtilsService {
     }
     return daysCompleted;
   }
+
+  public getCurrentWeek(startDate: string): number {
+    const daysBetween = differenceInDays(new Date(), parse(startDate));
+    return Math.floor(daysBetween / 7) + 1;
+  }
 }

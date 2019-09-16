@@ -10,8 +10,21 @@
   modal-body>
   <form [formGroup]="form">
     <div class="form-group">
+      <div class="d-block text-left">
+        <div class="d-flex justify-content-between">
+          <strong *ngIf="data.planForDayBefore">Plan for the day before:</strong>
+          <span *ngIf="data.planForDayBefore.scoreTarget"
+            class="ml-2">
+            <strong>Targetted Score: </strong>{{ data.planForDayBefore.scoreTarget }}
+          </span>
+        </div>
+        <p *ngIf="data.planForDayBefore" 
+          class="plan-description">
+          {{ data.planForDayBefore.summary }}
+        </p>
+      </div>
       <div class="d-flex mb-2">
-        <span class="mr-2">Coached IC On:</span>
+        <span class="mr-2"><strong>Coached IC On:</strong></span>
         <df-radio-group formControlName="coachedOn" [disabled]="isDisabled()">
           <df-radio-input value="productivity">Productivity</df-radio-input>
           <df-radio-input value="quality">Quality</df-radio-input>
