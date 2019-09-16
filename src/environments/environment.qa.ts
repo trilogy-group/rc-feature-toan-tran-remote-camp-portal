@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
-  envName: 'reg',
+  envName: 'qa',
   gitHash: 'GIT_HASH_PLACEHOLDER',
-  apiUrl: 'https://dev-remoteu.trilogy.com/api',
+  apiUrl: 'https://qa-remoteu.trilogy.com/api',
   itSystemAccessStatusUrl:
     'https://cl2w37ym50.execute-api.us-east-1.amazonaws.com/development/sls-ad-check-lambda-development-AutoVerifyAD',
   codeRepositoryAccessStatusUrl: 'https://kpruiaficl.execute-api.us-east-1.amazonaws.com/development/git-verify',
