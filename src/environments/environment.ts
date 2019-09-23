@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   envName: 'undefined',
+  assignmentProjectJira: 'TREM',
   gitHash: 'GIT_HASH_PLACEHOLDER',
   apiUrl: 'http://localhost:5000/api',
   itSystemAccessStatusUrl:

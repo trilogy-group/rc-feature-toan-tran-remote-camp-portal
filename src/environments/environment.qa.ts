@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   envName: 'qa',
+  assignmentProjectJira: 'TREM',
   gitHash: 'GIT_HASH_PLACEHOLDER',
   apiUrl: 'https://qa-remoteu.trilogy.com/api',
   itSystemAccessStatusUrl:
