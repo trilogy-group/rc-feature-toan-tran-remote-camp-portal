@@ -598,9 +598,9 @@ jenkins.job=${JOB_NAME}" \
       echo "Performing cleanup..."
       sh """
         set -e
-        if [[ \$(docker ps -a | grep ${ARTIFACT_ID}-${BRANCH_NAME}) ]]; then
-          docker kill ${ARTIFACT_ID}-${BRANCH_NAME} 2> /dev/null || true
-          docker rm ${ARTIFACT_ID}-${BRANCH_NAME} 2> /dev/null || true
+        if [[ \$(docker ps -a | grep ${ARTIFACT_ID}-${encoded_branch_name}) ]]; then
+          docker kill ${ARTIFACT_ID}-${encoded_branch_name} 2> /dev/null || true
+          docker rm ${ARTIFACT_ID}-${encoded_branch_name} 2> /dev/null || true
         fi
       """
     }

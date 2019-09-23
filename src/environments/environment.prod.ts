@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   envName: 'prod',
+  assignmentProjectJira: 'REM',
   gitHash: 'GIT_HASH_PLACEHOLDER',
   apiUrl: 'https://remoteu.trilogy.com/api',
   itSystemAccessStatusUrl:

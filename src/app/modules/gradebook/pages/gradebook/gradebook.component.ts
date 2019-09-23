@@ -3,6 +3,7 @@ import { DfToasterService } from '@devfactory/ngx-df/toaster';
 
 import { GradebookService } from 'src/app/shared/services/gradebook.service';
 import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-gradebook',
@@ -19,6 +20,7 @@ export class GradebookComponent implements OnInit {
   public readonly qualityApprovedReviewTooltip = `Shows quality achieved for approved assignments and submitted
   assignments that are not yet reviewed. Assignments that are not reviewed yet is assumed to have FTAR=YES`;
   public readonly qualityTargetTooltip = 'Shows target quality  that should have been achieved by the current day';
+  public readonly assignmentProjectJira = `${environment.assignmentProjectJira}`;
 
   public gradebookData: any[];
   public lastRefreshed: Date;
