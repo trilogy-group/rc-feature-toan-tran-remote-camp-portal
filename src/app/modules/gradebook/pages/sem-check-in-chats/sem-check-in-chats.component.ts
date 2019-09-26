@@ -23,6 +23,15 @@ export class SemCheckInChatsComponent implements OnInit {
   @ViewChild('checkInChatDetail')
   private checkInChatDetail: TemplateRef<null>;
 
+  public readonly summaryTooltip = `Summary area provides overall performance and
+  compliance metrics along with any missing calendar activities for the IC.`;
+  public readonly cicTooltip = `Check-in Chat Area provides means to record
+  check-in chats provided for the ICs. It should be filled daily. The manager
+  can only fill the current day. Missed days will be shown in gray with the
+  "Not Done" label whereas completed days will be shown in green with the "Done" label.`;
+  public readonly planTooltip = `This section contains daily plans of the ICs for
+  weeks. By default current week is expanded. ICs manager can approve or change
+  the plan until the end of Tuesday.`;
   public profile: any;
   public daysCompleted: number;
   public productivityScore: number;
