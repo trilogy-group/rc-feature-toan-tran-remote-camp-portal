@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material';
+import { MatTooltipModule, MatIconModule, MatButtonModule } from '@angular/material';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PlanRoutingModule } from 'src/app/modules/plan/plan-routing.module';
@@ -18,6 +18,8 @@ import { WeeklyPlanComponent } from './components/weekly-plan/weekly-plan.compon
     FormsModule,
     SharedModule,
     PlanRoutingModule,
+    MatTooltipModule,
+    MatIconModule,
     MatButtonModule
   ],
   exports: [
