@@ -19,6 +19,11 @@ export class IcPlanComponent implements OnInit {
 
   @ViewChildren(WeeklyPlanComponent)
   public weeklyPlans: QueryList<WeeklyPlanComponent>;
+  public readonly planTooltip = `This page contains daily plans of the ICs for weeks.
+  By default current week is expanded. IC can fill daily target score into the "Score Target"
+  field and fill his/her plans to achieve that score into the "To be completed by EOD"
+  text area. IC can only fill his/her scores and plans for the current week until the
+  end of Monday. ICs manager then will approve or change the plan until the end of Tuesday.`;
 
   constructor(
     private readonly planningService: PlanningService,
