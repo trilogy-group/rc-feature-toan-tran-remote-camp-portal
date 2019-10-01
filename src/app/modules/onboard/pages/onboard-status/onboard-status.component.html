@@ -24,99 +24,154 @@
             <h5><strong>{{ preStartInfo?.email }}</strong></h5>
           </div>
         </div>
-        <div *ngIf="!accessesConfirmed()">
-          <div class="d-flex flex-column justify-content-between">
-            <div class="d-flex flex-column align-items-center">
-              <h5 class="d-flex align-items-center">Onboarded to RemoteU System <mat-icon class="ml-2 success">check_circle</mat-icon></h5>
-              <h5 class="d-flex align-items-center">Access to IT Systems
-                <div *ngIf="loadedItAccessSystems">
-                  <mat-icon *ngIf="!preStartInfo?.accesses?.itSystems"
-                    class="ml-2 warning">
-                    warning
-                  </mat-icon>
-                  <mat-icon *ngIf="preStartInfo?.accesses?.itSystems"
-                    class="ml-2 success">
-                    check_circle
-                  </mat-icon>
-                </div>
-                <div *ngIf="!loadedItAccessSystems">
-                  <i class="ml-2 df-loader"></i>
-                </div>
+        <div *ngIf="loadedAccessesConfirmed">
+          <div *ngIf="accessesConfirmed(); else notAccessConfirmed"
+            class="d-flex flex-column align-items-center">
+            <div class="d-block my-2">
+              <h5 class="text-center mb-0">Access to Jira
+                <mat-icon *ngIf="preStartInfo?.accesses?.jira && loadedJiraStatus"
+                  class="ml-2 success">check_circle
+                </mat-icon>
+                <i *ngIf="!loadedJiraStatus"class="ml-2 df-loader"></i>
               </h5>
-              <h5 class="d-flex align-items-center">Access to RemoteU Materials
-                <div *ngIf="loadedRemoteUMaterials">
-                  <mat-icon *ngIf="!preStartInfo?.accesses?.remoteUMaterials"
-                    class="ml-2 warning">
-                    warning
-                  </mat-icon>
-                  <mat-icon *ngIf="preStartInfo?.accesses?.remoteUMaterials"
-                    class="ml-2 success">
-                    check_circle
-                  </mat-icon>
-                </div>
-                <div *ngIf="!loadedRemoteUMaterials">
-                  <i class="ml-2 df-loader"></i>
-                </div>
+              <em *ngIf="!preStartInfo?.accesses?.jira">Will Be Set By {{ getJiraETA() | date: short }}</em>
+            </div>
+            <div class="d-block my-2">
+              <h5 class="text-center mb-0">Assigned Tickets
+                <mat-icon *ngIf="preStartInfo?.ticketsAssigned && loadedTicketsAssigned"
+                class="ml-2 success">check_circle
+                </mat-icon>
+                <i *ngIf="!loadedTicketsAssigned"class="ml-2 df-loader"></i>
               </h5>
-              <h5 
-                *ngIf="showCodeRepositoryAccess"
-                class="d-flex align-items-center">Access to Code Repository
-                <div *ngIf="loadedCodeRepositoryAccess">
-                  <mat-icon *ngIf="!preStartInfo?.accesses?.codeRepository"
-                    class="ml-2 warning">
-                    warning
-                  </mat-icon>
-                  <mat-icon *ngIf="preStartInfo?.accesses?.codeRepository"
-                    class="ml-2 success">
-                    check_circle
-                  </mat-icon>
-                </div>
-                <div *ngIf="!loadedCodeRepositoryAccess">
-                  <i class="ml-2 df-loader"></i>
-                </div>
+              <em *ngIf="!preStartInfo?.ticketsAssigned">Will Be Set By {{ getDefaultETA() | date: short }}</em>
+            </div>
+            <div class="d-block my-2">
+              <h5 class="text-center mb-0">Assignment Folder
+                <mat-icon *ngIf="preStartInfo?.assignmentFolder && loadedAssignmentFolder"
+                  class="ml-2 success">check_circle
+                </mat-icon>
+                <i *ngIf="!loadedAssignmentFolder"class="ml-2 df-loader"></i>
               </h5>
-              
-              <div class="d-flex flex-column align-items-center mt-3">
-                <p class="onboard-info text-center">Please follow all the instructions that you have received to {{ preStartInfo?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>
-                <button *ngIf="showConfirmAccessesButton()"
-                  [class.d-none]="true"
-                  (click)="confirmAccesses(close)"
-                  class="btn btn-outline-primary">
-                  Confirm Accesses
-                </button>
+              <div *ngIf="loadedAssignmentFolder">
+                <em *ngIf="!preStartInfo?.assignmentFolder">Will Be Set By {{ getDefaultETA() | date: short }}</em>
               </div>
             </div>
+            <div class="d-block my-2">
+              <h5 class="text-center mb-0">Ready to Start
+                <mat-icon *ngIf="preStartInfo?.readyToStart && loadedReadyToStart" class="ml-2 success">check_circle
+                </mat-icon>
+                <i *ngIf="!loadedReadyToStart"class="ml-2 df-loader"></i>
+              </h5>
+              <div *ngIf="loadedReadyToStart">
+                <em *ngIf="!preStartInfo?.readyToStart">Will Be Set By {{ getDefaultETA() | date: short }}</em>
+              </div>
+            </div>
+            <div class="d-flex flex-column text-center align-items-center mt-3">
+              <p class="onboard-info">Please follow all the instructions that you have received to {{ preStartInfo?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>
+            </div>
           </div>
-        </div>
-        <div *ngIf="accessesConfirmed()"
-          class="d-flex flex-column align-items-center">
-          <div class="d-block my-2">
-            <h5 class="text-center mb-0">Access to Jira <mat-icon *ngIf="preStartInfo?.accesses?.jira"
-              class="ml-2 success">check_circle</mat-icon>
-            </h5>
-            <em *ngIf="!preStartInfo?.accesses?.jira">Will Be Set By {{ getJiraETA() | date: short }}</em>
-          </div>
-          <div class="d-block my-2">
-            <h5 class="text-center mb-0">Assigned Tickets <mat-icon *ngIf="preStartInfo?.ticketsAssigned"
-              class="ml-2 success">check_circle</mat-icon>
-            </h5>
-            <em *ngIf="!preStartInfo?.ticketsAssigned">Will Be Set By {{ getDefaultETA() | date: short }}</em>
-          </div>
-          <div class="d-block my-2">
-            <h5 class="text-center mb-0">Assignment Folder <mat-icon *ngIf="preStartInfo?.assignmentFolder"
-              class="ml-2 success">check_circle</mat-icon>
-            </h5>
-            <em *ngIf="!preStartInfo?.assignmentFolder">Will Be Set By {{ getDefaultETA() | date: short }}</em>
-          </div>
-          <div class="d-block my-2">
-            <h5 class="text-center mb-0">Welcome Email Sent<mat-icon *ngIf="preStartInfo?.welcomeEmailSent"
-              class="ml-2 success">check_circle</mat-icon>
-            </h5>
-            <em *ngIf="!preStartInfo?.welcomeEmailSent">Will Be Sent By {{ getDefaultETA() | date: short }}</em>
-          </div>
-          <div class="d-flex flex-column text-center align-items-center mt-3">
-            <p class="onboard-info">Please follow all the instructions that you have received to {{ preStartInfo?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>
-          </div>
+          <ng-template #notAccessConfirmed>
+            <div class="d-flex flex-column justify-content-between">
+              <div class="d-flex flex-column align-items-center">
+                <h5 class="d-flex align-items-center">Onboarded to RemoteU System <mat-icon class="ml-2 success">check_circle</mat-icon></h5>
+                <h5 class="d-flex align-items-center">Access to IT Systems
+                  <div *ngIf="loadedItAccessSystems">
+                    <mat-icon *ngIf="!preStartInfo?.accesses?.itSystems"
+                      class="ml-2 warning">
+                      warning
+                    </mat-icon>
+                    <mat-icon *ngIf="preStartInfo?.accesses?.itSystems"
+                      class="ml-2 success">
+                      check_circle
+                    </mat-icon>
+                  </div>
+                  <div *ngIf="!loadedItAccessSystems">
+                    <i class="ml-2 df-loader"></i>
+                  </div>
+                  <button *ngIf="isItSystemsReportIssueButtonVisible()"
+                    [disabled]="isItSystemsReportIssueButtonDisabled()"
+                    (click)="reportItSystemsIssue()"
+                    class="ml-2 px-2 py-1 btn btn-warning text-white d-flex align-items-center">
+                    <mat-icon *ngIf="!preStartInfo?.accesses?.itSystems"
+                      class="warning-icon mr-1">
+                      warning
+                    </mat-icon>
+                    {{ itSystemsIssueReported ? 'Issue Reported' : 'Report Issue' }}
+                  </button>
+                </h5>
+                <h5 class="d-flex align-items-center">Access to RemoteU Materials
+                  <div *ngIf="loadedRemoteUMaterials">
+                    <mat-icon *ngIf="!preStartInfo?.accesses?.remoteUMaterials"
+                      class="ml-2 warning">
+                      warning
+                    </mat-icon>
+                    <mat-icon *ngIf="preStartInfo?.accesses?.remoteUMaterials"
+                      class="ml-2 success">
+                      check_circle
+                    </mat-icon>
+                  </div>
+                  <div *ngIf="!loadedRemoteUMaterials">
+                    <i class="ml-2 df-loader"></i>
+                  </div>
+                  <button *ngIf="isRemoteUMaterialsIssueButtonVisible()"
+                    [disabled]="isRemoteUMaterialsIssueButtonDisabled()"
+                    (click)="reportRemoteUMaterialsIssue()"
+                    class="ml-2 px-2 py-1 btn btn-warning text-white d-flex align-items-center">
+                    <mat-icon *ngIf="!preStartInfo?.accesses?.remoteUMaterials"
+                      class="warning-icon mr-1">
+                      warning
+                    </mat-icon>
+                    {{ remoteUMaterialsIssueReported ? 'Issue Reported' : 'Report Issue' }}
+                  </button>
+                </h5>
+                <h5
+                  *ngIf="showCodeRepositoryAccess"
+                  class="d-flex align-items-center">
+                  <a href="https://crossover.zoom.us/recording/share/MAWnWGAoG3_J9LyCxiv4b0Wgncq-UDxQBmmmiXqy7OU" target="_blank">
+                    <mat-icon *ngIf="isCodeRepositoryIssueButtonVisible()"
+                      matTooltip="Click here to see help video"
+                      matTooltipPosition="above"
+                      class="info-tooltip text-right">help</mat-icon>
+                  </a>
+                  Access to Company Code Base
+                  <div *ngIf="loadedCodeRepositoryAccess">
+                    <mat-icon *ngIf="!preStartInfo?.accesses?.codeRepository"
+                      class="ml-2 warning">
+                      warning
+                    </mat-icon>
+                    <mat-icon *ngIf="preStartInfo?.accesses?.codeRepository"
+                      class="ml-2 success">
+                      check_circle
+                    </mat-icon>
+                  </div>
+                  <div *ngIf="!loadedCodeRepositoryAccess">
+                    <i class="ml-2 df-loader"></i>
+                  </div>
+                  <button *ngIf="isCodeRepositoryIssueButtonVisible()"
+                    [disabled]="isCodeRepositoryIssueButtonDisabled()"
+                    (click)="reportCodeRepositoryIssue()"
+                    class="ml-2 px-2 py-1 btn btn-warning text-white d-flex align-items-center">
+                    <mat-icon *ngIf="!preStartInfo?.accesses?.codeRepository"
+                      class="warning-icon mr-1">
+                      warning
+                    </mat-icon>
+                    {{ codeRepositoryIssueReported ? 'Issue Reported' : 'Report Issue' }}
+                  </button>
+                </h5>
+              </div>
+              <div class="d-flex flex-column align-items-center">
+                <button
+                  [disabled]="isConfirmButtonDisabled()"
+                  (click)="confirmAccesses(close)"
+                  class="btn btn-outline-primary">
+                  {{ getConfirmAccessesButtonText() }}
+                </button>
+                <div class="d-flex flex-column text-center align-items-center mt-3">
+                  <p class="onboard-info text-center mt-2">Please follow all the instructions that you have received to {{ preStartInfo?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>
+                </div>
+              </div>
+            </div>
+          </ng-template>
         </div>
       </df-card-content>
     </df-card>

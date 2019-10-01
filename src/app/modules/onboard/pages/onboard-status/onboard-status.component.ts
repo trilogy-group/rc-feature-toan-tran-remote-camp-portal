@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { subDays } from 'date-fns';
+import { DfToasterService } from '@devfactory/ngx-df';
+import { flatMap, tap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 
 import { OnboardingService } from 'src/app/shared/services/onboarding.service';
 import { ProfileService } from 'src/app/shared/services/profile.service';
-
-import { DfToasterService } from '@devfactory/ngx-df';
 import { Pipelines } from 'src/app/constants/pipelines.constants';
 
 @Component({
@@ -13,8 +14,11 @@ import { Pipelines } from 'src/app/constants/pipelines.constants';
   styleUrls: ['./onboard-status.component.scss']
 })
 export class OnboardStatusComponent implements OnInit {
-  private readonly allSet = 'You\'re All Set';
+  private readonly allSet = 'All Set';
   private readonly notAllSet = 'You\'re Almost There';
+  private readonly confirmAccessesText = 'Confirm';
+  private readonly accessesConfirmedText = 'Confirmed';
+
   public constructor(
     private readonly onboardingService: OnboardingService,
     private readonly profileService: ProfileService,
@@ -31,30 +35,62 @@ export class OnboardStatusComponent implements OnInit {
 
   public showCodeRepositoryAccess = false;
 
+  public itSystemsIssueReported = false;
+
+  public remoteUMaterialsIssueReported = false;
+
+  public codeRepositoryIssueReported = false;
+
+  public loadedAssignmentFolder = false;
+
+  public loadedReadyToStart = false;
+
+  public loadedJiraStatus = false;
+
+  public loadedTicketsAssigned = false;
+
+  public loadedAccessesConfirmed = false;
+
   public getHeaderText(): string {
     return this.preStartInfo &&
       this.preStartInfo.ticketsAssigned &&
       this.preStartInfo.assignmentFolder &&
-      this.preStartInfo.welcomeEmailSent ? this.allSet : this.notAllSet;
+      this.preStartInfo.accesses.jira &&
+      this.preStartInfo.readyToStart ? this.allSet : this.notAllSet;
   }
 
   public ngOnInit(): void {
-    this.profileService.getProfile().subscribe(profile => {
-      this.onboardingService.getPreStartInfo().subscribe(preStartInfo => {
-        this.preStartInfo = preStartInfo;
-        this.preStartInfo.name = profile.icName;
-        this.preStartInfo.pipeline = profile.pipeline;
-        this.preStartInfo.startDate = profile.startDate;
-        this.preStartInfo.alternativeEmail = profile.xoLoginEmail;
-        this.preStartInfo.email = profile.companyEmail;
-        this.preStartInfo.ad = profile.adAccount;
-        this.showCodeRepositoryAccess = profile.pipeline !== Pipelines.QAManualTester;
+    let profile;
 
+    this.profileService.getProfile().pipe
+    (
+      flatMap((userProfile) => {
+        profile = userProfile;
+        return forkJoin(
+          this.onboardingService.getPreStartInfo(),
+          this.onboardingService.getAccessesConfirmed(profile.companyEmail)
+        );
+      })
+    )
+    .subscribe(([preStartInfo, accessesConfirmed]) => {
+      this.preStartInfo = preStartInfo;
+      this.preStartInfo.name = profile.icName;
+      this.preStartInfo.pipeline = profile.pipeline;
+      this.preStartInfo.startDate = profile.startDate;
+      this.preStartInfo.alternativeEmail = profile.xoLoginEmail;
+      this.preStartInfo.email = profile.companyEmail;
+      this.preStartInfo.ad = profile.adAccount;
+      this.preStartInfo.accessesConfirmed = accessesConfirmed && accessesConfirmed.status === 'Yes';
+      this.showCodeRepositoryAccess = profile.pipeline !== Pipelines.QAManualTester;
+      this.loadedAccessesConfirmed = true;
+
+      if (!this.preStartInfo.accessesConfirmed) {
         this.onboardingService.getItSystemAccess(this.preStartInfo.ad)
           .subscribe(
             statusResponse => {
               this.loadedItAccessSystems = true;
-              preStartInfo.accesses.itSystems = statusResponse && statusResponse.status === 'Yes';
+              this.preStartInfo.accesses.itSystems = statusResponse && statusResponse.status === 'Yes';
+              this.itSystemsIssueReported = statusResponse && statusResponse.reported === 'Yes';
             },
             () => this.toasterService.popError('Unable to get it system access status')
           );
@@ -62,22 +98,27 @@ export class OnboardStatusComponent implements OnInit {
           .subscribe(
             statusResponse => {
               this.loadedRemoteUMaterials = true;
-              preStartInfo.accesses.remoteUMaterials = statusResponse && statusResponse.status === 'Yes';
+              this.preStartInfo.accesses.remoteUMaterials = statusResponse && statusResponse.status === 'Yes';
+              this.remoteUMaterialsIssueReported = statusResponse && statusResponse.reported === 'Yes';
             },
             () => this.toasterService.popError('Unable to get remote material access status')
           );
 
-          if (this.showCodeRepositoryAccess) {
-            this.onboardingService.getCodeRepositoryAccess(this.preStartInfo.email)
+        if (this.showCodeRepositoryAccess) {
+          this.onboardingService.getReportCodeRepositoryIssue(this.preStartInfo.email)
             .subscribe(
               statusResponse => {
+                this.preStartInfo.reportedIssueCodeRepository = statusResponse && statusResponse.reported === '1';
+                this.preStartInfo.accesses.codeRepository = statusResponse && statusResponse.trilogy_status === 'Yes';
+                this.codeRepositoryIssueReported = this.preStartInfo.reportedIssueCodeRepository;
                 this.loadedCodeRepositoryAccess = true;
-                preStartInfo.accesses.codeRepository = statusResponse && statusResponse.status === 'Yes';
               },
-              () => this.toasterService.popError('Unable to get code repository access status')
+              () => this.toasterService.popError('Unable to get it reported issue code repository status')
             );
-          }
-      });
+        }
+      } else {
+        this.loadFinalStageServices();
+      }
     });
   }
 
@@ -87,24 +128,116 @@ export class OnboardStatusComponent implements OnInit {
 
   public getJiraETA(): Date {
     return subDays(this.preStartInfo.startDate, 3);
-
   }
 
   public accessesConfirmed(): boolean {
     return this.preStartInfo && this.preStartInfo.accessesConfirmed;
   }
 
-  public showConfirmAccessesButton(): boolean {
-    return this.preStartInfo &&
-      this.preStartInfo.accesses &&
-      this.preStartInfo.accesses.itSystems &&
+  public isConfirmButtonDisabled(): boolean {
+    return this.accessesConfirmed() || !(
+      this.preStartInfo && this.preStartInfo.accesses &&
+      this.preStartInfo.accesses.codeRepository &&
       this.preStartInfo.accesses.remoteUMaterials &&
-      this.preStartInfo.accesses.codeRepository;
+      this.preStartInfo.accesses.itSystems
+    );
+  }
+
+  public isItSystemsReportIssueButtonDisabled(): boolean {
+    return this.itSystemsIssueReported;
+  }
+
+  public isItSystemsReportIssueButtonVisible(): boolean {
+    return (
+      this.loadedItAccessSystems &&
+      this.preStartInfo &&
+      this.preStartInfo.accesses &&
+      !this.preStartInfo.accesses.itSystems
+    );
+  }
+
+  public reportItSystemsIssue(): void {
+    this.onboardingService.reportItSystemsIssue(this.preStartInfo.name, this.preStartInfo.ad)
+      .subscribe(() => this.itSystemsIssueReported = true);
+  }
+
+  public isRemoteUMaterialsIssueButtonDisabled(): boolean {
+    return this.remoteUMaterialsIssueReported;
+  }
+
+  public isRemoteUMaterialsIssueButtonVisible(): boolean {
+    return this.loadedRemoteUMaterials && this.preStartInfo &&
+    this.preStartInfo.accesses && !this.preStartInfo.accesses.remoteUMaterials;
+  }
+
+  public reportRemoteUMaterialsIssue(): void {
+    this.onboardingService.reportRemoteUMaterialsIssue(this.preStartInfo.name, this.preStartInfo.email)
+      .subscribe(() => this.remoteUMaterialsIssueReported = true);
+  }
+
+  public isCodeRepositoryIssueButtonDisabled(): boolean {
+    return this.codeRepositoryIssueReported;
+  }
+
+  public isCodeRepositoryIssueButtonVisible(): boolean {
+    return this.loadedCodeRepositoryAccess && this.preStartInfo &&
+      this.preStartInfo.accesses && !this.preStartInfo.accesses.codeRepository;
+  }
+
+  public reportCodeRepositoryIssue(): void {
+    this.onboardingService.reportCodeRepositoryIssue(
+    this.preStartInfo.ad, this.preStartInfo.name, this.preStartInfo.email).subscribe(() => {
+    this.codeRepositoryIssueReported = true;
+    });
   }
 
   public confirmAccesses(): void {
-    this.onboardingService.confirmAccesses().subscribe(() => {
+    this.onboardingService.confirmAccesses(this.preStartInfo.email).subscribe(() => {
       this.preStartInfo.accessesConfirmed = true;
+      this.loadFinalStageServices();
     });
+
+  }
+
+  public getConfirmAccessesButtonText(): string {
+    return this.accessesConfirmed() ? this.accessesConfirmedText : this.confirmAccessesText;
+  }
+
+  public loadFinalStageServices(): void {
+    this.onboardingService.getAssignmentFolder(this.preStartInfo.name)
+      .subscribe(
+        statusResponse => {
+          this.loadedAssignmentFolder = true;
+          this.preStartInfo.assignmentFolder = statusResponse && statusResponse.status === 'Yes';
+        },
+        () => this.toasterService.popError('Unable to get assignment folder status')
+      );
+
+    this.onboardingService.getReadyToStart(this.preStartInfo.email)
+      .subscribe(
+        statusResponse => {
+          this.loadedReadyToStart = true;
+          this.preStartInfo.readyToStart = statusResponse && statusResponse.status === 'Yes';
+        },
+        () => this.toasterService.popError('Unable to get ready to start status')
+      );
+
+    this.onboardingService.getTicketsAssigned(this.preStartInfo.email)
+      .subscribe(
+        statusResponse => {
+          this.loadedTicketsAssigned = true;
+          this.preStartInfo.ticketsAssigned = statusResponse && statusResponse.status === 'Yes';
+        },
+        () => this.toasterService.popError('Unable to get jira status')
+      );
+
+    this.onboardingService.getJiraStatus(this.preStartInfo.name)
+      .subscribe(
+        statusResponse => {
+          this.loadedJiraStatus = true;
+          this.preStartInfo.accesses.jira = statusResponse && statusResponse.status === 'Yes';
+        },
+        () => this.toasterService.popError('Unable to get tickets assigned status')
+      );
   }
 }
