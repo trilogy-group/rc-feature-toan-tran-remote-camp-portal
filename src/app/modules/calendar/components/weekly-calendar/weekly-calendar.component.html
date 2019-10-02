@@ -30,6 +30,11 @@
                     target="_blank">
                     {{ item.description }}
                   </a>
+                  <a *ngIf="item.additionalUrl"
+                    [href]="item.additionalUrl"
+                    target="_blank">
+                    {{ item.additionalUrlDescription }}
+                  </a>
                 </ng-template>
               </df-grid-column>
               <df-grid-column header="Time (min)">
