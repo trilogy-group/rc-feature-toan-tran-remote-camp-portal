@@ -20,6 +20,18 @@
   font-size: 16px;
 }
 
+.info-tooltip {
+  font-size: 16px;
+  top: 1px;
+  right: -7px;
+  color: $au-amber;
+  cursor: pointer;
+}
+
+.warning-icon {
+  font-size: 20px;
+}
+
 .header {
   word-break: break-word;
 }
@@ -35,8 +47,8 @@
 :host {
   ::ng-deep {
     .df-loader {
-      width: 30px;
-      height: 30px;
+      width: 24px;
+      height: 24px;
     }
   }
 }
