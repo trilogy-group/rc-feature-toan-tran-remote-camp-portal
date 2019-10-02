@@ -81,7 +81,7 @@ export class OnboardStatusComponent implements OnInit {
       this.preStartInfo.email = profile.companyEmail;
       this.preStartInfo.ad = profile.adAccount;
       this.preStartInfo.accessesConfirmed = accessesConfirmed && accessesConfirmed.status === 'Yes';
-      this.showCodeRepositoryAccess = profile.pipeline !== Pipelines.QAManualTester;
+      this.showCodeRepositoryAccess = !this.isQAManualTester();
       this.loadedAccessesConfirmed = true;
 
       if (!this.preStartInfo.accessesConfirmed) {
@@ -137,7 +137,7 @@ export class OnboardStatusComponent implements OnInit {
   public isConfirmButtonDisabled(): boolean {
     return this.accessesConfirmed() || !(
       this.preStartInfo && this.preStartInfo.accesses &&
-      this.preStartInfo.accesses.codeRepository &&
+      (this.preStartInfo.accesses.codeRepository || this.isQAManualTester()) &&
       this.preStartInfo.accesses.remoteUMaterials &&
       this.preStartInfo.accesses.itSystems
     );
@@ -196,7 +196,6 @@ export class OnboardStatusComponent implements OnInit {
       this.preStartInfo.accessesConfirmed = true;
       this.loadFinalStageServices();
     });
-
   }
 
   public getConfirmAccessesButtonText(): string {
@@ -239,5 +238,9 @@ export class OnboardStatusComponent implements OnInit {
         },
         () => this.toasterService.popError('Unable to get tickets assigned status')
       );
+  }
+
+  public isQAManualTester(): boolean {
+    return this.preStartInfo && this.preStartInfo.pipeline === Pipelines.QAManualTester;
   }
 }
