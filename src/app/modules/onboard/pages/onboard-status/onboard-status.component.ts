@@ -227,7 +227,7 @@ export class OnboardStatusComponent implements OnInit {
           this.loadedTicketsAssigned = true;
           this.preStartInfo.ticketsAssigned = statusResponse && statusResponse.status === 'Yes';
         },
-        () => this.toasterService.popError('Unable to get jira status')
+        () => this.toasterService.popError('Unable to get tickets assigned status')
       );
 
     this.onboardingService.getJiraStatus(this.preStartInfo.name)
@@ -236,7 +236,7 @@ export class OnboardStatusComponent implements OnInit {
           this.loadedJiraStatus = true;
           this.preStartInfo.accesses.jira = statusResponse && statusResponse.status === 'Yes';
         },
-        () => this.toasterService.popError('Unable to get tickets assigned status')
+        () => this.toasterService.popError('Unable to get jira status')
       );
   }
 
