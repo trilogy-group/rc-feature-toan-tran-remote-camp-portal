@@ -16,7 +16,7 @@ export const environment = {
   reportIssuePostUrl: 'https://hmart2ms7g.execute-api.us-east-1.amazonaws.com/dev/reporting_issue_post',
   checkAssignmentFolderGetUrl: 'https://aajp1n4sv1.execute-api.us-east-1.amazonaws.com/development/check-drive',
   readyToStartGetUrl: 'https://hmart2ms7g.execute-api.us-east-1.amazonaws.com/dev/ready-to-start-get',
-  jiraStatusGetUrl: 'https://yjc5fqkq9c.execute-api.us-east-1.amazonaws.com/development/jira-check',
+  jiraStatusGetUrl: 'https://a185kccj8c.execute-api.us-east-1.amazonaws.com/dev/jira-check',
   ticketsAssignedGetUrl: 'https://cj84gm0eh7.execute-api.us-east-1.amazonaws.com/dev/backlog_status'
 };
 
