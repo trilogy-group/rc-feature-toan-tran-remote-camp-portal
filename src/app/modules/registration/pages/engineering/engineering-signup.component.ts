@@ -18,6 +18,9 @@ export class EngineeringSignupComponent {
   private readonly fieldRequiredMessage = 'This field is required';
   private readonly invalidEmailFormatMessage = 'Please enter a valid email';
 
+  public readonly qaManualTester = 'QA Manual Tester';
+
+  public selectedRoleName = '';
   public form: FormGroup;
   public roles: any[] = [];
   public rolePrerequisites: any[] = [];
@@ -48,6 +51,7 @@ export class EngineeringSignupComponent {
 
     this.form = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(this.emailRegex)])],
+      GitHubId: [null],
       role: [null, Validators.required],
       requirement1: [false, Validators.required],
       requirement2: [false, Validators.required],
@@ -75,7 +79,15 @@ export class EngineeringSignupComponent {
     this.form.controls.role.setValue(roleId);
 
     const role = this.roles.find(x => x.id === roleId);
+    this.selectedRoleName = role.name;
     this.rolePrerequisites = role.prerequisites;
+
+    if (this.isNonQAManualTesterSelected()) {
+      this.form.get('GitHubId').setValidators([Validators.required]);
+    } else {
+      this.form.get('GitHubId').clearValidators();
+      this.form.get('GitHubId').updateValueAndValidity();
+    }
   }
 
   public startDateChange(date: Date): void {
@@ -104,6 +116,10 @@ export class EngineeringSignupComponent {
     if (!this.form.controls.email.valid) {
       return this.form.controls.email.value.trim() === '' ? this.fieldRequiredMessage : this.invalidEmailFormatMessage;
     }
+  }
+
+  public isNonQAManualTesterSelected(): boolean {
+    return this.selectedRoleName !== '' && this.selectedRoleName !== this.qaManualTester;
   }
 
   public isSubmitDisabled(): boolean {
