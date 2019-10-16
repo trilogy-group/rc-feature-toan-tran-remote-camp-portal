@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { subDays } from 'date-fns';
 import { DfToasterService } from '@devfactory/ngx-df';
-import { flatMap, tap } from 'rxjs/operators';
+import { flatMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
 import { OnboardingService } from 'src/app/shared/services/onboarding.service';
@@ -50,6 +50,8 @@ export class OnboardStatusComponent implements OnInit {
   public loadedTicketsAssigned = false;
 
   public loadedAccessesConfirmed = false;
+
+  public loadedRemoteUCodeBase = false;
 
   public getHeaderText(): string {
     return this.preStartInfo &&
@@ -184,6 +186,11 @@ export class OnboardStatusComponent implements OnInit {
       this.preStartInfo.accesses && !this.preStartInfo.accesses.codeRepository;
   }
 
+  public isRemoteUCodeRepositoryIssueVisible(): boolean {
+    return this.loadedRemoteUCodeBase && this.preStartInfo &&
+      this.preStartInfo.accesses && !this.preStartInfo.accesses.loadedRemoteUCodeBase;
+  }
+
   public reportCodeRepositoryIssue(): void {
     this.onboardingService.reportCodeRepositoryIssue(
     this.preStartInfo.ad, this.preStartInfo.name, this.preStartInfo.email).subscribe(() => {
@@ -238,6 +245,16 @@ export class OnboardStatusComponent implements OnInit {
         },
         () => this.toasterService.popError('Unable to get jira status')
       );
+
+    if (this.showCodeRepositoryAccess) {
+      this.onboardingService.getRemoteUCodeBaseAccess(this.preStartInfo.email)
+        .subscribe(statusResponse => {
+          this.preStartInfo.accesses.loadedRemoteUCodeBase = statusResponse && statusResponse.status === 'Yes';
+          this.loadedRemoteUCodeBase = true;
+        },
+        () => this.toasterService.popError('Unable to get RemoteU code repository access status')
+      );
+    }
   }
 
   public isQAManualTester(): boolean {
