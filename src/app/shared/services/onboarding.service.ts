@@ -19,6 +19,7 @@ export class OnboardingService {
   private static readonly readyToStartGetUrl = environment.readyToStartGetUrl;
   private static readonly jiraStatusGetUrl = environment.jiraStatusGetUrl;
   private static readonly ticketsAssignedGetUrl = environment.ticketsAssignedGetUrl;
+  private static readonly remoteUCodeRepoAccessUrl = environment.remoteUCodeRepoAccess;
 
   private preStartInfo = {
     accesses: {
@@ -67,6 +68,11 @@ export class OnboardingService {
   public getReportCodeRepositoryIssue(email: string): Observable<any> {
     const options = this.getSkipLoaderHeaders();
     return this.httpClient.get(`${OnboardingService.codeRepositoryIssueGet}?email=${email}`, options);
+  }
+
+  public getRemoteUCodeBaseAccess(email: string): Observable<any> {
+    const options = this.getSkipLoaderHeaders();
+    return this.httpClient.get(`${OnboardingService.remoteUCodeRepoAccessUrl}?email=${email}`, options);
   }
 
   public getRemoteUMaterialsAccess(email: string): Observable<any> {

@@ -28,6 +28,25 @@
           <div *ngIf="accessesConfirmed(); else notAccessConfirmed"
             class="d-flex flex-column align-items-center">
             <div class="d-block my-2">
+              <h5 *ngIf="showCodeRepositoryAccess" 
+                class="text-center mb-0">
+                <a href="https://crossover.zoom.us/recording/play/8A4b5eTt8jeyRBCaFKJTDY7vbtwRuS3w7B9LFXvGBR7gU1ZBFIq2th9KNhCwZwhB?autoplay=true&startTime=1571184542000" target="_blank">
+                  <mat-icon *ngIf="isRemoteUCodeRepositoryIssueVisible()"
+                    matTooltip="Click here to see help video"
+                    matTooltipPosition="above"
+                    class="info-tooltip text-right">help</mat-icon>
+                </a>
+                Access to RemoteU Code Base
+                <mat-icon *ngIf="loadedRemoteUCodeBase && preStartInfo?.accesses?.loadedRemoteUCodeBase"
+                  class="ml-2 success">check_circle
+                </mat-icon>
+                <mat-icon *ngIf="loadedRemoteUCodeBase && !preStartInfo?.accesses?.loadedRemoteUCodeBase"
+                  class="ml-2 warning">warning
+                </mat-icon>
+                <i *ngIf="!loadedRemoteUCodeBase"class="ml-2 df-loader"></i>
+              </h5>
+            </div>
+            <div class="d-block my-2">
               <h5 class="text-center mb-0">Access to Jira
                 <mat-icon *ngIf="preStartInfo?.accesses?.jira && loadedJiraStatus"
                   class="ml-2 success">check_circle

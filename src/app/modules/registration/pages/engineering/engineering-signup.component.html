@@ -37,6 +37,16 @@
             {{ role.name }}
           </df-option>
         </df-select>
+        <h5 *ngIf="isNonQAManualTesterSelected()"
+          class="mb-1 mt-3">GitHub Username<span class="danger">*</span>
+          <span *ngIf="showErrors && !form.controls.GitHubId.valid"
+            class="ml-1 danger missing-field">This field is required</span>
+        </h5>
+        <input *ngIf="isNonQAManualTesterSelected()"
+          type="text"
+          formControlName="GitHubId"
+          placeholder="Your GitHub Username"
+          class="form-control">
         <h5 class="mb-1 mt-3">
           Common Mandatory Prerequisites<span class="danger">*</span>
           <span *ngIf="showErrors && !mandatoryPrerequisitesChecked()"
