@@ -3,7 +3,7 @@ import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DfFileUploader, DfFileUploaderOptions, DfFileUploaderActionOptions } from '@devfactory/ngx-df/file-upload';
 import { Router } from '@angular/router';
-import { isThursday, startOfWeek, addWeeks, isFriday, isSaturday, isSunday } from 'date-fns';
+import { isThursday, startOfWeek, addWeeks, isFriday, isSaturday, isSunday, isWednesday, isTuesday } from 'date-fns';
 
 import { RegistrationService } from 'src/app/shared/services/registration.service';
 
@@ -154,7 +154,7 @@ export class EngineeringSignupComponent {
 
   private getNext12Mondays(): void {
     let date = new Date();
-    if (isThursday(date) || isFriday(date) || isSaturday(date) || isSunday(date)) {
+    if (isTuesday(date) || isWednesday(date) || isThursday(date) || isFriday(date) || isSaturday(date) || isSunday(date)) {
       date = addWeeks(date, 1);
     }
     for (let i = 0; i < 12; i++) {
