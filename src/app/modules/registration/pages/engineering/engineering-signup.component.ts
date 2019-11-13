@@ -154,9 +154,7 @@ export class EngineeringSignupComponent {
 
   private getNext12Mondays(): void {
     let date = new Date();
-    if (isTuesday(date) || isWednesday(date) || isThursday(date) || isFriday(date) || isSaturday(date) || isSunday(date)) {
-      date = addWeeks(date, 1);
-    }
+    date = addWeeks(date, 2);
     for (let i = 0; i < 12; i++) {
       this.mondays.push(startOfWeek(addWeeks(date, 1), { weekStartsOn: 1 }));
       date = addWeeks(date, 1);
