@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { subDays } from 'date-fns';
-import { DfToasterService } from '@devfactory/ngx-df';
+import { DfToasterService, DfPortalService, DfPortalOptions, DfPortalOrientation } from '@devfactory/ngx-df';
 import { flatMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
@@ -19,11 +19,21 @@ export class OnboardStatusComponent implements OnInit {
   private readonly confirmAccessesText = 'Confirm';
   private readonly accessesConfirmedText = 'Confirmed';
 
+  private portalOptions = new DfPortalOptions();
+
   public constructor(
     private readonly onboardingService: OnboardingService,
     private readonly profileService: ProfileService,
     private readonly toasterService: DfToasterService,
-  ) {}
+    private portal: DfPortalService
+  ) {
+    this.portalOptions.showCloseButton = true;
+    this.portalOptions.orientation = DfPortalOrientation.Right;
+    this.portalOptions.width = '600px';
+  }
+
+  @ViewChild('trainingMaterial')
+  public trainingsTemplate: TemplateRef<{}>;
 
   public preStartInfo: any;
 
@@ -259,5 +269,9 @@ export class OnboardStatusComponent implements OnInit {
 
   public isQAManualTester(): boolean {
     return this.preStartInfo && this.preStartInfo.pipeline === Pipelines.QAManualTester;
+  }
+
+  public openTrainingMaterials(): void {
+    this.portal.open(this.trainingsTemplate, this.portalOptions);
   }
 }

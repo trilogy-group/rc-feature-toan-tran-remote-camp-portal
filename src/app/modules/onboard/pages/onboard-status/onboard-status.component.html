@@ -95,10 +95,6 @@
                 <h5 class="d-flex align-items-center">Onboarded to RemoteU System <mat-icon class="ml-2 success">check_circle</mat-icon></h5>
                 <h5 class="d-flex align-items-center">Access to IT Systems
                   <div *ngIf="loadedItAccessSystems">
-                    <mat-icon *ngIf="!preStartInfo?.accesses?.itSystems"
-                      class="ml-2 warning">
-                      warning
-                    </mat-icon>
                     <mat-icon *ngIf="preStartInfo?.accesses?.itSystems"
                       class="ml-2 success">
                       check_circle
@@ -110,7 +106,7 @@
                   <button *ngIf="isItSystemsReportIssueButtonVisible()"
                     [disabled]="isItSystemsReportIssueButtonDisabled()"
                     (click)="reportItSystemsIssue()"
-                    class="ml-2 px-2 py-1 btn btn-warning text-white d-flex align-items-center">
+                    class="ml-2 px-2 py-1 btn btn-warning btn-sm text-white d-flex align-items-center">
                     <mat-icon *ngIf="!preStartInfo?.accesses?.itSystems"
                       class="warning-icon mr-1">
                       warning
@@ -120,10 +116,6 @@
                 </h5>
                 <h5 class="d-flex align-items-center">Access to RemoteU Materials
                   <div *ngIf="loadedRemoteUMaterials">
-                    <mat-icon *ngIf="!preStartInfo?.accesses?.remoteUMaterials"
-                      class="ml-2 warning">
-                      warning
-                    </mat-icon>
                     <mat-icon *ngIf="preStartInfo?.accesses?.remoteUMaterials"
                       class="ml-2 success">
                       check_circle
@@ -135,7 +127,7 @@
                   <button *ngIf="isRemoteUMaterialsIssueButtonVisible()"
                     [disabled]="isRemoteUMaterialsIssueButtonDisabled()"
                     (click)="reportRemoteUMaterialsIssue()"
-                    class="ml-2 px-2 py-1 btn btn-warning text-white d-flex align-items-center">
+                    class="ml-2 px-2 py-1 btn btn-warning btn-sm text-white d-flex align-items-center">
                     <mat-icon *ngIf="!preStartInfo?.accesses?.remoteUMaterials"
                       class="warning-icon mr-1">
                       warning
@@ -154,10 +146,6 @@
                   </a>
                   Access to Company Code Base
                   <div *ngIf="loadedCodeRepositoryAccess">
-                    <mat-icon *ngIf="!preStartInfo?.accesses?.codeRepository"
-                      class="ml-2 warning">
-                      warning
-                    </mat-icon>
                     <mat-icon *ngIf="preStartInfo?.accesses?.codeRepository"
                       class="ml-2 success">
                       check_circle
@@ -169,7 +157,7 @@
                   <button *ngIf="isCodeRepositoryIssueButtonVisible()"
                     [disabled]="isCodeRepositoryIssueButtonDisabled()"
                     (click)="reportCodeRepositoryIssue()"
-                    class="ml-2 px-2 py-1 btn btn-warning text-white d-flex align-items-center">
+                    class="ml-2 px-2 py-1 btn btn-warning btn-sm text-white d-flex align-items-center">
                     <mat-icon *ngIf="!preStartInfo?.accesses?.codeRepository"
                       class="warning-icon mr-1">
                       warning
@@ -178,15 +166,30 @@
                   </button>
                 </h5>
               </div>
-              <div class="d-flex flex-column align-items-center">
-                <button
-                  [disabled]="isConfirmButtonDisabled()"
-                  (click)="confirmAccesses(close)"
-                  class="btn btn-outline-primary">
-                  {{ getConfirmAccessesButtonText() }}
-                </button>
-                <div class="d-flex flex-column text-center align-items-center mt-3">
-                  <p class="onboard-info text-center mt-2">Please follow all the instructions that you have received to {{ preStartInfo?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>
+              <div class="row mt-3 px-2">
+                <div class="col-6">
+                  <div class="d-flex flex-column align-items-center">
+                    <button
+                      [disabled]="isConfirmButtonDisabled()"
+                      (click)="confirmAccesses(close)"
+                      class="btn btn-outline-primary">
+                      {{ getConfirmAccessesButtonText() }}
+                    </button>
+                    <div class="d-flex flex-column text-center align-items-center mt-3">
+                      <p class="onboard-info text-center mt-2">Please follow all the instructions that you have received to {{ preStartInfo?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="d-flex flex-column align-items-center">
+                    <button
+                      class="btn btn-outline-primary"
+                      (click)="openTrainingMaterials()">Training Materials
+                    </button>
+                    <div class="d-flex flex-column text-center align-items-center mt-3">
+                      <p class="onboard-info text-center mt-2">Also, please make sure to check the training materials</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -196,3 +199,7 @@
     </df-card>
   </div>
 </div>
+
+<ng-template #trainingMaterial>
+  <app-preparation-material [pipeline]="preStartInfo?.pipeline"></app-preparation-material>
+</ng-template>

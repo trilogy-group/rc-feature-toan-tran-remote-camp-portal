@@ -1,0 +1,33 @@
+<div class="d-block p-3">
+  <h4 class="text-center">RemoteU Training Materials</h4>
+  <span class="mt-2 preparation-material-text">We provide the below curriculum during RemoteU. Completing the listed training materials will improve your chance to succeeding in Remote University.</span>
+  <div class="d-flex mt-4">
+    <df-accordion>
+      <df-accordion-panel [expanded]="true">
+        <df-accordion-header>
+          <df-accordion-header-title>
+            <h5 class="mb-0">WorkSmart Pro Framework Trainings</h5>
+          </df-accordion-header-title>
+        </df-accordion-header>
+        <df-accordion-content>
+          <app-training-material-grid
+            class="mr-1"
+            [trainings]="worksmartTrainings"></app-training-material-grid>
+        </df-accordion-content>
+      </df-accordion-panel>
+      <df-accordion-panel>
+        <df-accordion-header>
+          <df-accordion-header-title>
+            <h5 class="mb-0">Technical Trainings</h5>
+          </df-accordion-header-title>
+        </df-accordion-header>
+        <df-accordion-content>
+          <app-training-material-grid
+            class="ml-1"
+            [trainings]="technicalTrainings"></app-training-material-grid>
+        </df-accordion-content>
+      </df-accordion-panel>
+    </df-accordion>
+  </div>
+</div>
+  
