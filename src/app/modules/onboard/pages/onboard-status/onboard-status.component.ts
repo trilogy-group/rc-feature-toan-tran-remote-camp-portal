@@ -88,6 +88,7 @@ export class OnboardStatusComponent implements OnInit {
       this.preStartInfo = preStartInfo;
       this.preStartInfo.name = profile.icName;
       this.preStartInfo.pipeline = profile.pipeline;
+      this.preStartInfo.pipelineJiraId = profile.pipelineJiraId;
       this.preStartInfo.startDate = profile.startDate;
       this.preStartInfo.alternativeEmail = profile.xoLoginEmail;
       this.preStartInfo.email = profile.companyEmail;
