@@ -13,6 +13,8 @@ export const environment = {
   checkAssignmentFolderGetUrl: 'https://94zqaokrwc.execute-api.us-east-1.amazonaws.com/prod/check-drive',
   readyToStartGetUrl: 'https://5lwj6352lh.execute-api.us-east-1.amazonaws.com/prod/ready-to-start-get',
   jiraStatusGetUrl: 'https://np109yeyje.execute-api.us-east-1.amazonaws.com/prod/jira-check',
-  ticketsAssignedGetUrl: 'https://gezqhdy74j.execute-api.us-east-1.amazonaws.com/prod/backlog_status',  
-  remoteUCodeRepoAccess: 'https://5lwj6352lh.execute-api.us-east-1.amazonaws.com/prod/check-remotecamp-public-access'
+  ticketsAssignedGetUrl: 'https://gezqhdy74j.execute-api.us-east-1.amazonaws.com/prod/backlog_status',
+  remoteUCodeRepoAccess: 'https://5lwj6352lh.execute-api.us-east-1.amazonaws.com/prod/check-remotecamp-public-access',
+  workSmartTrainingsUrl: 'https://xxhj8mghhl.execute-api.us-east-1.amazonaws.com/prod/ws-pro',
+  technicalTrainingsUrl: 'https://xxhj8mghhl.execute-api.us-east-1.amazonaws.com/prod/technical'
 };

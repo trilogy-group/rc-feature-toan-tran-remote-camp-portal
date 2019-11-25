@@ -20,6 +20,7 @@ import { DfFileUploadModule } from '@devfactory/ngx-df/file-upload';
 import { DfNumberIncreaseModule } from '@devfactory/ngx-df/number-increase';
 import { DfRadioInputModule } from '@devfactory/ngx-df/radio-input';
 import { DfSelectModule } from '@devfactory/ngx-df/select';
+import { DfPortalModule } from '@devfactory/ngx-df/portal';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { DfSelectModule } from '@devfactory/ngx-df/select';
     DfNumberIncreaseModule.forRoot(),
     DfRadioInputModule.forRoot(),
     DfSelectModule.forRoot(),
+    DfPortalModule.forRoot(),
   ],
   providers: [],
   exports: [
@@ -78,6 +80,7 @@ import { DfSelectModule } from '@devfactory/ngx-df/select';
     DfNumberIncreaseModule,
     DfRadioInputModule,
     DfSelectModule,
+    DfPortalModule,
   ],
 })
 export class NgxDfRootModule {}
@@ -105,6 +108,7 @@ export class NgxDfRootModule {}
     DfNumberIncreaseModule,
     DfRadioInputModule,
     DfSelectModule,
+    DfPortalModule,
   ],
   exports: [
     DfCardModule,
@@ -128,6 +132,7 @@ export class NgxDfRootModule {}
     DfNumberIncreaseModule,
     DfRadioInputModule,
     DfSelectModule,
+    DfPortalModule,
   ],
 })
 export class NgxDfCustom {
