@@ -67,7 +67,7 @@ describe('PreparationMaterialComponent', () => {
       }];
 
       // Act
-      component.assignTrainings([worksmartTrainings, {}]);
+      component.assignTrainings([worksmartTrainings, []]);
 
       // Assert
       expect(component.worksmartTrainings[0].name).toBe('worksmart training');
@@ -80,14 +80,168 @@ describe('PreparationMaterialComponent', () => {
         trainingUrl: 'url',
         type: 'video',
         duration: '2',
+        typeOfTraining: 'Kickoff',
         focus: 'productivity'
       }];
 
       // Act
-      component.assignTrainings([{}, technicalTrainings]);
+      component.assignTrainings([[], technicalTrainings]);
 
       // Assert
       expect(component.technicalTrainings[0].name).toBe('technical training');
+    });
+
+    it('should sort WorkSmart trainings', () => {
+      // Arrange
+      const worksmartTrainings: TrainingMaterial[] = [{
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'other'
+      }, {
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'culture'
+      }, {
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'quality'
+      }, {
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'productivity'
+      }, {
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'compliance'
+      }, {
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'graduate recording'
+      }];
+
+      const expectedTrainings: TrainingMaterial[] = [{
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'compliance'
+      }, {
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'quality'
+      }, {
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'productivity'
+      }, {
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'graduate recording'
+      }, {
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'other'
+      },{
+        name: 'worksmart training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        focus: 'culture'
+      }];
+
+      // Act
+      component.assignTrainings([worksmartTrainings, []]);
+
+      // Assert
+      expect(component.worksmartTrainings).toEqual(expectedTrainings);
+    });
+
+    it('should sort technical trainings', () => {
+      // Arrange
+      const technicalTrainings: TrainingMaterial[] = [{
+        name: 'technical training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        typeOfTraining: 'Other',
+        focus: '',
+      }, {
+        name: 'technical training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        typeOfTraining: 'External',
+        focus: '',
+      }, {
+        name: 'technical training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        typeOfTraining: 'Kickoff',
+        focus: '',
+      }, {
+        name: 'technical training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        typeOfTraining: 'Faq',
+        focus: '',
+      }];
+      const expectedTrainings: TrainingMaterial[] = [{
+        name: 'technical training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        typeOfTraining: 'Kickoff',
+        focus: ''
+      }, {
+        name: 'technical training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        typeOfTraining: 'Faq',
+        focus: ''
+      }, {
+        name: 'technical training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        typeOfTraining: 'External',
+        focus: ''
+      }, {
+        name: 'technical training',
+        trainingUrl: 'url',
+        type: 'video',
+        duration: '2',
+        typeOfTraining: 'Other',
+        focus: ''
+      }];
+
+      // Act
+      component.assignTrainings([[], technicalTrainings]);
+
+      // Assert
+      expect(component.technicalTrainings).toEqual(expectedTrainings);
     });
   });
 });

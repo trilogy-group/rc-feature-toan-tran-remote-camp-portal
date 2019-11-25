@@ -18,7 +18,8 @@
         </a>
       </ng-template>
     </df-grid-column>
-    <df-grid-column header="Focus">
+    <df-grid-column header="Focus"
+      *ngIf="!hideFocus">
       <ng-template let-item="rowData"
         dfGridTemplate="body">
         {{ item.focus }}

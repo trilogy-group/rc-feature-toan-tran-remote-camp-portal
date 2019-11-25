@@ -8,12 +8,8 @@
       width: 184px;
     }
 
-    th:nth-child(2) {
-      width: 123px;
-    }
-
-    th:nth-child(3) {
-      width: 60px;
+    th:last-child {
+      width: 150px;
     }
   }
 

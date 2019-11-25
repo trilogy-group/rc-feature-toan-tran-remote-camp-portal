@@ -12,5 +12,8 @@ export class TrainingMaterialGridComponent {
   public header: string;
 
   @Input()
+  public hideFocus = false;
+
+  @Input()
   public trainings: TrainingMaterial[] = [];
 }
