@@ -24,6 +24,7 @@ import { SemCheckInChatsService } from 'src/app/shared/services/sem-check-in-cha
 import { UtilsService } from 'src/app/shared/services/utils.service';
 import { RegistrationService } from 'src/app/shared/services/registration.service';
 import { PlanningService } from 'src/app/shared/services/planning.service';
+import { TrainingMaterialService } from 'src/app/shared/services/training-material.service';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { PlanningService } from 'src/app/shared/services/planning.service';
     SemCheckInChatsService,
     UtilsService,
     RegistrationService,
-    PlanningService
+    PlanningService,
+    TrainingMaterialService
   ],
   bootstrap: [AppComponent]
 })
