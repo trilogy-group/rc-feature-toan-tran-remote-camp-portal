@@ -1,0 +1,41 @@
+<div class="col-12">
+  <df-grid 
+    [value]="trainings"
+    [scrollable]="true"
+    [columnResizeMode]="'expand'"
+    dataKey="ProductID"
+    tableStyleClass="resizable-grid"
+    sortMode="multiple"
+    [resizableColumns]="true"
+    scrollHeight="300px"
+    [forceResponsiveInMobile]="false">
+    <df-grid-column header="Name">
+      <ng-template let-item="rowData"
+        dfGridTemplate="body">
+        <a [href]="item.trainingUrl"
+          target="_blank">
+          {{ item.name }}
+        </a>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column header="Focus"
+      *ngIf="!hideFocus">
+      <ng-template let-item="rowData"
+        dfGridTemplate="body">
+        {{ item.focus }}
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column header="Type">
+      <ng-template let-item="rowData"
+        dfGridTemplate="body">
+        {{ item.type }}
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column header="Time To Complete (min)">
+      <ng-template let-item="rowData"
+        dfGridTemplate="body">
+        {{ item.duration }}
+      </ng-template>
+    </df-grid-column>
+  </df-grid>
+</div>

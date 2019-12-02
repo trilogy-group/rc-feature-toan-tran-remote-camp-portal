@@ -1,0 +1,14 @@
+.preparation-material-text {
+  white-space: initial;
+  font-size: 12px;
+}
+
+:host ::ng-deep {
+  .df-accordion-content__wrapper {
+    padding: 0px !important;
+  }
+
+  df-accordion-header {
+    min-height: 45px !important;
+  }
+}

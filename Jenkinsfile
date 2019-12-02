@@ -1,4 +1,5 @@
 def feature_branches_to_deploy = [
+  "feature/RUP-811",
   "feature/RT-123",
   "RUP-88",
   "feature/RUP-132"

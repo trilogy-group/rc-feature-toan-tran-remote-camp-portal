@@ -14,5 +14,7 @@ export const environment = {
   readyToStartGetUrl: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/ready-to-start-get',
   jiraStatusGetUrl: 'https://zv87oar3g5.execute-api.us-east-1.amazonaws.com/qa/jira-check',
   ticketsAssignedGetUrl: 'https://sr202yf402.execute-api.us-east-1.amazonaws.com/qa/backlog_status',
-  remoteUCodeRepoAccess: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/check-remotecamp-public-access'
+  remoteUCodeRepoAccess: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/check-remotecamp-public-access',
+  workSmartTrainingsUrl: 'https://wk0gso0xie.execute-api.us-east-1.amazonaws.com/qa/ws-pro',
+  technicalTrainingsUrl: 'https://wk0gso0xie.execute-api.us-east-1.amazonaws.com/qa/technical'
 };
