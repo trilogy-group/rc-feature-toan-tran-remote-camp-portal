@@ -85,6 +85,10 @@
                 <em *ngIf="!preStartInfo?.readyToStart">Will Be Set By {{ getDefaultETA() | date: short }}</em>
               </div>
             </div>
+            <button
+              class="btn btn-outline-primary mt-3"
+              (click)="openTrainingMaterials()">Training Materials
+            </button>
             <div class="d-flex flex-column text-center align-items-center mt-3">
               <p class="onboard-info">Please follow all the instructions that you have received to {{ preStartInfo?.email }}. If there is an issue, please send an email to <a href = "mailto: remotecamp-sem@trilogy.com">remotecamp-sem@trilogy.com <mat-icon class="info pointer">email</mat-icon></a></p>
             </div>
