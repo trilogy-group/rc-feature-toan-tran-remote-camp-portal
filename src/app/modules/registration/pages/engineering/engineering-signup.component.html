@@ -4,8 +4,8 @@
       <form class="d-block"
         [formGroup]="form">
         <p class="mb-0">
-          <em>Please note, that before you start your work at Crossover, you’ll have to pass the Remote University - paid intensive program which will teach you how to be an Elite of our Company. Not everyone can pass the Remote University successfully, though we graduate more than 80% of the candidates. 
-              Before accepting the order you need to confirm that you accept the Remote University rules, and you want to participate in this program. If you have questions or concerns about the Remote University program, please reach out to your interviewer. 
+          <em>Please note, that before you start your work at Crossover, you’ll have to pass the Remote University - paid intensive program which will teach you how to be an Elite of our Company. Not everyone can pass the Remote University successfully, though we graduate more than 80% of the candidates.
+              Before accepting the order you need to confirm that you accept the Remote University rules, and you want to participate in this program. If you have questions or concerns about the Remote University program, please reach out to your interviewer.
           </em>
         </p>
         <p class="mb-5">
@@ -30,7 +30,7 @@
         </h5>
         <df-select
           placeholder="Please select a role to apply for"
-          (change)="getRoleSpecificPrerequisites($event)"          
+          (change)="getRoleSpecificPrerequisites($event)"
           [filterable]="false">
           <df-option *ngFor="let role of roles"
             [value]="role.id">
@@ -42,6 +42,9 @@
           <span *ngIf="showErrors && !form.controls.GitHubId.valid"
             class="ml-1 danger missing-field">This field is required</span>
         </h5>
+        <p *ngIf="isNonQAManualTesterSelected()">
+          Register to <a href="https://github.com" target="_blank">https://github.com</a> if you don't have any GitHub name already
+        </p>
         <input *ngIf="isNonQAManualTesterSelected()"
           type="text"
           formControlName="GitHubId"
@@ -54,7 +57,7 @@
         </h5>
         <div class="d-block">
           <p>
-            Please check to confirm you have the following covered. Refer to <a 
+            Please check to confirm you have the following covered. Refer to <a
               href="https://docs.google.com/document/d/1Z1ZaQpf4aa291O_dkbrPhaY0s0CEKr2RNOPltfRTFsc/edit"
               target="_blank">this</a> document for details.
           </p>
@@ -71,7 +74,7 @@
             Stable internet connection with at least 5Mbps download speed (handle video streaming)
           </df-checkbox>
           <df-checkbox formControlName="requirement5">
-            Computer that meets the specs specified in the above document 
+            Computer that meets the specs specified in the above document
           </df-checkbox>
           <df-checkbox formControlName="requirement6">
             Able to work in an environment with no distractions during working hours
@@ -86,7 +89,7 @@
             Computer with a webcam and high quality microphone/headset that meets the specs specified in the above document
           </df-checkbox>
         </div>
-        
+
         <h5 class="mb-1 mt-3">Role Specific Prerequisites</h5>
         <p>
           Please check whether you have the following skillset. If not, it is highly recommended that you spend time learning these skills before starting RemoteU
@@ -110,7 +113,7 @@
         <input type="text"
           formControlName="videoUrl"
           placeholder="Video Url"
-          class="form-control">        
+          class="form-control">
 
         <h5 class="mb-1 mt-3">
           Starting Date<span class="danger">*</span>
@@ -136,7 +139,7 @@
             class="ml-1 danger missing-field">This field is required</span>
         </h5>
         <p>
-          Please download, sign and upload the 
+          Please download, sign and upload the
           <a href="https://docs.google.com/document/d/1ZdVCuOo532LP4ctHTvKkFC33DVvFG_Xca5LK_1xlM2g/edit"
             target="_blank">
             RemoteU Contract
@@ -155,7 +158,7 @@
         </df-checkbox>
         <div *ngIf="showErrors && isSubmitDisabled()"
           class="danger"><em>Please make sure to enter all missing fields above marked in red</em></div>
-        <button 
+        <button
           (click)="submit()"
           type="submit"
           class="btn btn-primary mt-3 pl-4 pr-4 mr-2">
