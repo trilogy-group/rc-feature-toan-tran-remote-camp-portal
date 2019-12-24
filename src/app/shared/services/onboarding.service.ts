@@ -20,6 +20,7 @@ export class OnboardingService {
   private static readonly jiraStatusGetUrl = environment.jiraStatusGetUrl;
   private static readonly ticketsAssignedGetUrl = environment.ticketsAssignedGetUrl;
   private static readonly remoteUCodeRepoAccessUrl = environment.remoteUCodeRepoAccess;
+  private static readonly communicationChannelAccessUrl = environment.communicationChannelAccessUrl;
 
   private preStartInfo = {
     accesses: {
@@ -98,6 +99,11 @@ export class OnboardingService {
   public getTicketsAssigned(email: string): Observable<any> {
     const options = this.getSkipLoaderHeaders();
     return this.httpClient.get(`${OnboardingService.ticketsAssignedGetUrl}?email=${email}`, options);
+  }
+
+  public getCommunicationChannelAccess(email: string): Observable<any> {
+    const options = this.getSkipLoaderHeaders();
+    return this.httpClient.get(`${OnboardingService.communicationChannelAccessUrl}?email=${email}`, options);
   }
 
   private getSkipLoaderHeaders(): any {

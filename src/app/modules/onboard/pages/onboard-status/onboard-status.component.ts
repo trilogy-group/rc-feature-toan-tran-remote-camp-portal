@@ -63,6 +63,8 @@ export class OnboardStatusComponent implements OnInit {
 
   public loadedRemoteUCodeBase = false;
 
+  public loadedCommunicationChannel = false;
+
   public getHeaderText(): string {
     return this.preStartInfo &&
       this.preStartInfo.ticketsAssigned &&
@@ -220,6 +222,11 @@ export class OnboardStatusComponent implements OnInit {
     return this.accessesConfirmed() ? this.accessesConfirmedText : this.confirmAccessesText;
   }
 
+  public isCommunicationChannelVisible(): boolean {
+    return this.loadedCommunicationChannel && this.preStartInfo &&
+      this.preStartInfo.accesses && !this.preStartInfo.accesses.loadedCommunicationChannel;
+  }
+
   public loadFinalStageServices(): void {
     this.onboardingService.getAssignmentFolder(this.preStartInfo.name)
       .subscribe(
@@ -266,6 +273,15 @@ export class OnboardStatusComponent implements OnInit {
         () => this.toasterService.popError('Unable to get RemoteU code repository access status')
       );
     }
+
+    this.onboardingService.getCommunicationChannelAccess(this.preStartInfo.email)
+      .subscribe(statusResponse => {
+        this.preStartInfo.accesses.loadedCommunicationChannel = statusResponse && statusResponse.status === 'Yes';
+        this.loadedCommunicationChannel = true;
+      },
+        () => this.toasterService.popError('Unable to get Communication Channel access status')
+      );
+
   }
 
   public isQAManualTester(): boolean {

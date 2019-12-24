@@ -16,5 +16,6 @@ export const environment = {
   ticketsAssignedGetUrl: 'https://sr202yf402.execute-api.us-east-1.amazonaws.com/qa/backlog_status',
   remoteUCodeRepoAccess: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/check-remotecamp-public-access',
   workSmartTrainingsUrl: 'https://wk0gso0xie.execute-api.us-east-1.amazonaws.com/qa/ws-pro',
-  technicalTrainingsUrl: 'https://wk0gso0xie.execute-api.us-east-1.amazonaws.com/qa/technical'
+  technicalTrainingsUrl: 'https://wk0gso0xie.execute-api.us-east-1.amazonaws.com/qa/technical',
+  communicationChannelAccessUrl: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/check-xoChat-registeration-get'
 };
