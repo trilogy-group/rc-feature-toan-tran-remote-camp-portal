@@ -99,6 +99,19 @@
             [class.d-none]="!sideBar.isOpen">Gradebook</span>
         </a>
       </df-sidebar-item>
+      <df-sidebar-item *ngIf="isAdmin()"
+        [hasIcon]="false"
+        matTooltip="Admin"
+        matTooltipPosition="right"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/admin']">
+          <mat-icon class="ml-1">person</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Admin</span>
+        </a>
+      </df-sidebar-item>
       <df-sidebar-item *ngIf="!isAdmin()"
         [hasIcon]="false"
         matTooltip="My Plan"

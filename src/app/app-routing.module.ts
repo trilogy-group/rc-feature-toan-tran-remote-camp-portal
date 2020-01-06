@@ -33,6 +33,10 @@ const routes: Routes = [
       {
         path: 'onboard',
         loadChildren: './modules/onboard/onboard.module#OnboardModule',
+      },
+      {
+        path: 'admin',
+        loadChildren: './modules/admin/admin.module#AdminModule',
       }
     ]
   },

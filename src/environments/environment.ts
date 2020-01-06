@@ -21,7 +21,9 @@ export const environment = {
   remoteUCodeRepoAccess: 'https://hmart2ms7g.execute-api.us-east-1.amazonaws.com/dev/check-remotecamp-public-access',
   workSmartTrainingsUrl: 'https://nqgh2fcnx5.execute-api.us-east-1.amazonaws.com/dev/ws-pro',
   technicalTrainingsUrl: 'https://nqgh2fcnx5.execute-api.us-east-1.amazonaws.com/dev/technical',
-  communicationChannelAccessUrl: 'https://hmart2ms7g.execute-api.us-east-1.amazonaws.com/dev/check-xoChat-registeration-get'
+  communicationChannelAccessUrl: 'https://hmart2ms7g.execute-api.us-east-1.amazonaws.com/dev/check-xoChat-registeration-get',
+  knowledgeBaseUrl: 'https://3ont4uqzx2.execute-api.us-east-1.amazonaws.com/dev/refresh-kb',
+  knowledgeBaseStatusUrl: 'https://3ont4uqzx2.execute-api.us-east-1.amazonaws.com/dev/status'
 };
 
 /*

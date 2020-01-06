@@ -1,0 +1,30 @@
+<div class="ml-5 d-flex flex-column">
+  <div class="container-fluid">
+    <div class="row section__header">
+      <div class="col py-3 justify-content-between d-flex">
+        <h1 class="m-0">
+          Admin
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3 class="ml-3 mb-2 mt-3">
+          Chatbot
+        </h3>
+        <button mat-raised-button
+          [disabled]="refreshingKnowledgeBase"
+          class="mt-4"
+          (click)="refreshKnowledgeBase()">
+          Refresh Knowledge Base
+          <mat-icon [matTooltip]="refreshKnowledgeBaseTooltip"
+            *ngIf="!refreshingKnowledgeBase"
+            class="ml-1 info-tooltip">help_outline</mat-icon>
+          <i *ngIf="refreshingKnowledgeBase" class="ml-2 mb-1 df-loader"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

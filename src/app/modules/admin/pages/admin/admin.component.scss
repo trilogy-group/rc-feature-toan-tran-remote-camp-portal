@@ -1,0 +1,14 @@
+@import "~@devfactory/ngx-df/core/loaders/loader";
+
+.info-tooltip {
+  margin-bottom: 2px;
+}
+
+:host {
+  ::ng-deep {
+    .df-loader {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

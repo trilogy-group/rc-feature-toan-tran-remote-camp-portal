@@ -62,10 +62,10 @@ export class AuthenticationGuard implements CanActivate {
   }
 
   private isAdminRoute(url: string): boolean {
-    return url === 'gradebook';
+    return url === 'gradebook' || url === 'admin';
   }
 
   private isUserRoute(url: string): boolean {
-    return true;
+    return url !== 'admin';
   }
 }

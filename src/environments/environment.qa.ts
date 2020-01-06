@@ -17,5 +17,7 @@ export const environment = {
   remoteUCodeRepoAccess: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/check-remotecamp-public-access',
   workSmartTrainingsUrl: 'https://wk0gso0xie.execute-api.us-east-1.amazonaws.com/qa/ws-pro',
   technicalTrainingsUrl: 'https://wk0gso0xie.execute-api.us-east-1.amazonaws.com/qa/technical',
-  communicationChannelAccessUrl: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/check-xoChat-registeration-get'
+  communicationChannelAccessUrl: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/check-xoChat-registeration-get',
+  knowledgeBaseUrl: 'https://nfe9weffa0.execute-api.amazonaws.com/qa/refresh-kb',
+  knowledgeBaseStatusUrl: 'https://nfe9weffa0.execute-api.us-east-1.amazonaws.com/qa/status'
 };
