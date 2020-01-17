@@ -4,6 +4,7 @@ export const environment = {
   assignmentProjectJira: 'TREM',
   gitHash: 'GIT_HASH_PLACEHOLDER',
   apiUrl: 'https://qa-remoteu.trilogy.com/api',
+  googleClientId: '833875804511-7quv82va3lpm63b1ap0ob0c5sjjms8nq.apps.googleusercontent.com',
   itSystemAccessGetUrl: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/report-issue-it-systems-access-get',
   preStartConfirmAccessesGetUrl: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/confirm-accesses-get',
   preStartConfirmAccessesPutUrl: 'https://s1w5hujwr4.execute-api.us-east-1.amazonaws.com/qa/confirm-accesses-put',

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, TemplateRef, ViewChild } from '@angular/core';
+import { Component, NgZone, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { FormControl } from '@angular/forms';
@@ -9,14 +9,12 @@ import { finalize } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { AuthenticationTokenService } from 'src/app/shared/services/authentication-token.service';
 
-declare var gapi: any;
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   private readonly admin = 'admin';
   // tslint:disable-next-line:max-line-length
   private readonly emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -36,22 +34,8 @@ export class LoginComponent implements OnInit {
     private readonly authenticationTokenService: AuthenticationTokenService
   ) { }
 
-  public ngOnInit(): void {
-    setTimeout(() => {
-      gapi.signin2.render('my-signin2', {
-        'scope': 'profile email',
-        'width': 240,
-        'height': 40,
-        'longtitle': true,
-        'theme': 'dark',
-        'onsuccess': this.onSuccess.bind(this),
-        'onfailure': this.onFailure.bind(this)
-      });
-    }, 500);
-  }
-
-  public onSuccess(googleUser: any): void {
-    this.login(googleUser.getAuthResponse().id_token);
+  public onSuccess(googleIdToken: string): void {
+    this.login(googleIdToken);
   }
 
   public onFailure(error: any): void {

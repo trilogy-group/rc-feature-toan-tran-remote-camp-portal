@@ -4,6 +4,7 @@ export const environment = {
   assignmentProjectJira: 'REM',
   gitHash: 'GIT_HASH_PLACEHOLDER',
   apiUrl: 'https://remoteu.trilogy.com/api',
+  googleClientId: '833875804511-7quv82va3lpm63b1ap0ob0c5sjjms8nq.apps.googleusercontent.com',
   itSystemAccessGetUrl: 'https://5lwj6352lh.execute-api.us-east-1.amazonaws.com/prod/report-issue-it-systems-access-get',
   preStartConfirmAccessesGetUrl: 'https://5lwj6352lh.execute-api.us-east-1.amazonaws.com/prod/confirm-accesses-get',
   preStartConfirmAccessesPutUrl: 'https://5lwj6352lh.execute-api.us-east-1.amazonaws.com/prod/confirm-accesses-put',
