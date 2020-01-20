@@ -16,8 +16,9 @@
             class="col">
             <h5 class="mt-2"><strong>{{ dayPlan.day }}</strong></h5>
             By the end of the day:
-            <p class="mb-0"><em>{{ dayPlan.description}}</em></p>
+            <p class="mb-0 day-description"><em>{{ dayPlan.description}}</em></p>
             <df-grid [value]="dayPlan.actions"
+                     sortField="position"
               [editable]="true">
               <df-grid-column header="Action">
                 <ng-template let-item="rowData"

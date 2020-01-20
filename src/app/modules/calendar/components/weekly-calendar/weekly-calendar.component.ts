@@ -33,6 +33,7 @@ export class WeeklyCalendarComponent implements OnInit {
         const duration = plan.actions.map(action => action.duration).reduce((durationA, durationB) => durationA + durationB);
         plan.actions.push({
           description: this.TOTAL,
+          position: Number.MAX_SAFE_INTEGER,
           duration,
         });
       });

@@ -15,12 +15,16 @@ export class CalendarComponent implements OnInit {
   public week2 = [];
   public week3 = [];
   public week4 = [];
+  public weekIndexOffset = 0;
 
   constructor(private calendarService: CalendarService) { }
 
   public ngOnInit(): void {
     this.calendarService.getWeeklyPlanning().subscribe(weeklyPlanning => {
       this.weeklyPlanning = cloneDeep(weeklyPlanning);
+      if (this.weeklyPlanning.length <= 4) {
+        this.weekIndexOffset = 1;
+      }
     });
   }
 
