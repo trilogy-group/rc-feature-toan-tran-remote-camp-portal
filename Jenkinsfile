@@ -2,7 +2,8 @@ def feature_branches_to_deploy = [
   "feature/RUP-811",
   "feature/RT-123",
   "RUP-88",
-  "feature/RUP-132"
+  "feature/RUP-132",
+  "RT-2915"
 ]
 
 String NG_BUILD_CONFIG
@@ -45,9 +46,9 @@ pipeline {
     CONTAINER_PORT = 80
     HEALTH_CHECK_ENDPOINT = "/"
     DTR_URL = "registry2.swarm.devfactory.com"
-    DTR_USERNAME = "anetrebskiy"
-    DTR_PASSWORD = credentials("DTR_PW_NETREBSKIY")
-    DOCKER_LINUX_HOST = "dl6.aureacentral.com"
+    TEST_DOCKER_LINUX_HOST = "dl6.aureacentral.com"
+    PROD_DOCKER_LINUX_HOST = "dl1.aureacentral.com"
+    DOCKER_LINUX_PORT = "9998"
     COMPANY = "teamrooms"
     TEAM = "remotecamp"
     EMAIL = "alex.netrebskiy@aurea.com"
@@ -83,9 +84,11 @@ pipeline {
               NG_BUILD_CONFIG="--configuration=dev"
               STAGE = "dev"
               HOST_HEALTH_CHECK_PORT = 9201
+              DOCKER_LINUX_HOST = "${TEST_DOCKER_LINUX_HOST}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
+              echo "DOCKER_LINUX_HOST: ${DOCKER_LINUX_HOST}"
             }
           }
         }
@@ -99,9 +102,11 @@ pipeline {
               NG_BUILD_CONFIG="--configuration=qa"
               STAGE = "qa"
               HOST_HEALTH_CHECK_PORT = 9202
+              DOCKER_LINUX_HOST = "${TEST_DOCKER_LINUX_HOST}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
+              echo "DOCKER_LINUX_HOST: ${DOCKER_LINUX_HOST}"
             }
           }
         }
@@ -115,9 +120,11 @@ pipeline {
               NG_BUILD_CONFIG="--configuration=prod"
               STAGE = "staging"
               HOST_HEALTH_CHECK_PORT = 9203
+              DOCKER_LINUX_HOST = "${PROD_DOCKER_LINUX_HOST}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
+              echo "DOCKER_LINUX_HOST: ${DOCKER_LINUX_HOST}"
             }
           }
         }
@@ -137,9 +144,11 @@ pipeline {
               NG_BUILD_CONFIG="--configuration=regression"
               STAGE = "regression"
               HOST_HEALTH_CHECK_PORT = 9204
+              DOCKER_LINUX_HOST = "${TEST_DOCKER_LINUX_HOST}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
+              echo "DOCKER_LINUX_HOST: ${DOCKER_LINUX_HOST}"
             }
           }
         }
@@ -239,14 +248,7 @@ pipeline {
 
         stage ("7) Push Docker image to DTR") {
           stages {
-            stage ("7.1) Login to the remote registry") {
-              steps {
-                echo "Logging in to the remote registry..."
-                sh "docker login https://${DTR_URL} -u${DTR_USERNAME} -p${DTR_PASSWORD}"
-              }
-            }
-
-            stage ("7.2) Push tagged Docker images to DTR") {
+            stage ("7.1) Push tagged Docker images to DTR") {
               steps {
                 echo "Pushing the Docker image to the remote registry..."
                 sh "docker push ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${encoded_branch_name}:${GIT_HASH}"
@@ -256,15 +258,15 @@ pipeline {
           }
         }
 
-        stage ("8) Deploy to DL6 - Non-Prod") {
+        stage ("8) Deploy to DL - Non-Prod") {
           stages {
-            stage ("8.1) Find old deployments on DL6") {
+            stage ("8.1) Find old deployments on DL") {
               steps {
-                echo "Finding old deployments on DL6..."
+                echo "Finding old deployments on DL..."
                 script {
                   OLD_DEPLOYMENTS = sh (script: """
                     set -e
-                    docker -H ${DOCKER_LINUX_HOST} ps -q -f "label=SERVICE_NAME=regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}"
+                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} ps -q -f "label=SERVICE_NAME=regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}"
                   """, returnStdout: true).trim()
                 }
                 sh """#!/bin/bash
@@ -272,7 +274,7 @@ pipeline {
                   echo "Found the following old deployment(s):"
                   for hash in ${OLD_DEPLOYMENTS}
                   do
-                    CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                    CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                     echo \\'\${CONTAINER_NAME:1}\\'
                   done
                 """
@@ -292,12 +294,12 @@ pipeline {
               }
             }
 
-            stage ("8.3) Deploy new container to DL6") {
+            stage ("8.3) Deploy new container to DL") {
               steps {
-                echo "Deploying new container to DL6..."
+                echo "Deploying new container to DL..."
                 sh """
                   set -e
-                  docker -H ${DOCKER_LINUX_HOST} run -d --rm \
+                  docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
                   --name regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}-${GIT_HASH}-${BUILD_NUMBER} \
                   -l "SERVICE_NAME=regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}" \
                   -l "SERVICE_TAGS=\
@@ -324,22 +326,22 @@ jenkins.job=${JOB_NAME}" \
                   ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${encoded_branch_name}:${GIT_HASH}
                 """
                 echo "Deployed container 'regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}-${GIT_HASH}-${BUILD_NUMBER}'"
-                echo "DL6-hosted '${STAGE}' container available at http://regression-${encoded_branch_name}-${ENDPOINT}"
+                echo "DL-hosted '${STAGE}' container available at http://regression-${encoded_branch_name}-${ENDPOINT}"
               }
             }
 
-            stage ("8.4) Clean up old deployments on DL6") {
+            stage ("8.4) Clean up old deployments on DL") {
               steps {
-                echo "Cleaning up old deployments on DL6..."
+                echo "Cleaning up old deployments on DL..."
                 sh """#!/bin/bash
                   set -e
                   for hash in ${OLD_DEPLOYMENTS}
                   do
-                    CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                    CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                     echo Killing container \\'\${CONTAINER_NAME:1}\\'
-                    docker -H ${DOCKER_LINUX_HOST} kill \$hash 2> /dev/null || true
+                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} kill \$hash 2> /dev/null || true
                     echo Removing container \\'\${CONTAINER_NAME:1}\\'
-                    docker -H ${DOCKER_LINUX_HOST} rm \$hash 2> /dev/null || true
+                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} rm \$hash 2> /dev/null || true
                     echo
                   done
                 """
@@ -378,14 +380,7 @@ jenkins.job=${JOB_NAME}" \
 
         stage ("7) Push Docker image to DTR") {
           stages {
-            stage ("7.1) Login to the remote registry") {
-              steps {
-                echo "Logging in to the remote registry..."
-                sh "docker login https://${DTR_URL} -u${DTR_USERNAME} -p${DTR_PASSWORD}"
-              }
-            }
-
-            stage ("7.2) Push tagged Docker images to DTR") {
+            stage ("7.1) Push tagged Docker images to DTR") {
               steps {
                 echo "Pushing the Docker image to the remote registry..."
                 sh "docker push ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}"
@@ -395,15 +390,15 @@ jenkins.job=${JOB_NAME}" \
           }
         }
 
-        stage ("8) Deploy to DL6 - Non-Prod") {
+        stage ("8) Deploy to DL - Non-Prod") {
           stages {
-            stage ("8.1) Find old deployments on DL6") {
+            stage ("8.1) Find old deployments on DL") {
               steps {
-                echo "Finding old deployments on DL6..."
+                echo "Finding old deployments on DL..."
                 script {
                   OLD_DEPLOYMENTS = sh (script: """
                     set -e
-                    docker -H ${DOCKER_LINUX_HOST} ps -q -f "label=SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}"
+                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} ps -q -f "label=SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}"
                   """, returnStdout: true).trim()
                 }
                 sh """#!/bin/bash
@@ -411,7 +406,7 @@ jenkins.job=${JOB_NAME}" \
                   echo "Found the following old deployment(s):"
                   for hash in ${OLD_DEPLOYMENTS}
                   do
-                    CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                    CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                     echo \\'\${CONTAINER_NAME:1}\\'
                   done
                 """
@@ -431,12 +426,12 @@ jenkins.job=${JOB_NAME}" \
               }
             }
 
-            stage ("8.3) Deploy new container to DL6") {
+            stage ("8.3) Deploy new container to DL") {
               steps {
-                echo "Deploying new container to DL6..."
+                echo "Deploying new container to DL..."
                 sh """
                   set -e
-                  docker -H ${DOCKER_LINUX_HOST} run -d --rm \
+                  docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
                   -l "SERVICE_TAGS=\
@@ -463,22 +458,22 @@ jenkins.job=${JOB_NAME}" \
                   ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                 """
                 echo "Deployed container '${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER}'"
-                echo "DL6-hosted '${STAGE}' container available at http://${STAGE}-${ENDPOINT}"
+                echo "DL-hosted '${STAGE}' container available at http://${STAGE}-${ENDPOINT}"
               }
             }
 
-            stage ("8.4) Clean up old deployments on DL6") {
+            stage ("8.4) Clean up old deployments on DL") {
               steps {
-                echo "Cleaning up old deployments on DL6..."
+                echo "Cleaning up old deployments on DL..."
                 sh """#!/bin/bash
                   set -e
                   for hash in ${OLD_DEPLOYMENTS}
                   do
-                    CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                    CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                     echo Killing container \\'\${CONTAINER_NAME:1}\\'
-                    docker -H ${DOCKER_LINUX_HOST} kill \$hash 2> /dev/null || true
+                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} kill \$hash 2> /dev/null || true
                     echo Removing container \\'\${CONTAINER_NAME:1}\\'
-                    docker -H ${DOCKER_LINUX_HOST} rm \$hash 2> /dev/null || true
+                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} rm \$hash 2> /dev/null || true
                     echo
                   done
                 """
@@ -497,15 +492,15 @@ jenkins.job=${JOB_NAME}" \
             ok "Just do it"
           }
           stages {
-            stage ("9) Deploy to DL6 - Prod") {
+            stage ("9) Deploy to DL - Prod") {
               stages {
-                stage ("9.1) Find old 'prod' deployments on DL6") {
+                stage ("9.1) Find old 'prod' deployments on DL") {
                   steps {
-                    echo "Finding old 'prod' deployments on DL6..."
+                    echo "Finding old 'prod' deployments on DL..."
                     script {
                       OLD_DEPLOYMENTS = sh (script: """
                         set -e
-                        docker -H ${DOCKER_LINUX_HOST} ps -q -f "label=SERVICE_NAME=prod_${PRODUCT}_${SERVICE}"
+                        docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} ps -q -f "label=SERVICE_NAME=prod_${PRODUCT}_${SERVICE}"
                       """, returnStdout: true).trim()
                     }
                     sh """#!/bin/bash
@@ -513,7 +508,7 @@ jenkins.job=${JOB_NAME}" \
                       echo "Found the following old 'prod' deployment(s):"
                       for hash in ${OLD_DEPLOYMENTS}
                       do
-                        CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                        CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                         echo \\'\${CONTAINER_NAME:1}\\'
                       done
                     """
@@ -533,12 +528,12 @@ jenkins.job=${JOB_NAME}" \
                   }
                 }
 
-                stage ("9.3) Deploy new 'prod' container to DL6") {
+                stage ("9.3) Deploy new 'prod' container to DL") {
                   steps {
-                    echo "Deploying new 'prod' container to DL6..."
+                    echo "Deploying new 'prod' container to DL..."
                     sh """
                       set -e
-                      docker -H ${DOCKER_LINUX_HOST} run -d --rm \
+                      docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
                       --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER} \
                       -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
                       -l "SERVICE_TAGS=\
@@ -565,22 +560,22 @@ jenkins.job=${JOB_NAME}" \
                       ${DTR_URL}/${PROJECT_ID}/${ARTIFACT_ID}-${BRANCH_NAME}:${GIT_HASH}
                     """
                     echo "Deployed container 'prod_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER}'"
-                    echo "DL6-hosted 'prod' container available at http://${ENDPOINT}"
+                    echo "DL-hosted 'prod' container available at http://${ENDPOINT}"
                   }
                 }
 
-                stage ("9.4) Clean up old 'prod' deployments on DL6") {
+                stage ("9.4) Clean up old 'prod' deployments on DL") {
                   steps {
-                    echo "Cleaning up old 'prod' deployments on DL6..."
+                    echo "Cleaning up old 'prod' deployments on DL..."
                     sh """#!/bin/bash
                       set -e
                       for hash in ${OLD_DEPLOYMENTS}
                       do
-                        CONTAINER_NAME=\$(docker -H ${DOCKER_LINUX_HOST} inspect -f="{{.Name}}" \$hash)
+                        CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                         echo Killing container \\'\${CONTAINER_NAME:1}\\'
-                        docker -H ${DOCKER_LINUX_HOST} kill \$hash 2> /dev/null || true
+                        docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} kill \$hash 2> /dev/null || true
                         echo Removing container \\'\${CONTAINER_NAME:1}\\'
-                        docker -H ${DOCKER_LINUX_HOST} rm \$hash 2> /dev/null || true
+                        docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} rm \$hash 2> /dev/null || true
                         echo
                       done
                     """
