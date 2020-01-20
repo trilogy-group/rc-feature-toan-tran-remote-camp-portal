@@ -116,24 +116,6 @@
           class="form-control">
 
         <h5 class="mb-1 mt-3">
-          Starting Date<span class="danger">*</span>
-          <span *ngIf="showErrors && !form.controls.startDate.valid"
-            class="ml-1 danger missing-field">This field is required</span>
-        </h5>
-        <p>
-          Please select a date when you can be available to start the RemoteU. Please note that you won't be able to postpone the date once started. Please note below: RemoteU is a 4-week program and you are required to work 40 hours by the end of Friday (a minimum of 8 hours every weekday).
-        </p>
-        <df-select
-          placeholder="Please select a starting date"
-          (change)="startDateChange($event)"
-          [filterable]="false">
-          <df-option *ngFor="let monday of mondays"
-            [value]="monday">
-            Monday, {{ monday | date: short }}
-          </df-option>
-        </df-select>
-
-        <h5 class="mb-1 mt-3">
           Signed Contract<span class="danger">*</span>
           <span *ngIf="showErrors && !contractFileUploader?.filesQueue?.length"
             class="ml-1 danger missing-field">This field is required</span>

@@ -3,7 +3,6 @@ import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DfFileUploader, DfFileUploaderOptions, DfFileUploaderActionOptions } from '@devfactory/ngx-df/file-upload';
 import { Router } from '@angular/router';
-import { isThursday, startOfWeek, addWeeks, isFriday, isSaturday, isSunday, isWednesday, isTuesday } from 'date-fns';
 
 import { RegistrationService } from 'src/app/shared/services/registration.service';
 
@@ -27,7 +26,6 @@ export class EngineeringSignupComponent {
   public loaded = false;
 
   public contractFileUploader: DfFileUploader;
-  public mondays: Date[] = [];
 
   public showErrors: boolean;
 
@@ -63,7 +61,6 @@ export class EngineeringSignupComponent {
       requirement8: [false, Validators.required],
       requirement9: [false, Validators.required],
       requirement10: [false, Validators.required],
-      startDate: [null, Validators.required],
       videoUrl: [null, Validators.required]
     });
     this.registrationService.getAvailableRoles()
@@ -71,8 +68,6 @@ export class EngineeringSignupComponent {
         this.roles = roles.sort((x, y) => x.name.localeCompare(y.name));
         this.loaded = true;
       });
-
-    this.getNext12Mondays();
   }
 
   public getRoleSpecificPrerequisites(roleId: number): void {
@@ -90,18 +85,11 @@ export class EngineeringSignupComponent {
     }
   }
 
-  public startDateChange(date: Date): void {
-    this.form.controls.startDate.setValue(date);
-  }
-
   public onContractUploadFileEvent(): void {
   }
 
   public onContractRemoveFileEvent(): void {
     this.contractFileUploader.removeAll();
-  }
-
-  public onVideoUploadFileEvent(): void {
   }
 
   public mandatoryPrerequisitesChecked(): boolean {
@@ -150,15 +138,6 @@ export class EngineeringSignupComponent {
         this.router.navigate(['/login']);
         this.toasterService.popSuccess(`You are registered successfully!`);
       }, this.handleError.bind(this));
-  }
-
-  private getNext12Mondays(): void {
-    let date = new Date();
-    date = addWeeks(date, 2);
-    for (let i = 0; i < 12; i++) {
-      this.mondays.push(startOfWeek(addWeeks(date, 1), { weekStartsOn: 1 }));
-      date = addWeeks(date, 1);
-    }
   }
 
   private handleError(error): void {
