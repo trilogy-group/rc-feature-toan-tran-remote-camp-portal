@@ -59,7 +59,7 @@ pipeline {
 
   agent {
     node {
-      label "rc-qe"
+      label "incorrect-agent-label"
     }
   }
 
