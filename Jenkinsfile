@@ -45,7 +45,9 @@ pipeline {
     CONTAINER_PORT = 80
     HEALTH_CHECK_ENDPOINT = "/"
     DTR_URL = "registry2.swarm.devfactory.com"
+    TEST_TLS_VERIFY = " "
     TEST_DOCKER_LINUX_HOST = "dl6.aureacentral.com"
+    PROD_TLS_VERIFY = "--tlsverify"
     PROD_DOCKER_LINUX_HOST = "dl1.aureacentral.com"
     DOCKER_LINUX_PORT = "9998"
     COMPANY = "teamrooms"
@@ -84,6 +86,7 @@ pipeline {
               STAGE = "dev"
               HOST_HEALTH_CHECK_PORT = 9201
               DOCKER_LINUX_HOST = "${TEST_DOCKER_LINUX_HOST}"
+              TLS_VERIFY = "${TEST_TLS_VERIFY}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
@@ -102,6 +105,7 @@ pipeline {
               STAGE = "qa"
               HOST_HEALTH_CHECK_PORT = 9202
               DOCKER_LINUX_HOST = "${TEST_DOCKER_LINUX_HOST}"
+              TLS_VERIFY = "${TEST_TLS_VERIFY}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
@@ -120,6 +124,7 @@ pipeline {
               STAGE = "staging"
               HOST_HEALTH_CHECK_PORT = 9203
               DOCKER_LINUX_HOST = "${PROD_DOCKER_LINUX_HOST}"
+              TLS_VERIFY = "${PROD_TLS_VERIFY}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
@@ -144,6 +149,7 @@ pipeline {
               STAGE = "regression"
               HOST_HEALTH_CHECK_PORT = 9204
               DOCKER_LINUX_HOST = "${TEST_DOCKER_LINUX_HOST}"
+              TLS_VERIFY = "${TEST_TLS_VERIFY}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
               echo "HOST_HEALTH_CHECK_PORT: ${HOST_HEALTH_CHECK_PORT}"
@@ -265,7 +271,7 @@ pipeline {
                 script {
                   OLD_DEPLOYMENTS = sh (script: """
                     set -e
-                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} ps -q -f "label=SERVICE_NAME=regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}"
+                    docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} ps -q -f "label=SERVICE_NAME=regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}"
                   """, returnStdout: true).trim()
                 }
                 sh """#!/bin/bash
@@ -273,7 +279,7 @@ pipeline {
                   echo "Found the following old deployment(s):"
                   for hash in ${OLD_DEPLOYMENTS}
                   do
-                    CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
+                    CONTAINER_NAME=\$(docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                     echo \\'\${CONTAINER_NAME:1}\\'
                   done
                 """
@@ -298,7 +304,7 @@ pipeline {
                 echo "Deploying new container to DL..."
                 sh """
                   set -e
-                  docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
+                  docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
                   --name regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}-${GIT_HASH}-${BUILD_NUMBER} \
                   -l "SERVICE_NAME=regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}" \
                   -l "SERVICE_TAGS=\
@@ -336,11 +342,11 @@ jenkins.job=${JOB_NAME}" \
                   set -e
                   for hash in ${OLD_DEPLOYMENTS}
                   do
-                    CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
+                    CONTAINER_NAME=\$(docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                     echo Killing container \\'\${CONTAINER_NAME:1}\\'
-                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} kill \$hash 2> /dev/null || true
+                    docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} kill \$hash 2> /dev/null || true
                     echo Removing container \\'\${CONTAINER_NAME:1}\\'
-                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} rm \$hash 2> /dev/null || true
+                    docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} rm \$hash 2> /dev/null || true
                     echo
                   done
                 """
@@ -397,7 +403,7 @@ jenkins.job=${JOB_NAME}" \
                 script {
                   OLD_DEPLOYMENTS = sh (script: """
                     set -e
-                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} ps -q -f "label=SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}"
+                    docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} ps -q -f "label=SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}"
                   """, returnStdout: true).trim()
                 }
                 sh """#!/bin/bash
@@ -405,7 +411,7 @@ jenkins.job=${JOB_NAME}" \
                   echo "Found the following old deployment(s):"
                   for hash in ${OLD_DEPLOYMENTS}
                   do
-                    CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
+                    CONTAINER_NAME=\$(docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                     echo \\'\${CONTAINER_NAME:1}\\'
                   done
                 """
@@ -430,7 +436,7 @@ jenkins.job=${JOB_NAME}" \
                 echo "Deploying new container to DL..."
                 sh """
                   set -e
-                  docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
+                  docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
                   -l "SERVICE_TAGS=\
@@ -468,11 +474,11 @@ jenkins.job=${JOB_NAME}" \
                   set -e
                   for hash in ${OLD_DEPLOYMENTS}
                   do
-                    CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
+                    CONTAINER_NAME=\$(docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                     echo Killing container \\'\${CONTAINER_NAME:1}\\'
-                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} kill \$hash 2> /dev/null || true
+                    docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} kill \$hash 2> /dev/null || true
                     echo Removing container \\'\${CONTAINER_NAME:1}\\'
-                    docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} rm \$hash 2> /dev/null || true
+                    docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} rm \$hash 2> /dev/null || true
                     echo
                   done
                 """
@@ -499,7 +505,7 @@ jenkins.job=${JOB_NAME}" \
                     script {
                       OLD_DEPLOYMENTS = sh (script: """
                         set -e
-                        docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} ps -q -f "label=SERVICE_NAME=prod_${PRODUCT}_${SERVICE}"
+                        docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} ps -q -f "label=SERVICE_NAME=prod_${PRODUCT}_${SERVICE}"
                       """, returnStdout: true).trim()
                     }
                     sh """#!/bin/bash
@@ -507,7 +513,7 @@ jenkins.job=${JOB_NAME}" \
                       echo "Found the following old 'prod' deployment(s):"
                       for hash in ${OLD_DEPLOYMENTS}
                       do
-                        CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
+                        CONTAINER_NAME=\$(docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                         echo \\'\${CONTAINER_NAME:1}\\'
                       done
                     """
@@ -532,7 +538,7 @@ jenkins.job=${JOB_NAME}" \
                     echo "Deploying new 'prod' container to DL..."
                     sh """
                       set -e
-                      docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
+                      docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
                       --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER} \
                       -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
                       -l "SERVICE_TAGS=\
@@ -570,11 +576,11 @@ jenkins.job=${JOB_NAME}" \
                       set -e
                       for hash in ${OLD_DEPLOYMENTS}
                       do
-                        CONTAINER_NAME=\$(docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
+                        CONTAINER_NAME=\$(docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} inspect -f="{{.Name}}" \$hash)
                         echo Killing container \\'\${CONTAINER_NAME:1}\\'
-                        docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} kill \$hash 2> /dev/null || true
+                        docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} kill \$hash 2> /dev/null || true
                         echo Removing container \\'\${CONTAINER_NAME:1}\\'
-                        docker --tlsverify -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} rm \$hash 2> /dev/null || true
+                        docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} rm \$hash 2> /dev/null || true
                         echo
                       done
                     """
