@@ -21,6 +21,7 @@ import { DfNumberIncreaseModule } from '@devfactory/ngx-df/number-increase';
 import { DfRadioInputModule } from '@devfactory/ngx-df/radio-input';
 import { DfSelectModule } from '@devfactory/ngx-df/select';
 import { DfPortalModule } from '@devfactory/ngx-df/portal';
+import { DfDatepickerModule } from '@devfactory/ngx-df/datepicker';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { DfPortalModule } from '@devfactory/ngx-df/portal';
     DfRadioInputModule.forRoot(),
     DfSelectModule.forRoot(),
     DfPortalModule.forRoot(),
+    DfDatepickerModule.forRoot()
   ],
   providers: [],
   exports: [
@@ -81,6 +83,7 @@ import { DfPortalModule } from '@devfactory/ngx-df/portal';
     DfRadioInputModule,
     DfSelectModule,
     DfPortalModule,
+    DfDatepickerModule
   ],
 })
 export class NgxDfRootModule {}
@@ -109,6 +112,7 @@ export class NgxDfRootModule {}
     DfRadioInputModule,
     DfSelectModule,
     DfPortalModule,
+    DfDatepickerModule
   ],
   exports: [
     DfCardModule,
@@ -133,6 +137,7 @@ export class NgxDfRootModule {}
     DfRadioInputModule,
     DfSelectModule,
     DfPortalModule,
+    DfDatepickerModule
   ],
 })
 export class NgxDfCustom {
