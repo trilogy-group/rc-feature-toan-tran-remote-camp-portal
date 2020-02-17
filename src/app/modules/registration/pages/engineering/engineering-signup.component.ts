@@ -151,8 +151,8 @@ export class EngineeringSignupComponent implements OnInit {
 
   private setMinStartDate(): void {
     let date = new Date();
-    date = addWeeks(date, 2);
-    this.minStartDate = addDays(date, 1);
+    date = addWeeks(date, 1);
+    this.minStartDate = date;
   }
 
   private handleError(error): void {
