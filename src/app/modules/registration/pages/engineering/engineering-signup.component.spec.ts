@@ -76,7 +76,7 @@ describe('EngineeringSignupComponent', () => {
         component.ngOnInit();
 
         // Assert
-        expect(component.minStartDate.getTime()).toBeGreaterThanOrEqual(addDays(now, 15).getTime());
+        expect(component.minStartDate.getTime()).toBeGreaterThanOrEqual(addDays(now, 7).getTime());
     });
 
 

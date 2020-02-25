@@ -3,7 +3,7 @@ import { DfToasterService } from '@devfactory/ngx-df/toaster';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DfFileUploader, DfFileUploaderOptions, DfFileUploaderActionOptions } from '@devfactory/ngx-df/file-upload';
 import { Router } from '@angular/router';
-import { addWeeks, addDays } from 'date-fns';
+import { addWeeks } from 'date-fns';
 
 import { RegistrationService } from 'src/app/shared/services/registration.service';
 
@@ -18,7 +18,7 @@ export class EngineeringSignupComponent implements OnInit {
   private readonly fieldRequiredMessage = 'This field is required';
   private readonly invalidEmailFormatMessage = 'Please enter a valid email';
 
-  public readonly qaManualTester = 'QA Manual Tester';
+  public readonly qaManualTesterPipelines = ['QA Manual Tester', 'Software Tester'];
 
   public selectedRoleName = '';
   public form: FormGroup;
@@ -116,7 +116,7 @@ export class EngineeringSignupComponent implements OnInit {
   }
 
   public isNonQAManualTesterSelected(): boolean {
-    return this.selectedRoleName !== '' && this.selectedRoleName !== this.qaManualTester;
+    return this.selectedRoleName !== '' && !this.qaManualTesterPipelines.includes(this.selectedRoleName);
   }
 
   public isSubmitDisabled(): boolean {
