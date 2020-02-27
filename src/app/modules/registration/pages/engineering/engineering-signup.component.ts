@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { addWeeks } from 'date-fns';
 
 import { RegistrationService } from 'src/app/shared/services/registration.service';
+import {UtilsService} from '../../../../shared/services/utils.service';
 
 @Component({
   selector: 'app-engineering-signup',
@@ -17,8 +18,6 @@ export class EngineeringSignupComponent implements OnInit {
   private readonly emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   private readonly fieldRequiredMessage = 'This field is required';
   private readonly invalidEmailFormatMessage = 'Please enter a valid email';
-
-  public readonly qaManualTesterPipelines = ['QA Manual Tester', 'Software Tester'];
 
   public selectedRoleName = '';
   public form: FormGroup;
@@ -35,6 +34,7 @@ export class EngineeringSignupComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly registrationService: RegistrationService,
     private readonly toasterService: DfToasterService,
+    private readonly utilsService: UtilsService,
     private router: Router,
   ) {
     const contractOptions: DfFileUploaderOptions = {
@@ -86,7 +86,7 @@ export class EngineeringSignupComponent implements OnInit {
     this.selectedRoleName = role.name;
     this.rolePrerequisites = role.prerequisites;
 
-    if (this.isNonQAManualTesterSelected()) {
+    if (this.isPipelineWithGithubAccountSelected()) {
       this.form.get('GitHubId').setValidators([Validators.required]);
     } else {
       this.form.get('GitHubId').clearValidators();
@@ -115,8 +115,8 @@ export class EngineeringSignupComponent implements OnInit {
     }
   }
 
-  public isNonQAManualTesterSelected(): boolean {
-    return this.selectedRoleName !== '' && !this.qaManualTesterPipelines.includes(this.selectedRoleName);
+  public isPipelineWithGithubAccountSelected(): boolean {
+    return this.selectedRoleName !== '' && this.utilsService.isPipelineWithGithubAccount(this.selectedRoleName);
   }
 
   public isSubmitDisabled(): boolean {

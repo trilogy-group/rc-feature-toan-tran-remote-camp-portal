@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { differenceInDays, isSaturday, isSunday, parse } from 'date-fns';
+import {Pipelines} from '../../constants/pipelines.constants';
 
 @Injectable()
 export class UtilsService {
@@ -20,5 +21,14 @@ export class UtilsService {
   public getCurrentWeek(startDate: string): number {
     const daysBetween = differenceInDays(new Date(), parse(startDate));
     return Math.floor(daysBetween / 7) + 1;
+  }
+
+  public isPipelineWithGithubAccount(pipeline: string): boolean {
+    if (!pipeline) {
+      throw new Error('pipeline argument is not set');
+    }
+
+    const pipelinesWithoutGithubAccount = [Pipelines.SoftwareTester.toLowerCase().trim(), Pipelines.QAManualTester.toLowerCase().trim()];
+    return !pipelinesWithoutGithubAccount.includes(pipeline.toLowerCase().trim());
   }
 }

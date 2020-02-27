@@ -12,6 +12,7 @@ import {EngineeringSignupComponent} from './engineering-signup.component';
 import {of} from 'rxjs';
 import {addDays} from 'date-fns';
 import {DF_ERROR_STATE_MATCHER} from '@devfactory/ngx-df';
+import {UtilsService} from '../../../../shared/services/utils.service';
 
 describe('EngineeringSignupComponent', () => {
     let component: EngineeringSignupComponent;
@@ -33,6 +34,10 @@ describe('EngineeringSignupComponent', () => {
                 {
                     provide: RegistrationService,
                     useValue: instance(mock(RegistrationService))
+                },
+                {
+                    provide: UtilsService,
+                    useValue: instance(mock(UtilsService))
                 },
                 {
                     provide: FormBuilder,
