@@ -221,10 +221,12 @@
                 </div>
                 <div class="chart-container">
                   <df-bar *ngIf="loaded"
-                    [data]="productivityChart"
-                    [padding]="0.4"
-                    [colors]="productivityColors"
-                    [valueTicksCount]="10">
+                          [data]="productivityChart"
+                          [padding]="0.4"
+                          [colors]="productivityColors"
+                          [valueTicksCount]="10"
+                          [legendOptions]="productivityChartLegendOptions"
+                          [showLegend]="true">
                   </df-bar>
                 </div>
               </div>

@@ -1,7 +1,14 @@
 import { OnInit, Component, Input } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
-import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfLoadingSpinnerService } from '@devfactory/ngx-df';
+import {
+  DF_COLORS, DfLegendAlignment,
+  DfLegendOptions,
+  DfLineChartConfiguration,
+  DfLineChartScaleType,
+  DfLoadingSpinnerService,
+  DfPlacement
+} from '@devfactory/ngx-df';
 import { finalize } from 'rxjs/operators';
 
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
@@ -83,6 +90,7 @@ export class AccomplishmentsComponent implements OnInit {
   public profile: any = { };
   public weeks = [0, 1, 2, 3];
   public showWelcome: boolean;
+  public productivityChartLegendOptions: DfLegendOptions = new DfLegendOptions();
 
   constructor(
     private readonly accomplishmentsService: AccomplishmentsService,
@@ -181,6 +189,8 @@ export class AccomplishmentsComponent implements OnInit {
       this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: Number(ftarYes.toFixed(2)) });
       this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: Number((1 - ftarYes).toFixed(2)) });
       this.hardestProblemsByDay = hardestProblemsByDay;
+      this.productivityChartLegendOptions.legendPosition = DfPlacement.TopCenter;
+      this.productivityChartLegendOptions.legendAlignment = DfLegendAlignment.Horizontal;
 
       this.loaded = true;
 
