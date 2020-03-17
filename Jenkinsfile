@@ -2,7 +2,8 @@ def feature_branches_to_deploy = [
   "feature/RUP-811",
   "feature/RT-123",
   "RUP-88",
-  "feature/RUP-132"
+  "feature/RUP-132",
+  "RT-3329"
 ]
 
 String NG_BUILD_CONFIG
@@ -204,7 +205,7 @@ pipeline {
         echo "Starting the '${ARTIFACT_ID}' Docker container for '${encoded_branch_name}' branch..."
         sh """
           set -e
-          docker run -d --rm \
+          docker run -d --restart=always \
                      --name ${ARTIFACT_ID}-${encoded_branch_name} \
                      -p ${HOST_HEALTH_CHECK_PORT}:${CONTAINER_PORT} \
                      ${ARTIFACT_ID}-${encoded_branch_name}:latest
@@ -304,7 +305,7 @@ pipeline {
                 echo "Deploying new container to DL..."
                 sh """
                   set -e
-                  docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
+                  docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --restart=always \
                   --name regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}-${GIT_HASH}-${BUILD_NUMBER} \
                   -l "SERVICE_NAME=regression_${PRODUCT}_${SERVICE}_${encoded_branch_name}" \
                   -l "SERVICE_TAGS=\
@@ -436,7 +437,7 @@ jenkins.job=${JOB_NAME}" \
                 echo "Deploying new container to DL..."
                 sh """
                   set -e
-                  docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
+                  docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --restart=always \
                   --name ${STAGE}_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER} \
                   -l "SERVICE_NAME=${STAGE}_${PRODUCT}_${SERVICE}" \
                   -l "SERVICE_TAGS=\
@@ -538,7 +539,7 @@ jenkins.job=${JOB_NAME}" \
                     echo "Deploying new 'prod' container to DL..."
                     sh """
                       set -e
-                      docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --rm \
+                      docker ${TLS_VERIFY} -H ${DOCKER_LINUX_HOST}:${DOCKER_LINUX_PORT} run -d --restart=always \
                       --name prod_${PRODUCT}_${SERVICE}_${GIT_HASH}-${BUILD_NUMBER} \
                       -l "SERVICE_NAME=prod_${PRODUCT}_${SERVICE}" \
                       -l "SERVICE_TAGS=\
