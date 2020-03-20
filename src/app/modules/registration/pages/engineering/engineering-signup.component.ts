@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { DfFileUploader, DfFileUploaderOptions, DfFileUploaderActionOptions } from '@devfactory/ngx-df/file-upload';
 import { Router } from '@angular/router';
 import { addWeeks } from 'date-fns';
 
 import { RegistrationService } from 'src/app/shared/services/registration.service';
 import {UtilsService} from '../../../../shared/services/utils.service';
+import { GitHubValidator } from 'src/app/shared/validators/github.validator';
 
 @Component({
   selector: 'app-engineering-signup',
@@ -87,7 +88,8 @@ export class EngineeringSignupComponent implements OnInit {
     this.rolePrerequisites = role.prerequisites;
 
     if (this.isPipelineWithGithubAccountSelected()) {
-      this.form.get('GitHubId').setValidators([Validators.required]);
+      this.form.get('GitHubId').setValidators([this.gitHubUsernameValidator]);
+      this.form.get('GitHubId').setAsyncValidators(GitHubValidator.createValidator(this.registrationService));
     } else {
       this.form.get('GitHubId').clearValidators();
       this.form.get('GitHubId').updateValueAndValidity();
@@ -115,8 +117,33 @@ export class EngineeringSignupComponent implements OnInit {
     }
   }
 
+  public getGitHubUsernameErrorMessage(): string {
+    const username = this.form.controls.GitHubId.value;
+    const errors = this.form.get('GitHubId').errors;
+    if (!username || username.trim() === '') {
+      return this.fieldRequiredMessage;
+    }
+    if (errors && errors.invalidName) {
+      return errors.invalidName;
+    }
+    if (errors && errors.userNotExists) {
+      return errors.userNotExists;
+    }
+    return '';
+  }
+
   public isPipelineWithGithubAccountSelected(): boolean {
     return this.selectedRoleName !== '' && this.utilsService.isPipelineWithGithubAccount(this.selectedRoleName);
+  }
+
+  public gitHubUsernameValidator(control: AbstractControl) {
+    const value: string = control.value;
+    const gitHubUsernameRegex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+    // tslint:disable-next-line:max-line-length
+    const invalidGitHubNameMessage = 'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen. Also, it should not be longer than 38 characters';
+
+    return !value || value.toLowerCase() === 'none' || !gitHubUsernameRegex.test(value) ?
+    { invalidName: invalidGitHubNameMessage } : null;
   }
 
   public isSubmitDisabled(): boolean {

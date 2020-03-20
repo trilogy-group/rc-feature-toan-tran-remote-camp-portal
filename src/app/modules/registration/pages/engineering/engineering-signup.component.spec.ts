@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 
 import {SharedModule} from 'src/app/shared/shared.module';
 
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormGroup, AbstractControl} from '@angular/forms';
 import {RegistrationService} from 'src/app/shared/services/registration.service';
 import {DfToasterService} from '@devfactory/ngx-df/toaster';
 import {EngineeringSignupComponent} from './engineering-signup.component';
@@ -102,5 +102,67 @@ describe('EngineeringSignupComponent', () => {
         // Assert
         expect(component.loaded).toBeTruthy();
         expect(component.roles.length).toBe(2);
+    });
+
+    describe(('getGitHubUsernameErrorMessage'), () => {
+        it('should get message when name is empty', () => {
+            // Arrange
+            const formMock = {
+                controls: { GitHubId: { value: ''} },
+                get: jasmine.createSpy().and.returnValue({ errors: '' })
+            };
+            component.form = formMock as unknown as FormGroup;
+
+            // Act
+            const message = component.getGitHubUsernameErrorMessage();
+
+            // Assert
+            expect(message).toEqual(component['fieldRequiredMessage']);
+        });
+
+        it('should get message when name is invalid', () => {
+            // Arrange
+            const invalidName = 'invalid name';
+            const formMock = {
+                controls: { GitHubId: { value: '-invalidusername'} },
+                get: jasmine.createSpy().and.returnValue({ errors: { invalidName } })
+            };
+            component.form = formMock as unknown as FormGroup;
+
+            // Act
+            const message = component.getGitHubUsernameErrorMessage();
+
+            // Assert
+            expect(message).toEqual(invalidName);
+        });
+
+        it('should get message when user is non-existent', () => {
+            // Arrange
+            const userNotExists = 'user non existent';
+            const formMock = {
+                controls: { GitHubId: { value: '-invalidusername'} },
+                get: jasmine.createSpy().and.returnValue({ errors: { userNotExists } })
+            };
+            component.form = formMock as unknown as FormGroup;
+
+            // Act
+            const message = component.getGitHubUsernameErrorMessage();
+
+            // Assert
+            expect(message).toEqual(userNotExists);
+        });
+    });
+
+    it('should return an object when the GitHub username is incorrect', () => {
+        // Arrange
+        const control = { value: 'https://github.com' } as AbstractControl;
+
+        // Act
+        const validationResult = component.gitHubUsernameValidator(control);
+
+        // Assert
+        // tslint:disable-next-line:max-line-length
+        const invalidGitHubNameMessage = 'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen. Also, it should not be longer than 38 characters';
+        expect(validationResult).toEqual({ invalidName: invalidGitHubNameMessage});
     });
 });

@@ -40,7 +40,7 @@
         <h5 *ngIf="isPipelineWithGithubAccountSelected()"
           class="mb-1 mt-3">GitHub Username<span class="danger">*</span>
           <span *ngIf="showErrors && !form.controls.GitHubId.valid"
-            class="ml-1 danger missing-field">This field is required</span>
+            class="ml-1 danger missing-field">{{ getGitHubUsernameErrorMessage() }}</span>
         </h5>
         <p *ngIf="isPipelineWithGithubAccountSelected()">
           Register to <a href="https://github.com" target="_blank">https://github.com</a> if you don't have any GitHub name already
