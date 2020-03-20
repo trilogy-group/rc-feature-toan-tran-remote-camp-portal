@@ -92,6 +92,7 @@ export class EngineeringSignupComponent implements OnInit {
       this.form.get('GitHubId').setAsyncValidators(GitHubValidator.createValidator(this.registrationService));
     } else {
       this.form.get('GitHubId').clearValidators();
+      this.form.get('GitHubId').clearAsyncValidators();
       this.form.get('GitHubId').updateValueAndValidity();
     }
   }

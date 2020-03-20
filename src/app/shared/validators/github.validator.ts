@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 export class GitHubValidator {
   static createValidator(registrationService: RegistrationService) {
     return (control: AbstractControl) => registrationService.doesGitHubUsernameExist(control.value).pipe(
-      map(res => null),
+      map(() => null),
       catchError((error) =>
         of(error.status === 404 ? { userNotExists: 'Username does not exist. Please enter an existing one' } : null)
       )
