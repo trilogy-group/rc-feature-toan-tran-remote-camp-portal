@@ -26,6 +26,7 @@ import { RegistrationService } from 'src/app/shared/services/registration.servic
 import { PlanningService } from 'src/app/shared/services/planning.service';
 import { TrainingMaterialService } from 'src/app/shared/services/training-material.service';
 import { AdminService } from 'src/app/shared/services/admin.service';
+import { TutorialsService } from './shared/services/tutorials.service';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { AdminService } from 'src/app/shared/services/admin.service';
     RegistrationService,
     PlanningService,
     TrainingMaterialService,
-    AdminService
+    AdminService,
+    TutorialsService
   ],
   bootstrap: [AppComponent]
 })
