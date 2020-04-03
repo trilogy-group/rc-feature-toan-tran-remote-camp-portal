@@ -20,5 +20,6 @@ export const environment = {
   technicalTrainingsUrl: 'https://nqgh2fcnx5.execute-api.us-east-1.amazonaws.com/dev/technical',
   communicationChannelAccessUrl: 'https://hmart2ms7g.execute-api.us-east-1.amazonaws.com/dev/check-xoChat-registeration-get',
   knowledgeBaseUrl: 'https://3ont4uqzx2.execute-api.us-east-1.amazonaws.com/dev/refresh-kb',
+  tutorialsBaseUrl: 'https://qo7poxyzj6.execute-api.us-east-1.amazonaws.com/dev/tutorials',
   knowledgeBaseStatusUrl: 'https://3ont4uqzx2.execute-api.us-east-1.amazonaws.com/dev/status'
 };

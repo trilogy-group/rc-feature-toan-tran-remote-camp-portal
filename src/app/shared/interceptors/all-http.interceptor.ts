@@ -7,6 +7,9 @@ import { AuthenticationTokenService } from 'src/app/shared/services/authenticati
 
 @Injectable()
 export class AllHttpInterceptor implements HttpInterceptor {
+
+  private static readonly DISABLE_AUTHORIZATION_HEADER = 'X-Disable-Authorization';
+
   constructor(private readonly authenticationTokenService: AuthenticationTokenService) { }
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -22,9 +25,17 @@ export class AllHttpInterceptor implements HttpInterceptor {
       headers['Content-Type'] = 'application/json';
     }
 
-    const token = this.authenticationTokenService.getToken();
-    if (!!token) {
-      headers['Authorization'] = `Bearer ${this.authenticationTokenService.getToken()}`;
+    /*
+     * Workaround to set a custom flag is by setting and clearing headers. This is the suggested approach
+     * while angular feature 18155 is not yet implemented. Ref.: https://github.com/angular/angular/issues/18155.
+     */
+    if (request.headers.has(AllHttpInterceptor.DISABLE_AUTHORIZATION_HEADER)) {
+      request.headers.delete(AllHttpInterceptor.DISABLE_AUTHORIZATION_HEADER);
+    } else {
+      const token = this.authenticationTokenService.getToken();
+      if (!!token) {
+        headers['Authorization'] = `Bearer ${this.authenticationTokenService.getToken()}`;
+      }
     }
 
     request = request.clone({ setHeaders: headers });
