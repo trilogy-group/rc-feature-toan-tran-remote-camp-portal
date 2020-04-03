@@ -50,7 +50,8 @@ pipeline {
     TEST_DOCKER_LINUX_HOST = "dl6.aureacentral.com"
     PROD_TLS_VERIFY = "--tlsverify"
     PROD_DOCKER_LINUX_HOST = "dl1.aureacentral.com"
-    DOCKER_LINUX_PORT = "9998"
+    TEST_DOCKER_LINUX_PORT = "2375"
+    PROD_DOCKER_LINUX_PORT = "9998"
     COMPANY = "teamrooms"
     TEAM = "remotecamp"
     EMAIL = "alex.netrebskiy@aurea.com"
@@ -87,6 +88,7 @@ pipeline {
               STAGE = "dev"
               HOST_HEALTH_CHECK_PORT = 9201
               DOCKER_LINUX_HOST = "${TEST_DOCKER_LINUX_HOST}"
+              DOCKER_LINUX_PORT = "${TEST_DOCKER_LINUX_PORT}"
               TLS_VERIFY = "${TEST_TLS_VERIFY}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
@@ -106,6 +108,7 @@ pipeline {
               STAGE = "qa"
               HOST_HEALTH_CHECK_PORT = 9202
               DOCKER_LINUX_HOST = "${TEST_DOCKER_LINUX_HOST}"
+              DOCKER_LINUX_PORT = "${TEST_DOCKER_LINUX_PORT}"
               TLS_VERIFY = "${TEST_TLS_VERIFY}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
@@ -125,6 +128,7 @@ pipeline {
               STAGE = "staging"
               HOST_HEALTH_CHECK_PORT = 9203
               DOCKER_LINUX_HOST = "${PROD_DOCKER_LINUX_HOST}"
+              DOCKER_LINUX_PORT = "${PROD_DOCKER_LINUX_PORT}"
               TLS_VERIFY = "${PROD_TLS_VERIFY}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
@@ -150,6 +154,7 @@ pipeline {
               STAGE = "regression"
               HOST_HEALTH_CHECK_PORT = 9204
               DOCKER_LINUX_HOST = "${TEST_DOCKER_LINUX_HOST}"
+              DOCKER_LINUX_PORT = "${TEST_DOCKER_LINUX_PORT}"
               TLS_VERIFY = "${TEST_TLS_VERIFY}"
               echo "NG_BUILD_CONFIG: ${NG_BUILD_CONFIG}"
               echo "STAGE: ${STAGE}"
