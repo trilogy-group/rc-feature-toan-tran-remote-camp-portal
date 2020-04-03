@@ -29,6 +29,9 @@
             "styles": [
               "src/styles.scss",
               "node_modules/font-awesome/css/font-awesome.min.css",
+              "node_modules/codemirror/lib/codemirror.css",
+              "node_modules/codemirror/addon/merge/merge.css",
+              "node_modules/codemirror/addon/scroll/simplescrollbars.css"
             ],
             "scripts": []
           },
@@ -157,7 +160,10 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/codemirror/lib/codemirror.css",
+              "node_modules/codemirror/addon/merge/merge.css",
+              "node_modules/codemirror/addon/scroll/simplescrollbars.css"
             ],
             "scripts": [],
             "assets": [

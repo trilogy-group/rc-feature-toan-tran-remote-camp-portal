@@ -37,6 +37,10 @@ const routes: Routes = [
       {
         path: 'admin',
         loadChildren: './modules/admin/admin.module#AdminModule',
+      },
+      {
+        path: 'tutorials',
+        loadChildren: './modules/tutorials/tutorials.module#TutorialsModule'
       }
     ]
   },

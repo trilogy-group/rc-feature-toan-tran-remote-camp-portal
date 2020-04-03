@@ -125,6 +125,19 @@
             [class.d-none]="!sideBar.isOpen">My Plan</span>
         </a>
       </df-sidebar-item>
+      <df-sidebar-item *ngIf="!isAdmin()"
+        [hasIcon]="false"
+        matTooltip="Tutorials"
+        matTooltipPosition="right"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/tutorials']">
+          <mat-icon class="ml-1">title</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Tutorials</span>
+        </a>
+      </df-sidebar-item>
     </df-sidebar>
 
     <main class="col p-0">

@@ -1,0 +1,75 @@
+<div class="ml-5 d-block">
+  <div class="row section__header">
+    <div class="col py-3 justify-content-between d-flex">
+      <h1 class="ml-3 mb-0 d-flex align-items-center">
+        <span class="mr-2">Tutorials:</span>
+        <df-select
+          class="tutorial-select"
+          placeholder="Please select a tutorial"
+          (change)="startTutorial($event)"
+          [filterable]="false">
+          <df-option *ngFor="let tut of tutorials"
+            [value]="tut.id">
+            {{ tut.name }}
+          </df-option>
+        </df-select>
+      </h1>
+    </div>
+  </div>
+  <div *ngIf="loaded"
+    class="ml-2 row training-step-header">
+    <div class="col d-flex justify-content-end">
+      <button type="button" class="mx-1 my-1 btn btn-secondary btn-sm"
+        (click)="goBack()"
+        [disabled]="isBackDisabled()">Back
+      </button>
+    </div>
+    <div class="col d-flex justify-content-center">
+      <h5 class="my-2">
+        {{ currentStepNumber }}. {{ tutorial?.currentStep?.title }}
+      </h5>
+    </div>
+    <div class="col justify-content-end">
+      <button type="button" class="mx-1 my-1 btn btn-secondary btn-sm"
+        (click)="goNext()"
+        [disabled]="isNextDisabled()">Next
+      </button>
+    </div>
+  </div>
+  <df-split-view *ngIf="loaded"
+    gutterSize="15"
+    class="ml-2 coding-tutorials">
+    <df-split-panel>
+      <app-description-panel
+        [description]="tutorial?.currentStep?.description">
+      </app-description-panel>
+    </df-split-panel>
+
+    <df-split-panel class="position-relative">
+      <button type="button" class="mx-1 my-1 btn btn-secondary btn-sm float d-flex align-items-center"
+        (click)="toggleAnswer()">
+        <mat-icon [matTooltip]="getSwitchButtonTooltip()">
+          {{ getSwitchButtonIcon() }}</mat-icon>
+      </button>
+      <div class="code-panels h-100">
+        <app-working-panel #workingPanel
+          [class.d-none]="showAnswer"
+          [code]="workingCode"
+          (updateWorkingCode)="updateWorkingCode($event)">
+        </app-working-panel>
+        <app-answer-panel [class.d-none]="!showAnswer"
+          [answer]="answerCode">
+        </app-answer-panel>
+      </div>
+    </df-split-panel>
+
+    <df-split-panel>
+      <app-source-code-panel [sourceCode]="tutorial?.currentStep?.sourceCode">
+      </app-source-code-panel>
+    </df-split-panel>
+  </df-split-view>
+  <div *ngIf="loaded"
+    class="ml-2 d-flex align-items-center justify-content-center">
+    <div class="d-flex align-items-center">{{ currentStepNumber }} / {{ tutorial?.totalSteps }}</div>
+  </div>
+</div>

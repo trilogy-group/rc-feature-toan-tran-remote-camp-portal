@@ -1,0 +1,32 @@
+.coding-tutorials {
+  height: 500px;
+}
+
+.tutorial-select {
+  width: 225px;
+}
+
+.float{
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.training-step-header {
+  background: #ecf1f3;
+}
+
+:host {
+  ::ng-deep {
+    .df-split-panel__handle__button {
+      display: none;
+    }
+  
+    .df-split-panel__handle__line {
+      background-color: #333642;
+      border-left: 1px solid rgba(255,255,255,0.05);
+      border-right: 1px solid rgba(0,0,0,0.4);
+    }
+  }
+}
