@@ -23,7 +23,7 @@
                           colspan="4">
           </df-grid-column>
           <df-grid-column header="Productivity"
-                          colspan="3">
+                          colspan="4">
           </df-grid-column>
           <df-grid-column header="Quality"
                           colspan="3">
@@ -68,6 +68,16 @@
               <div class="w-100">
                 Target for Today
                 <mat-icon [matTooltip]="productivityTargetTooltip"
+                  class="ml-1 info-tooltip">help_outline</mat-icon>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
+            <ng-template
+              dfGridTemplate="header">
+              <div class="w-100">
+                Ultimate Target
+                <mat-icon [matTooltip]="ultimateTargetTooltip"
                   class="ml-1 info-tooltip">help_outline</mat-icon>
               </div>
             </ng-template>
@@ -180,6 +190,14 @@
           dfGridTemplate="body">
           <div class="{{ getTargetScoreColor(item, true) }}">
             {{ (item.scoreSummary?.targetForToday | number : '1.2') }}
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <div class="ultimate-target">
+            {{ (item.scoreSummary?.ultimateTarget | number : '1.2') }}
           </div>
         </ng-template>
       </df-grid-column>
