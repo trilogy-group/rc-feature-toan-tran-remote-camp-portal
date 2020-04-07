@@ -233,12 +233,12 @@
             </df-card-content>
           </df-card>
         </div>
-        <div class="col-6 px-4 d-flex justify-content-center">
+        <div class="col-6 px-4 d-flex justify-content-center" *ngIf="qualityTarget">
           <df-card class="quality-target-card">
             <df-card-content>
               <div class="d-flex flex-column">
                 <div class="d-flex justify-content-between">
-                  <h4>Quality Target: {{ qualityTarget }}%</h4>
+                  <h4>Quality Target: {{ qualityTarget * 100 }}%</h4>
                   <mat-icon [matTooltip]="qualityTargetTooltip"
                     class="info-tooltip">help_outline</mat-icon>
                 </div>

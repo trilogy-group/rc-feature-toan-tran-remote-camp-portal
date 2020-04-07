@@ -53,7 +53,7 @@ export class AccomplishmentsComponent implements OnInit {
   Submitted (In Review) or being worked on (In Progress).`;
 
   public readonly qualityTargetTooltip = `This chart displays on top as a text, Quality that should have been achieved until
-  the last completed day of the IC in the RemoteU. In the pie chart view, user can see a distribution of all tickets with FTAR
+  the last completed day of the IC in the RemoteU. In the pie chart view, user can see a distribution of tickets with FTAR
   (First Time Acceptance Rate) = YES and with FTAR=NO.`;
 
   public readonly qualityColors = [
@@ -155,7 +155,7 @@ export class AccomplishmentsComponent implements OnInit {
       });
 
       this.productivityTarget = dailyProgressResponse.scoreSummary.targetForToday;
-      this.qualityTarget = dailyProgressResponse.qualitySummary.targetForToday * 100;
+      this.qualityTarget = dailyProgressResponse.graduationQualitySummary.targetForToday;
       let day = 1;
       this.dailyProgress = dailyProgressResponse.daily.map(
         dailyObject => {
@@ -180,7 +180,8 @@ export class AccomplishmentsComponent implements OnInit {
       const productivityApproved = dailyProgressResponse.scoreSummary.approved || 0;
       const productivityInReview = dailyProgressResponse.scoreSummary.inReview || 0;
       const productivityInProgress = dailyProgressResponse.scoreSummary.inProgress || 0;
-      const ftarYes = dailyProgressResponse.qualitySummary.approved || 0;
+      const ftarYes = dailyProgressResponse.graduationQualitySummary.approved == null
+          ? 1 : dailyProgressResponse.graduationQualitySummary.approved;
 
       this.productivityChart.push({ xKey: this.approved, yKey: Number(productivityApproved.toFixed(2)) });
       this.productivityChart.push({ xKey: this.inReview, yKey: Number(productivityInReview.toFixed(2)) });

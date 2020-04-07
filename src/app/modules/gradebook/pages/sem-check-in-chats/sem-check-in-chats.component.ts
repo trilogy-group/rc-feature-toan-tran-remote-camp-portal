@@ -71,7 +71,7 @@ export class SemCheckInChatsComponent implements OnInit {
       this.profile = profile;
       this.compliance = compliance;
       this.productivityScore = dailyProgressResponse.scoreSummary.approved || 0;
-      this.qualityScore = (dailyProgressResponse.qualitySummary.approved || 0) * 100;
+      this.qualityScore = dailyProgressResponse.graduationQualitySummary.approved;
       this.hardestProblems = hardestProblems;
       this.missingCalendarActivities = missingCalendarActivities;
       this.weekCheckInChats = checkInChats;
