@@ -1,7 +1,14 @@
 import { OnInit, Component, Input } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { DfToasterService } from '@devfactory/ngx-df/toaster';
-import { DF_COLORS, DfLineChartConfiguration, DfLineChartScaleType, DfLoadingSpinnerService } from '@devfactory/ngx-df';
+import {
+  DF_COLORS, DfLegendAlignment,
+  DfLegendOptions,
+  DfLineChartConfiguration,
+  DfLineChartScaleType,
+  DfLoadingSpinnerService,
+  DfPlacement
+} from '@devfactory/ngx-df';
 import { finalize } from 'rxjs/operators';
 
 import { AccomplishmentsService } from 'src/app/shared/services/accomplishments.service';
@@ -46,7 +53,7 @@ export class AccomplishmentsComponent implements OnInit {
   Submitted (In Review) or being worked on (In Progress).`;
 
   public readonly qualityTargetTooltip = `This chart displays on top as a text, Quality that should have been achieved until
-  the last completed day of the IC in the RemoteU. In the pie chart view, user can see a distribution of all tickets with FTAR
+  the last completed day of the IC in the RemoteU. In the pie chart view, user can see a distribution of tickets with FTAR
   (First Time Acceptance Rate) = YES and with FTAR=NO.`;
 
   public readonly qualityColors = [
@@ -83,6 +90,7 @@ export class AccomplishmentsComponent implements OnInit {
   public profile: any = { };
   public weeks = [0, 1, 2, 3];
   public showWelcome: boolean;
+  public productivityChartLegendOptions: DfLegendOptions = new DfLegendOptions();
 
   constructor(
     private readonly accomplishmentsService: AccomplishmentsService,
@@ -109,7 +117,7 @@ export class AccomplishmentsComponent implements OnInit {
       this.profile = profile;
       this.calculateDaysCompleted();
 
-      const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality != null ? week.quality * 100 : null);
+      const weeklyQuality = dailyProgressResponse.weekly.map(week => week.quality != null ? week.quality * 100 : 100);
       const weeklyProductivity = dailyProgressResponse.weekly.map(week => week.productivity ? week.productivity : 0);
       const weeklyFtar = dailyProgressResponse.qualitySummary.approved != null ?
       dailyProgressResponse.qualitySummary.approved * 100 :
@@ -147,7 +155,7 @@ export class AccomplishmentsComponent implements OnInit {
       });
 
       this.productivityTarget = dailyProgressResponse.scoreSummary.targetForToday;
-      this.qualityTarget = dailyProgressResponse.qualitySummary.targetForToday * 100;
+      this.qualityTarget = dailyProgressResponse.graduationQualitySummary.targetForToday;
       let day = 1;
       this.dailyProgress = dailyProgressResponse.daily.map(
         dailyObject => {
@@ -172,7 +180,8 @@ export class AccomplishmentsComponent implements OnInit {
       const productivityApproved = dailyProgressResponse.scoreSummary.approved || 0;
       const productivityInReview = dailyProgressResponse.scoreSummary.inReview || 0;
       const productivityInProgress = dailyProgressResponse.scoreSummary.inProgress || 0;
-      const ftarYes = dailyProgressResponse.qualitySummary.approved || 0;
+      const ftarYes = dailyProgressResponse.graduationQualitySummary.approved == null
+          ? 1 : dailyProgressResponse.graduationQualitySummary.approved;
 
       this.productivityChart.push({ xKey: this.approved, yKey: Number(productivityApproved.toFixed(2)) });
       this.productivityChart.push({ xKey: this.inReview, yKey: Number(productivityInReview.toFixed(2)) });
@@ -181,6 +190,8 @@ export class AccomplishmentsComponent implements OnInit {
       this.qualityChart.push({ title: `${this.ftarYes} ${Math.round(ftarYes * 100)}%`, value: Number(ftarYes.toFixed(2)) });
       this.qualityChart.push({ title: `${this.ftarNo} ${Math.round((1 - ftarYes) * 100)}%`, value: Number((1 - ftarYes).toFixed(2)) });
       this.hardestProblemsByDay = hardestProblemsByDay;
+      this.productivityChartLegendOptions.legendPosition = DfPlacement.TopCenter;
+      this.productivityChartLegendOptions.legendAlignment = DfLegendAlignment.Horizontal;
 
       this.loaded = true;
 

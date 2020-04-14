@@ -15,7 +15,7 @@
             [trainings]="worksmartTrainings"></app-training-material-grid>
         </df-accordion-content>
       </df-accordion-panel>
-      <df-accordion-panel>
+      <df-accordion-panel *ngIf="!!moduleId">
         <df-accordion-header>
           <df-accordion-header-title>
             <h5 class="mb-0">Technical Trainings</h5>

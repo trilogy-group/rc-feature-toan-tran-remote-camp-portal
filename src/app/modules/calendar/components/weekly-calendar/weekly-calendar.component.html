@@ -1,12 +1,15 @@
 <div *ngIf="!!weekPlanning.week.length"
   class="d-flex flex-column">
-  <df-accordion>
+  <df-accordion #weekAccordion>
     <df-accordion-panel (open)="openWeek($event)">
       <df-accordion-header>
         <df-accordion-header-title>
           <div class="my-0 d-flex">
             <h4 class="ml-3 mr-5"><strong>Week {{ index }}</strong></h4>
             <h5 class="d-flex align-items-center">{{ weekPlanning.header }}</h5>
+            <h5 class="ml-4 d-flex align-items-center">
+              <em *ngIf="isCurrentWeek()">Current Week</em>
+            </h5>
           </div>
         </df-accordion-header-title>
       </df-accordion-header>
@@ -16,8 +19,9 @@
             class="col">
             <h5 class="mt-2"><strong>{{ dayPlan.day }}</strong></h5>
             By the end of the day:
-            <p class="mb-0"><em>{{ dayPlan.description}}</em></p>
+            <p class="mb-0 day-description"><em>{{ dayPlan.description}}</em></p>
             <df-grid [value]="dayPlan.actions"
+                     sortField="position"
               [editable]="true">
               <df-grid-column header="Action">
                 <ng-template let-item="rowData"

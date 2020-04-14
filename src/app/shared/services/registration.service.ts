@@ -1,16 +1,27 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpRequest, HttpHeaderResponse } from '@angular/common/http';
-import { DfFileUploadService, DfFileUploaderUtils, DfFile, removeTimezoneOffset } from '@devfactory/ngx-df';
-import { of, Observable, throwError } from 'rxjs';
-import { filter, map, catchError } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DfFileUploaderUtils, DfFile, removeTimezoneOffset, DfHttpSkipInterceptorEnum } from '@devfactory/ngx-df';
+import { Observable, throwError, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class RegistrationService {
   public static IcPipeline = `${environment.apiUrl}/IcPipeline`;
   public static Registration = `${environment.apiUrl}/Registration`;
+  public static GitHubUsernameCheck = `https://api.github.com/users/`;
 
-  public constructor(private httpClient: HttpClient, private fileUploadService: DfFileUploadService) { }
+  public constructor(private httpClient: HttpClient) { }
+
+  public doesGitHubUsernameExist(username: string): Observable<any> {
+    const options = this.getSkipLoaderHeaders();
+    return this.httpClient.get(`${RegistrationService.GitHubUsernameCheck}${username}`, options)
+    .pipe(
+      map((response: any) =>
+        of(!!response && !!response.login)
+      )
+    );
+  }
 
   public getAvailableRoles(): Observable<any> {
     return this.httpClient.get(RegistrationService.IcPipeline);
@@ -42,5 +53,12 @@ export class RegistrationService {
           return throwError(error);
         })
       );
+  }
+
+  private getSkipLoaderHeaders(): any {
+    const options = { headers: {}};
+    options['headers'][DfHttpSkipInterceptorEnum.LoaderInterceptor] = '';
+
+    return options;
   }
 }

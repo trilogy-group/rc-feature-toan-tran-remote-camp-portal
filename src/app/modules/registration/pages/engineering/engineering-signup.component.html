@@ -37,15 +37,15 @@
             {{ role.name }}
           </df-option>
         </df-select>
-        <h5 *ngIf="isNonQAManualTesterSelected()"
+        <h5 *ngIf="isPipelineWithGithubAccountSelected()"
           class="mb-1 mt-3">GitHub Username<span class="danger">*</span>
           <span *ngIf="showErrors && !form.controls.GitHubId.valid"
-            class="ml-1 danger missing-field">This field is required</span>
+            class="ml-1 danger missing-field">{{ getGitHubUsernameErrorMessage() }}</span>
         </h5>
-        <p *ngIf="isNonQAManualTesterSelected()">
+        <p *ngIf="isPipelineWithGithubAccountSelected()">
           Register to <a href="https://github.com" target="_blank">https://github.com</a> if you don't have any GitHub name already
         </p>
-        <input *ngIf="isNonQAManualTesterSelected()"
+        <input *ngIf="isPipelineWithGithubAccountSelected()"
           type="text"
           formControlName="GitHubId"
           placeholder="Your GitHub Username"
@@ -94,7 +94,7 @@
         <p>
           Please check whether you have the following skillset. If not, it is highly recommended that you spend time learning these skills before starting RemoteU
         </p>
-        <div class="d-block">
+        <div id="rolePrerequisitesList" class="d-block">
           <span *ngFor="let prerequisite of rolePrerequisites"
             class="mx-2 col-3 text-center">
             {{ prerequisite.name }}
@@ -123,15 +123,13 @@
         <p>
           Please select a date when you can be available to start the RemoteU. Please note that you won't be able to postpone the date once started. Please note below: RemoteU is a 4-week program and you are required to work 40 hours by the end of Friday (a minimum of 8 hours every weekday).
         </p>
-        <df-select
-          placeholder="Please select a starting date"
-          (change)="startDateChange($event)"
-          [filterable]="false">
-          <df-option *ngFor="let monday of mondays"
-            [value]="monday">
-            Monday, {{ monday | date: short }}
-          </df-option>
-        </df-select>
+        <df-datepicker dateFormat="MM/DD/YYYY"
+                       placeholder="Please select a starting date"
+                       [disabledDates]="['* * * 0,2,3,4,5,6']"
+                       formControlName="startDate"
+                       [minDate]="minStartDate">
+
+        </df-datepicker>
 
         <h5 class="mb-1 mt-3">
           Signed Contract<span class="danger">*</span>

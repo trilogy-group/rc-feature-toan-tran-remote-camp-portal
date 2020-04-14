@@ -1,0 +1,12 @@
+.description-panel {
+  background: #262626;
+  color: #ecf1f3;
+}
+
+:host {
+  ::ng-deep {
+    .code {
+      font-family: monospace;
+    }
+  }
+}

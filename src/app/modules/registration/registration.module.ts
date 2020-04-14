@@ -14,7 +14,7 @@ import { EngineeringSignupComponent } from 'src/app/modules/registration/pages/e
     CommonModule,
     FormsModule,
     SharedModule,
-    RegistrationRoutingModule,
+    RegistrationRoutingModule
   ]
 })
 export class RegistrationModule {}

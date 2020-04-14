@@ -8,6 +8,7 @@ import { NgxDfCustom } from 'src/app/shared/ngx-custom.module';
 import { OnboardStatusComponent } from './onboard-status.component';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import { OnboardingService } from 'src/app/shared/services/onboarding.service';
+import {UtilsService} from '../../../../shared/services/utils.service';
 
 describe('OnboardStatusComponent', () => {
   let component: OnboardStatusComponent;
@@ -38,7 +39,11 @@ describe('OnboardStatusComponent', () => {
         {
           provide: DfPortalService,
           useValue: instance(mock(DfPortalService)),
-        }
+        },
+        {
+          provide: UtilsService,
+          useValue: instance(mock(UtilsService)),
+        },
       ],
     });
   });

@@ -43,7 +43,7 @@ describe('TrainingMaterialService', () => {
       service.fetchTechnicalTrainings(pipelineId);
 
       // Assert
-      expect(httpClient.get).toHaveBeenCalledWith(`${expectedUrl}?pipeline-jira-id=${pipelineId}`);
+      expect(httpClient.get).toHaveBeenCalledWith(`${expectedUrl}?module-jira-id=${pipelineId}`);
     });
   });
 });

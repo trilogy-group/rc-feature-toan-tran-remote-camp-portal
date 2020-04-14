@@ -16,7 +16,7 @@ export class TrainingMaterialService {
     return this.httpClient.get<TrainingMaterial[]>(this.GET_WORKSMART_MATERIALS);
   }
 
-  public fetchTechnicalTrainings(pipeline: string): Observable<TrainingMaterial[]> {
-    return this.httpClient.get<TrainingMaterial[]>(`${this.GET_TECHNICAL_MATERIALS}?pipeline-jira-id=${pipeline}`);
+  public fetchTechnicalTrainings(moduleId: string): Observable<TrainingMaterial[]> {
+    return this.httpClient.get<TrainingMaterial[]>(`${this.GET_TECHNICAL_MATERIALS}?module-jira-id=${moduleId}`);
   }
 }

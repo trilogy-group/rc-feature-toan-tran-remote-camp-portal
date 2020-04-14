@@ -11,7 +11,7 @@ import { TrainingMaterial, TrainingFocus, TrainingType } from 'src/app/modules/o
 })
 export class PreparationMaterialComponent implements OnInit {
   @Input()
-  public pipeline: string;
+  public moduleId: string;
 
   public worksmartTrainings: TrainingMaterial[] = [];
   public technicalTrainings: TrainingMaterial[] = [];
@@ -21,10 +21,11 @@ export class PreparationMaterialComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    forkJoin(
-      this.trainingMaterialService.fetchWorksmartTrainings(),
-      this.trainingMaterialService.fetchTechnicalTrainings(this.pipeline)
-    ).subscribe(this.assignTrainings.bind(this));
+    const requests = [this.trainingMaterialService.fetchWorksmartTrainings()];
+    if (this.moduleId != null) {
+      requests.push(this.trainingMaterialService.fetchTechnicalTrainings(this.moduleId));
+    }
+    forkJoin(requests).subscribe(this.assignTrainings.bind(this));
   }
 
   public assignTrainings([worksmartTrainings, technicalTrainings]): void {
@@ -32,7 +33,10 @@ export class PreparationMaterialComponent implements OnInit {
     this.technicalTrainings = technicalTrainings;
 
     this.sortWorkSmartTrainings();
-    this.sortTechnicalTrainings();
+
+    if (technicalTrainings && technicalTrainings.length > 0) {
+      this.sortTechnicalTrainings();
+    }
   }
 
   private sortWorkSmartTrainings(): void {

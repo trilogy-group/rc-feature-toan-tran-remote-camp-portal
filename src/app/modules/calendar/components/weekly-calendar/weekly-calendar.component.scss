@@ -2,6 +2,10 @@
 @import '~@devfactory/ngx-df/core/theming/aurea-skin/theming';
 
 :host ::ng-deep {
+  .day-description {
+    white-space: pre-wrap;
+  }
+
   .df-grid {
     width: 454px !important;
 

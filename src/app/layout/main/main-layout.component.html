@@ -46,7 +46,7 @@
           (click)="logout()"
           [routerLink]=""
           class="d-flex"
-          style="padding: 0 16px; height: 48px;"><div class="d-flex align-items-center">
+          style="padding: 0 16px; height: 48px;"><div id="sign-out" class="d-flex align-items-center">
             Sign Out
           </div>
         </a>
@@ -123,6 +123,19 @@
           <mat-icon class="ml-1">post_add</mat-icon>
           <span class="ml-2"
             [class.d-none]="!sideBar.isOpen">My Plan</span>
+        </a>
+      </df-sidebar-item>
+      <df-sidebar-item *ngIf="!isAdmin()"
+        [hasIcon]="false"
+        matTooltip="Tutorials"
+        matTooltipPosition="right"
+        [hasNestedMenu]="false">
+        <a
+          class="h5 d-flex align-items-center"
+          [routerLink]="['/tutorials']">
+          <mat-icon class="ml-1">title</mat-icon>
+          <span class="ml-2"
+            [class.d-none]="!sideBar.isOpen">Tutorials</span>
         </a>
       </df-sidebar-item>
     </df-sidebar>

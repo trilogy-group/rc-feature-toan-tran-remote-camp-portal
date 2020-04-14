@@ -48,11 +48,16 @@
                 </div>
                 <div class="d-flex  mb-3">
                   <h5 class="my-0">
-                    Quality: 
-                    <df-number-increase
-                      *ngIf="loaded"
-                      [time]="500"
-                      [value]="qualityScore"></df-number-increase>%
+                    Quality:
+                    <span *ngIf="qualityScore !== null; else qualityEmpty">
+                      <df-number-increase
+                        *ngIf="loaded"
+                        [time]="500"
+                        [value]="qualityScore * 100"></df-number-increase>%
+                    </span>
+                    <ng-template #qualityEmpty>
+                      N/A
+                    </ng-template>
                   </h5>
                 </div>
                 <div class="d-block mb-3">

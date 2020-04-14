@@ -27,7 +27,10 @@ COPY .npmrc /app/.npmrc
 RUN npm install
 
 # Add app code
-COPY . /app
+
+COPY ./src /app/src
+COPY ./tsconfig.json /app/tsconfig.json
+COPY ./angular.json /app/angular.json
 
 # Insert Git Hash value
 RUN sed -i "s/GIT_HASH_PLACEHOLDER/${GIT_HASH}/g" /app/src/environments/*
@@ -37,7 +40,7 @@ RUN sed -i "s/GIT_HASH_PLACEHOLDER/${GIT_HASH}/g" /app/src/environments/*
 # RUN ng e2e --port 4200
 
 # Generate build
-RUN ng build --output-path=dist ${NG_BUILD_CONFIG}
+RUN ng build --output-path=dist ${NG_BUILD_CONFIG} && gzipper --verbose /app/dist
 
 
 
@@ -50,7 +53,7 @@ FROM nginx:1.16.0-alpine
 
 # Copy artifact build from the 'build environment'
 COPY --from=build /app/dist /usr/share/nginx/html
-
+COPY ./nginx/conf /etc/nginx
 # Expose port 80
 EXPOSE 80
 

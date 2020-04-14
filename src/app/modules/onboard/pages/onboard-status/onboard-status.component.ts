@@ -6,7 +6,7 @@ import { forkJoin } from 'rxjs';
 
 import { OnboardingService } from 'src/app/shared/services/onboarding.service';
 import { ProfileService } from 'src/app/shared/services/profile.service';
-import { Pipelines } from 'src/app/constants/pipelines.constants';
+import {UtilsService} from '../../../../shared/services/utils.service';
 
 @Component({
   selector: 'app-onboard-status',
@@ -25,6 +25,7 @@ export class OnboardStatusComponent implements OnInit {
     private readonly onboardingService: OnboardingService,
     private readonly profileService: ProfileService,
     private readonly toasterService: DfToasterService,
+    private readonly utilsService: UtilsService,
     private portal: DfPortalService
   ) {
     this.portalOptions.showCloseButton = true;
@@ -90,13 +91,13 @@ export class OnboardStatusComponent implements OnInit {
       this.preStartInfo = preStartInfo;
       this.preStartInfo.name = profile.icName;
       this.preStartInfo.pipeline = profile.pipeline;
-      this.preStartInfo.pipelineJiraId = profile.pipelineJiraId;
+      this.preStartInfo.remoteUModuleId = profile.remoteUModuleId;
       this.preStartInfo.startDate = profile.startDate;
       this.preStartInfo.alternativeEmail = profile.xoLoginEmail;
       this.preStartInfo.email = profile.companyEmail;
       this.preStartInfo.ad = profile.adAccount;
       this.preStartInfo.accessesConfirmed = accessesConfirmed && accessesConfirmed.status === 'Yes';
-      this.showCodeRepositoryAccess = !this.isQAManualTester();
+      this.showCodeRepositoryAccess = !this.isPipelineWithoutGithubAccount();
       this.loadedAccessesConfirmed = true;
 
       if (!this.preStartInfo.accessesConfirmed) {
@@ -152,7 +153,7 @@ export class OnboardStatusComponent implements OnInit {
   public isConfirmButtonDisabled(): boolean {
     return this.accessesConfirmed() || !(
       this.preStartInfo && this.preStartInfo.accesses &&
-      (this.preStartInfo.accesses.codeRepository || this.isQAManualTester()) &&
+      (this.preStartInfo.accesses.codeRepository || this.isPipelineWithoutGithubAccount()) &&
       this.preStartInfo.accesses.remoteUMaterials &&
       this.preStartInfo.accesses.itSystems
     );
@@ -284,8 +285,8 @@ export class OnboardStatusComponent implements OnInit {
 
   }
 
-  public isQAManualTester(): boolean {
-    return this.preStartInfo && this.preStartInfo.pipeline === Pipelines.QAManualTester;
+  public isPipelineWithoutGithubAccount(): boolean {
+    return this.preStartInfo && !this.utilsService.isPipelineWithGithubAccount(this.preStartInfo.pipeline);
   }
 
   public openTrainingMaterials(): void {

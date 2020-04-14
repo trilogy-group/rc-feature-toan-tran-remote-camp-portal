@@ -23,7 +23,7 @@
                           colspan="4">
           </df-grid-column>
           <df-grid-column header="Productivity"
-                          colspan="3">
+                          colspan="4">
           </df-grid-column>
           <df-grid-column header="Quality"
                           colspan="3">
@@ -68,6 +68,16 @@
               <div class="w-100">
                 Target for Today
                 <mat-icon [matTooltip]="productivityTargetTooltip"
+                  class="ml-1 info-tooltip">help_outline</mat-icon>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
+            <ng-template
+              dfGridTemplate="header">
+              <div class="w-100">
+                Ultimate Target
+                <mat-icon [matTooltip]="ultimateTargetTooltip"
                   class="ml-1 info-tooltip">help_outline</mat-icon>
               </div>
             </ng-template>
@@ -186,23 +196,43 @@
       <df-grid-column>
         <ng-template let-item="rowData"
           dfGridTemplate="body">
-          <div *ngIf="isAdmin()" class="{{ getQualityColor(item) }}">
-              <a class="{{ getQualityAnchorColor(item) }}" href="https://crossover.atlassian.net/issues/?jql=project ='{{assignmentProjectJira}}' AND assignee='{{item.icNameShort}}' and type='RC Task' and FTAR=NO" target="_blank">            {{ (item.qualitySummary?.approved | number : '1.2') }}</a>
+          <div class="ultimate-target">
+            {{ (item.scoreSummary?.ultimateTarget | number : '1.2') }}
           </div>
-          <div *ngIf="!isAdmin()" class="{{ getQualityColor(item) }}">
-             {{ (item.qualitySummary?.approved | number : '1.2') }}
-        </div>
         </ng-template>
       </df-grid-column>
       <df-grid-column>
         <ng-template let-item="rowData"
           dfGridTemplate="body">
-          <div  *ngIf="isAdmin()" class="{{ getCombinedQualityColor(item) }}">
-              <a  class="{{ getCombinedQualityAnchorColor(item) }}" href="https://crossover.atlassian.net/issues/?jql=project = '{{assignmentProjectJira}}' AND assignee='{{item.icNameShort}}' and type='RC Task' and status='IN REVIEW' and FTAR is empty" target="_blank">{{ (item.qualitySummary?.approvedAndInReview | number:'1.2') }}</a>
+          <div *ngIf="item.qualitySummary?.approved !== null; else qualityApprovedElseBlock">
+            <div *ngIf="isAdmin()" class="{{ getQualityColor(item) }}">
+                <a class="{{ getQualityAnchorColor(item) }}" href="https://crossover.atlassian.net/issues/?jql=project ='{{assignmentProjectJira}}' AND assignee='{{item.icNameShort}}' and type='RC Task' and FTAR=NO" target="_blank">
+                  {{ (item.qualitySummary?.approved | number : '1.2') }}
+                </a>
+            </div>
+            <div *ngIf="!isAdmin()" class="{{ getQualityColor(item) }}">
+               {{ (item.qualitySummary?.approved | number : '1.2') }}
+            </div>
           </div>
-          <div  *ngIf="!isAdmin()" class="{{ getCombinedQualityColor(item) }}">
-            {{ (item.qualitySummary?.approvedAndInReview | number:'1.1') }}
-        </div>
+          <ng-template #qualityApprovedElseBlock>
+              N/A
+          </ng-template>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column>
+        <ng-template let-item="rowData"
+          dfGridTemplate="body">
+          <div *ngIf="item.qualitySummary?.approvedAndInReview !== null; else qualityApprovedAndInReviewElseBlock">
+            <div  *ngIf="isAdmin()" class="{{ getCombinedQualityColor(item) }}">
+                <a  class="{{ getCombinedQualityAnchorColor(item) }}" href="https://crossover.atlassian.net/issues/?jql=project = '{{assignmentProjectJira}}' AND assignee='{{item.icNameShort}}' and type='RC Task' and status='IN REVIEW' and FTAR is empty" target="_blank">{{ (item.qualitySummary?.approvedAndInReview | number:'1.2') }}</a>
+            </div>
+            <div  *ngIf="!isAdmin()" class="{{ getCombinedQualityColor(item) }}">
+              {{ (item.qualitySummary?.approvedAndInReview | number:'1.1') }}
+            </div>
+          </div>
+          <ng-template #qualityApprovedAndInReviewElseBlock>
+            N/A
+          </ng-template>
         </ng-template>
       </df-grid-column>
       <df-grid-column>
