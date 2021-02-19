@@ -5,8 +5,8 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-    const CHECK_INTERVAL_PROPERTY_NAME = 'TOKEN_RENEW_CHECK_INTERVAL_IN_MS';
-    const RENEW_THRESHOLD = 12 * 60 * 60;
+    const checkIntervalPropertyName = 'tokenRenewCheckIntervalInMs';
+    const renewThreshold = 12 * 60 * 60;
     let component: AppComponent;
     let authenticationService: jasmine.SpyObj<AuthenticationService>;
     let authenticationTokenService: jasmine.SpyObj<AuthenticationTokenService>;
@@ -27,8 +27,8 @@ describe('AppComponent', () => {
         it('should start renew job', () => {
             // Act
             component.ngOnInit();
-            jasmine.clock().tick(component[CHECK_INTERVAL_PROPERTY_NAME]);
-            jasmine.clock().tick(component[CHECK_INTERVAL_PROPERTY_NAME]);
+            jasmine.clock().tick(component[checkIntervalPropertyName]);
+            jasmine.clock().tick(component[checkIntervalPropertyName]);
 
             // Assert
             expect(authenticationTokenService.isLoggedIn).toHaveBeenCalledTimes(2);
@@ -40,7 +40,7 @@ describe('AppComponent', () => {
 
             // Act
             component.ngOnInit();
-            jasmine.clock().tick(component[CHECK_INTERVAL_PROPERTY_NAME]);
+            jasmine.clock().tick(component[checkIntervalPropertyName]);
 
             // Assert
             expect(authenticationService.renewToken).not.toHaveBeenCalledWith();
@@ -49,11 +49,11 @@ describe('AppComponent', () => {
         it('should not renew token when token time to live not reach expiration threshold', () => {
             // Arrange
             authenticationTokenService.isLoggedIn.and.returnValue(true);
-            authenticationTokenService.getTokenRemainingTimeToLive.and.returnValue(RENEW_THRESHOLD + 1);
+            authenticationTokenService.getTokenRemainingTimeToLive.and.returnValue(renewThreshold + 1);
 
             // Act
             component.ngOnInit();
-            jasmine.clock().tick(component[CHECK_INTERVAL_PROPERTY_NAME]);
+            jasmine.clock().tick(component[checkIntervalPropertyName]);
 
             // Assert
             expect(authenticationService.renewToken).not.toHaveBeenCalledWith();
@@ -62,11 +62,11 @@ describe('AppComponent', () => {
         it('should not renew token when token time to live equal expiration threshold', () => {
             // Arrange
             authenticationTokenService.isLoggedIn.and.returnValue(true);
-            authenticationTokenService.getTokenRemainingTimeToLive.and.returnValue(RENEW_THRESHOLD);
+            authenticationTokenService.getTokenRemainingTimeToLive.and.returnValue(renewThreshold);
 
             // Act
             component.ngOnInit();
-            jasmine.clock().tick(component[CHECK_INTERVAL_PROPERTY_NAME]);
+            jasmine.clock().tick(component[checkIntervalPropertyName]);
 
             // Assert
             expect(authenticationService.renewToken).not.toHaveBeenCalledWith();
@@ -75,12 +75,12 @@ describe('AppComponent', () => {
         it('should renew token when token time to live smaller than expiration threshold', () => {
             // Arrange
             authenticationTokenService.isLoggedIn.and.returnValue(true);
-            authenticationTokenService.getTokenRemainingTimeToLive.and.returnValue(RENEW_THRESHOLD - 1);
+            authenticationTokenService.getTokenRemainingTimeToLive.and.returnValue(renewThreshold - 1);
             authenticationService.renewToken.and.returnValue(of());
 
             // Act
             component.ngOnInit();
-            jasmine.clock().tick(component[CHECK_INTERVAL_PROPERTY_NAME]);
+            jasmine.clock().tick(component[checkIntervalPropertyName]);
 
             // Assert
             expect(authenticationService.renewToken).toHaveBeenCalledTimes(1);

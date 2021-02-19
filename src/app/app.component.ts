@@ -16,8 +16,8 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private TOKEN_RENEW_CHECK_INTERVAL_IN_MS = 60 * 60 * 1000;
-  private TOKEN_TIME_TO_LIVE_THRESHOLD_IN_SEC = 12 * 60 * 60;
+  private readonly tokenRenewCheckIntervalInMs = 60 * 60 * 1000;
+  private readonly tokenTimeToLiveThresholdInSec = 12 * 60 * 60;
   private tokenRenewIntervalId: ReturnType<typeof setInterval>;
 
   constructor(
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private startAuthenticationTokenRenewJob() {
     // periodically check if the authentication token expire time and renew if necessary
     this.tokenRenewIntervalId =
-        setInterval(() => this.renewTokenIfNeed(), this.TOKEN_RENEW_CHECK_INTERVAL_IN_MS);
+        setInterval(() => this.renewTokenIfNeed(), this.tokenRenewCheckIntervalInMs);
   }
 
   private stopAuthenticationTokenRenewJob() {
@@ -54,6 +54,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private isRemainTokenTimeToLiveLessThanThreshold() {
     const tokenRemainTime: number = this.authenticationTokenService.getTokenRemainingTimeToLive();
-    return tokenRemainTime < this.TOKEN_TIME_TO_LIVE_THRESHOLD_IN_SEC;
+    return tokenRemainTime < this.tokenTimeToLiveThresholdInSec;
   }
 }

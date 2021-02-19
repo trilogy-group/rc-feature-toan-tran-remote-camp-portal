@@ -27,7 +27,7 @@ export class AuthenticationService {
       .pipe(map(response => this.authenticationTokenService.saveToken(response.toString())));
   }
 
-  public renewToken(): Observable<any> {
+  public renewToken(): Observable<void> {
     return this.httpClient.post(this.RENEW_TOKEN, null)
         .pipe(map(response => this.authenticationTokenService.saveToken(response.toString())));
   }

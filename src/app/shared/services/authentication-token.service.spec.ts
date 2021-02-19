@@ -1,13 +1,13 @@
-import {TestBed} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import {AuthenticationTokenService} from './authentication-token.service';
-import {RouterTestingModule} from '@angular/router/testing';
+import { AuthenticationTokenService } from './authentication-token.service';
 
 describe('AuthenticationTokenService', () => {
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTM2MTYxNDh9.lqEVVG163AKuXjOwTcJnusdZ-ASiFlfcFA0z693aF3w';
     const tokenExp = 1613616148;
-    const TOKEN_KEY_PROPERTY_NAME = 'TOKEN_KEY';
-    const TOKEN_REMAINING_TIME_TO_LIVE_FROM_METHOD_NAME = 'getTokenRemainingTimeToLiveFrom';
+    const tokenKeyPropertyName = 'TOKEN_KEY';
+    const tokenRemainingTimeToLiveFromMethodName = 'getTokenRemainingTimeToLiveFrom';
     let service: AuthenticationTokenService;
 
     beforeEach(() => {
@@ -21,7 +21,7 @@ describe('AuthenticationTokenService', () => {
         });
 
         service = TestBed.get(AuthenticationTokenService);
-        localStorage.removeItem(service[TOKEN_KEY_PROPERTY_NAME]);
+        localStorage.removeItem(service[tokenKeyPropertyName]);
     });
 
     it('should be created', () => {
@@ -29,14 +29,14 @@ describe('AuthenticationTokenService', () => {
         expect(service).toBeTruthy();
     });
 
-    describe(TOKEN_REMAINING_TIME_TO_LIVE_FROM_METHOD_NAME, () => {
+    describe(tokenRemainingTimeToLiveFromMethodName, () => {
         it('should return 0 if token not in local storage', () => {
             // Arrange
             const expectedRemainingTimeToLive = 0;
             const timeStamp = tokenExp - 1;
 
             // Act
-            const timeToLive = service[TOKEN_REMAINING_TIME_TO_LIVE_FROM_METHOD_NAME](timeStamp);
+            const timeToLive = service[tokenRemainingTimeToLiveFromMethodName](timeStamp);
 
             // Assert
             expect(timeToLive).toEqual(expectedRemainingTimeToLive);
@@ -63,10 +63,10 @@ describe('AuthenticationTokenService', () => {
         parameters.forEach(parameter => {
             it(parameter.description, () => {
                 // Arrange
-                localStorage.setItem(service[TOKEN_KEY_PROPERTY_NAME], token);
+                localStorage.setItem(service[tokenKeyPropertyName], token);
 
                 // Act
-                const timeToLive = service[TOKEN_REMAINING_TIME_TO_LIVE_FROM_METHOD_NAME](parameter.timeStamp);
+                const timeToLive = service[tokenRemainingTimeToLiveFromMethodName](parameter.timeStamp);
 
                 // Assert
                 expect(timeToLive).toEqual(parameter.expectedRemainingTimeToLive);
