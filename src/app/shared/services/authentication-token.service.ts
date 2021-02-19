@@ -26,6 +26,21 @@ export class AuthenticationTokenService {
         return current_time < jwt.exp - 10;
     }
 
+    public getTokenRemainingTimeToLive(): number {
+        const currentTime = new Date().getTime() / 1000;
+        return this.getTokenRemainingTimeToLiveFrom(currentTime);
+    }
+
+    private getTokenRemainingTimeToLiveFrom(timeStamp: number): number {
+        const token = localStorage.getItem(this.TOKEN_KEY);
+        if (!token) {
+            return 0;
+        }
+
+        const jwt = this.parseJwt(token);
+        return (timeStamp > jwt.exp) ? 0 : jwt.exp - timeStamp;
+    }
+
     public logout(): void {
         localStorage.removeItem(this.TOKEN_KEY);
         signOutGoogle();

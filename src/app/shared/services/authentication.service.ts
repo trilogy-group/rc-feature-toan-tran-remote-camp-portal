@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 export class AuthenticationService {
   private LOGIN = `${environment.apiUrl}/AuthenticationGoogleToken`;
   private IMPERSONATE = `${environment.apiUrl}/Impersonation`;
+  private RENEW_TOKEN = `${environment.apiUrl}/AuthenticationJwt`;
 
   public constructor(
     private authenticationTokenService: AuthenticationTokenService,
@@ -24,5 +25,10 @@ export class AuthenticationService {
   public impersonate(email: string): Observable<any> {
     return this.httpClient.post(this.IMPERSONATE, JSON.stringify(email))
       .pipe(map(response => this.authenticationTokenService.saveToken(response.toString())));
+  }
+
+  public renewToken(): Observable<void> {
+    return this.httpClient.post(this.RENEW_TOKEN, null)
+        .pipe(map(response => this.authenticationTokenService.saveToken(response.toString())));
   }
 }
