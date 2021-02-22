@@ -41,6 +41,10 @@ const routes: Routes = [
       {
         path: 'tutorials',
         loadChildren: './modules/tutorials/tutorials.module#TutorialsModule'
+      },
+      {
+        path: 'rca',
+        loadChildren: './modules/rca/rca.module#RcaModule'
       }
     ]
   },
