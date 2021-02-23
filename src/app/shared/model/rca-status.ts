@@ -1,4 +1,4 @@
 export enum RcaStatus {
-  Repeated = 'Repeated' ,
+  Repeated = 'Repeated',
   Resolved = 'Resolved'
 }

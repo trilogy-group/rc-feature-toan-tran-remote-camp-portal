@@ -49,9 +49,6 @@ export class RcaService {
     }
   ];
 
-  constructor() {
-  }
-
   getRcaData(): Observable<RcaItem[]> {
     return of(this.mockRcaData).pipe(
       delay(1500)
