@@ -26,6 +26,17 @@ describe('AuthenticationGuard', () => {
       // Assert
       expect(adminRoute).toBe(true);
     });
+
+    it('should return "rca" as not-admin route', () => {
+      // Arrange
+      const route = 'rca';
+
+      // Act
+      const adminRoute = authenticationGuard['isAdminRoute'](route);
+
+      // Assert
+      expect(adminRoute).toBe(false);
+    });
   });
 
   describe('isAdminRoute', () => {
@@ -38,6 +49,17 @@ describe('AuthenticationGuard', () => {
 
       // Assert
       expect(userRoute).toBe(false);
+    });
+
+    it('should return "rca" as user route', () => {
+      // Arrange
+      const route = 'rca';
+
+      // Act
+      const userRoute = authenticationGuard['isUserRoute'](route);
+
+      // Assert
+      expect(userRoute).toBe(true);
     });
   });
 });

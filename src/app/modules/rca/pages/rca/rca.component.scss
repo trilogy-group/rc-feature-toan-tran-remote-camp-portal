@@ -1,0 +1,48 @@
+:host ::ng-deep {
+  .df-grid {
+    tr:nth-child(1) {
+      th:nth-child(4) {
+        width: 90px;
+      }
+      th:nth-child(4) {
+        width: 230px;
+      }
+      th:nth-child(5) {
+        width: 250px;
+      }
+      th:nth-child(6) {
+        width: 260px;
+      }
+    }
+
+    td {
+      padding: 0;
+      line-height: 30px !important;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .df-grid-table-body__cell-data {
+      white-space: nowrap;
+    }
+
+    .grid-display-overflow {
+      padding-left: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .df-grid-column__cell-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  .resizable-grid th, .resizable-grid td {
+    border-right: 1px solid #eee;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: rgb(238, 238, 238);
+  }
+}

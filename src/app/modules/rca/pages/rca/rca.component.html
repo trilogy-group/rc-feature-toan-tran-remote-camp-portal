@@ -1,0 +1,97 @@
+<div class="ml-5 d-flex flex-column">
+  <div class="container-fluid">
+    <div class="row section__header">
+      <div class="col py-3 justify-content-between d-flex">
+        <h1 class="m-0">
+          Root Cause Analysis
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center">
+    <df-grid *ngIf="isLoaded"
+       sortMode="single"
+       class="ml-2"
+       [value]="rcaData"
+       [editable]="true"
+       tableStyleClass="resizable-grid"
+    >
+      <df-grid-column field="ticket"
+                      header="Ticket">
+        <ng-template let-item="rowData"
+                     dfGridTemplate="body">
+          <div class="d-flex justify-content-center">
+            <a matTooltip="{{ item.ticketSummary }}"
+              matTooltipPosition="right"
+              target="_blank"
+              [attr.href]="item.ticketLink">{{ item.ticket }}</a>
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column field="riqb"
+                      [filter]="true"
+                      header="RIQB">
+        <ng-template let-item="rowData"
+                     dfGridTemplate="body">
+          <div class="d-flex justify-content-center">
+            <a matTooltip="{{ item.riqbSummary }}"
+               matTooltipPosition="right"
+               target="_blank"
+               [attr.href]="item.riqbLink">{{ item.riqb }}</a>
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column field="dayNumber"
+                      [sortable]="true"
+                      [filter]="true"
+                      header="Day Number">
+      </df-grid-column>
+      <df-grid-column field="storyOfIncident"
+                      [editable]="true"
+                      header="Story of the incident">
+        <ng-template let-item="rowData"
+                     dfGridTemplate="body">
+          <div class="row">
+            <div class="col-10 grid-display-overflow" matTooltip="{{ item.storyOfIncident }}"
+                 matTooltipPosition="right">
+              {{ item.storyOfIncident }}
+            </div>
+            <mat-icon class="ml-1">mode_edit</mat-icon>
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column field="rootCause"
+                      [editable]="true"
+                      header="Root Cause">
+        <ng-template let-item="rowData"
+                     dfGridTemplate="body">
+          <div class="row">
+            <div class="col-10 grid-display-overflow" matTooltip="{{ item.rootCause }}"
+                 matTooltipPosition="right">
+              {{ item.rootCause }}
+            </div>
+            <mat-icon class="ml-1">mode_edit</mat-icon>
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column field="correctiveAction"
+                      [editable]="true"
+                      header="Corrective Action">
+        <ng-template let-item="rowData"
+                     dfGridTemplate="body">
+          <div class="row">
+            <div class="col-10 grid-display-overflow" matTooltip="{{ item.correctiveAction }}"
+                 matTooltipPosition="right">
+              {{ item.correctiveAction }}
+            </div>
+            <mat-icon class="ml-1">mode_edit</mat-icon>
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column field="status"
+                      header="Status">
+      </df-grid-column>
+    </df-grid>
+  </div>
+</div>
+
